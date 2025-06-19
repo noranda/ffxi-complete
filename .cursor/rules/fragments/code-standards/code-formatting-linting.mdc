@@ -1,0 +1,293 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Code Formatting & Linting
+
+## ESLint Configuration
+```json
+{
+  "extends": [
+    "@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "jsx-a11y"],
+  "rules": {
+    "prefer-const": "error",
+    "no-var": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/anchor-is-valid": "off"
+  }
+}
+```
+
+## Prettier Configuration
+```json
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 80,
+  "bracketSpacing": false,
+  "arrowParens": "avoid",
+  "endOfLine": "lf"
+}
+```
+
+## Code Style Guidelines
+
+### React Component Format
+```typescript
+// ✅ Correct: Use React.FC with typed props, const arrow function
+type JobProgressProps = {
+  experience: number;
+  job: string;
+  level: number;
+  onUpdate: (job: string, level: number) => void;
+};
+
+const JobProgress: React.FC<JobProgressProps> = ({experience, job, level, onUpdate}) => {
+  return (
+    <div className="job-progress">
+      <h3>{job}</h3>
+
+      <div className="level-info">
+        <span>Level: {level}</span>
+        <span>Exp: {experience}</span>
+      </div>
+
+      <button onClick={() => onUpdate(job, level + 1)}>
+        Level Up
+      </button>
+    </div>
+  );
+};
+
+// ❌ Incorrect: Function declaration, props not sorted, no spacing between siblings  
+function JobProgress({job, onUpdate, level, experience}: JobProgressProps) {
+  return (
+    <div className="job-progress">
+      <h3>{job}</h3>
+      <div className="level-info">
+        <span>Level: {level}</span>
+        <span>Exp: {experience}</span>
+      </div>
+      <button onClick={() => onUpdate(job, level + 1)}>Level Up</button>
+    </div>
+  );
+}
+```
+
+### JSX Formatting Rules
+```typescript
+// ✅ Correct: Props alphabetically sorted, newlines between multi-line sibling elements
+const UserProfile: React.FC<UserProfileProps> = ({avatar, name, role}) => {
+  return (
+    <div className="user-profile">
+      <img alt={name} className="avatar" src={avatar} />
+
+      <h2 className="name">{name}</h2>
+
+      <div className="role">{role}</div>
+
+      <button className="edit-button" onClick={handleEdit}>
+        Edit Profile
+      </button>
+    </div>
+  );
+};
+
+// ✅ Correct: Single-line siblings grouped, newlines around multi-line elements
+const SimpleCard: React.FC<SimpleCardProps> = ({title, description}) => {
+  return (
+    <div className="card">
+      <h3>{title}</h3>
+      <p>{description}</p>
+
+      <div className="actions">
+        <button>Edit</button>
+        <button>Delete</button>
+      </div>
+    </div>
+  );
+};
+
+// ✅ Correct: All single-line siblings can be grouped together
+const StatusIndicator: React.FC<StatusProps> = ({status, message}) => {
+  return (
+    <div className="status">
+      <span className="status-icon">{getIcon(status)}</span>
+      <span className="status-text">{message}</span>
+      <span className="status-time">{formatTime()}</span>
+    </div>
+  );
+};
+
+// ❌ Incorrect: No spacing between multi-line siblings, wrong prop order
+const UserProfile: React.FC<UserProfileProps> = ({name, role, avatar}) => {
+  return (
+    <div className="user-profile">
+      <img src={avatar} alt={name} className="avatar" />
+      <h2 className="name">{name}</h2>
+      <p className="role">{role}</p>
+      <button onClick={handleEdit} className="edit-button">Edit Profile</button>
+    </div>
+  );
+};
+```
+
+### JSX Newline Guidelines
+- **Both siblings single-line**: No newline needed between consecutive single-line elements
+- **Any sibling multi-line**: Add newline before and after multi-line elements
+- **Mixed content**: Group single-line elements together, separate from multi-line elements with newlines
+
+### HTML Element Preferences
+```typescript
+// ✅ Correct: Use <div> for text content to maintain full styling control
+const Message: React.FC<MessageProps> = ({content, type}) => {
+  return (
+    <div className="message">
+      <div className={`message-content ${type}`}>
+        {content}
+      </div>
+
+      <div className="message-timestamp">
+        {formatTime(Date.now())}
+      </div>
+    </div>
+  );
+};
+
+// ❌ Incorrect: Using <p> tags limits styling flexibility
+const Message: React.FC<MessageProps> = ({content, type}) => {
+  return (
+    <div className="message">
+      <p className={`message-content ${type}`}>{content}</p>
+      <p className="message-timestamp">{formatTime(Date.now())}</p>
+    </div>
+  );
+};
+```
+
+### Type Definitions
+```typescript
+// ✅ Correct: Properties alphabetically sorted
+type JobProgress = {
+  characterId: string;
+  experience: number;
+  job: JobType;
+  level: number;
+  updatedAt: Date;
+};
+
+// ✅ Correct: Single quotes for strings
+type JobStatus = 'active' | 'inactive' | 'mastered';
+
+// ✅ Correct: Semicolons after type definitions
+type ApiResponse<T> = {
+  data: T;
+  error: string | null;
+  success: boolean;
+};
+```
+
+### Import/Export Formatting
+```typescript
+// ✅ Correct: Alphabetically sorted imports
+import {createClient} from '@supabase/supabase-js';
+import {useEffect, useState} from 'react';
+
+import {JobType} from '../types/jobs';
+import {useAuth} from '../hooks/useAuth';
+```
+
+## Pre-commit Hooks (Husky)
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
+```
+
+## Rule System Code Standards
+
+**All code examples in our rule files (.mdc) must follow these formatting standards:**
+
+### Type vs Interface Consistency
+```typescript
+// ✅ Correct - Use type for object shapes (following our code standards)
+type ComponentProps = {
+  children: React.ReactNode;
+  className?: string;
+  onUpdate: () => void;
+};
+
+// ❌ Incorrect - Don't use interface for simple object shapes
+interface ComponentProps {
+  children: React.ReactNode;
+  className?: string;
+  onUpdate: () => void;
+}
+```
+
+### Bracket Spacing (Critical)
+```typescript
+// ✅ Correct - No spaces inside brackets (bracketSpacing: false)
+const {data, error} = await supabase.from('table').select('*');
+import {useState, useEffect} from 'react';
+const user = {name: 'test', id: 1};
+const {result} = renderHook(() => useAuth());
+
+// ❌ Incorrect - Spaces inside brackets
+const { data, error } = await supabase.from('table').select('*');
+import { useState, useEffect } from 'react';
+const user = { name: 'test', id: 1 };
+const { result } = renderHook(() => useAuth());
+```
+
+### Import Formatting
+```typescript
+// ✅ Correct - No bracket spacing, alphabetical imports
+import {createClient} from '@supabase/supabase-js';
+import {describe, it, expect} from 'vitest';
+import {render, screen} from '@testing-library/react';
+
+// ❌ Incorrect - Bracket spacing violations
+import { createClient } from '@supabase/supabase-js';
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+```
+
+### Object Destructuring
+```typescript
+// ✅ Correct - Consistent with Prettier config
+const {user, loading} = useAuth();
+const {mutationFn, onSuccess} = useMutation();
+const ProtectedRoute = ({children}: {children: React.ReactNode}) => {};
+
+// ❌ Incorrect - Inconsistent spacing
+const { user, loading } = useAuth();
+const { mutationFn, onSuccess } = useMutation();
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {};
+```
+
+**Note**: These standards ensure consistency between actual code and documentation examples. All examples must follow our established code standards including preferring types over interfaces for object shapes.

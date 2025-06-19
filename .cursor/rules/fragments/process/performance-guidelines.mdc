@@ -1,0 +1,19 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Performance Guidelines
+
+## Frontend Performance
+- Lazy load components and routes
+- Optimize bundle size with code splitting
+- React 19's automatic memoization handles component optimization
+- Implement virtual scrolling for large lists
+- Leverage React 19's concurrent features for better user experience
+
+## Database Performance
+- Use proper indexes for frequently queried columns
+- Implement pagination for large datasets
+- Use database views for complex queries
+- Monitor query performance

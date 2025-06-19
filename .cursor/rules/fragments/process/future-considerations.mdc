@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Future Considerations
+
+## Scalability
+- Design for multi-character support
+- Plan for community features
+- Consider internationalization
+- Prepare for mobile app development
+
+## Integration
+- Windower addon integration
+- EliteAPI integration
+- Export/import functionality
+- Community data sharing
+
+## Monitoring
+- Error tracking (Sentry)
+- Performance monitoring
+- User analytics (privacy-focused)
+- Database performance metrics

@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Quality Assurance
+
+## Code Quality
+- Use ESLint and Prettier with the configurations above
+- Run TypeScript compiler with strict mode
+- Use Husky for pre-commit hooks with lint-staged
+- Regular dependency updates
+
+## Accessibility
+- WCAG 2.1 AA compliance
+- Keyboard navigation support
+- Screen reader compatibility
+- Color contrast requirements
+
+## Browser Support
+- Modern evergreen browsers (Chrome, Firefox, Safari, Edge)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+- Graceful degradation for older browsers

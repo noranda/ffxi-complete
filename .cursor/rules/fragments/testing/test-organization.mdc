@@ -1,0 +1,365 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Test Organization Patterns
+
+## Colocated Test Structure
+
+Tests should be organized alongside their corresponding components using `__tests__` folders for clean separation and easy discovery.
+
+## Directory Structure (Required)
+
+### Component Test Organization
+```
+src/
+├── components/
+│   ├── ui/
+│   │   ├── __tests__/
+│   │   │   ├── button.test.tsx
+│   │   │   ├── card.test.tsx
+│   │   │   ├── input.test.tsx
+│   │   │   └── tabs.test.tsx
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── input.tsx
+│   │   └── tabs.tsx
+│   ├── layout/
+│   │   ├── __tests__/
+│   │   │   ├── AppBar.test.tsx
+│   │   │   ├── MainLayout.test.tsx
+│   │   │   └── Sidebar.test.tsx
+│   │   ├── AppBar.tsx
+│   │   ├── MainLayout.tsx
+│   │   └── Sidebar.tsx
+│   └── auth/
+│       ├── __tests__/
+│       │   ├── LoginForm.test.tsx
+│       │   ├── ProtectedRoute.test.tsx
+│       │   └── UserMenu.test.tsx
+│       ├── LoginForm.tsx
+│       ├── ProtectedRoute.tsx
+│       └── UserMenu.tsx
+├── hooks/
+│   ├── __tests__/
+│   │   ├── useAuth.test.ts
+│   │   ├── useCharacter.test.ts
+│   │   └── useJobProgress.test.ts
+│   ├── useAuth.ts
+│   ├── useCharacter.ts
+│   └── useJobProgress.ts
+├── lib/
+│   ├── __tests__/
+│   │   ├── auth.test.ts
+│   │   ├── supabase.test.ts
+│   │   └── utils.test.ts
+│   ├── auth.ts
+│   ├── supabase.ts
+│   └── utils.ts
+└── pages/
+    ├── __tests__/
+    │   ├── Dashboard.test.tsx
+    │   ├── Login.test.tsx
+    │   └── Register.test.tsx
+    ├── Dashboard.tsx
+    ├── Login.tsx
+    └── Register.tsx
+```
+
+### Service and Utility Test Organization
+```
+src/
+├── services/
+│   ├── __tests__/
+│   │   ├── characterService.test.ts
+│   │   ├── jobService.test.ts
+│   │   └── progressService.test.ts
+│   ├── characterService.ts
+│   ├── jobService.ts
+│   └── progressService.ts
+├── utils/
+│   ├── __tests__/
+│   │   ├── constants.test.ts
+│   │   ├── validation.test.ts
+│   │   └── formatters.test.ts
+│   ├── constants.ts
+│   ├── validation.ts
+│   └── formatters.ts
+└── contexts/
+    ├── __tests__/
+    │   ├── AuthContext.test.tsx
+    │   ├── CharacterContext.test.tsx
+    │   └── ThemeContext.test.tsx
+    ├── AuthContext.tsx
+    ├── CharacterContext.tsx
+    └── ThemeContext.tsx
+```
+
+## Test File Naming (Required)
+
+### Naming Conventions
+```typescript
+// ✅ Correct: Match source file name with .test extension
+// Source: components/ui/button.tsx
+// Test: components/ui/__tests__/button.test.tsx
+
+// Source: hooks/useAuth.ts  
+// Test: hooks/__tests__/useAuth.test.ts
+
+// Source: pages/Dashboard.tsx
+// Test: pages/__tests__/Dashboard.test.tsx
+
+// ❌ Incorrect: Different naming patterns
+// Don't use: Button.test.tsx (capitalization mismatch)
+// Don't use: button.spec.tsx (use .test not .spec)
+// Don't use: test-button.tsx (prefix pattern)
+```
+
+### File Extension Rules
+- **React components**: `.test.tsx`
+- **TypeScript utilities**: `.test.ts`
+- **JavaScript files**: `.test.js` (avoid in TypeScript projects)
+
+## Test Discovery and Execution
+
+### Vitest Configuration
+```typescript
+// vitest.config.ts - Automatically finds tests in __tests__ folders
+export default defineConfig({
+  test: {
+    include: [
+      'src/**/__tests__/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
+    ],
+    exclude: [
+      'node_modules',
+      'dist',
+      '.git',
+      '.cache'
+    ],
+  },
+});
+
+// Why this pattern:
+// - Finds tests in __tests__ folders
+// - Also supports inline .test files for flexibility
+// - Excludes unnecessary directories
+// - Supports all relevant file extensions
+```
+
+### Test Commands
+```bash
+# Run all tests
+yarn test
+
+# Run tests for specific component folder
+yarn test src/components/ui/__tests__
+
+# Run specific test file
+yarn test src/components/ui/__tests__/button.test.tsx
+
+# Run tests in watch mode
+yarn test:watch
+
+# Run tests with coverage
+yarn test:coverage
+```
+
+## Benefits of __tests__ Folder Structure
+
+### Organization Benefits
+- **Clean separation** between source and test files
+- **Easy discovery** of all tests for a module
+- **Reduced clutter** in source directories
+- **Clear intent** - tests are obviously tests
+- **IDE support** - most editors recognize __tests__ folders
+
+### Maintenance Benefits
+- **Batch operations** on tests (delete, move, refactor)
+- **Clear test scope** - all tests for a module in one place
+- **Version control** - easier to track test changes
+- **Build exclusion** - easier to exclude from production builds
+
+### Development Benefits
+- **Focused development** - tests don't interfere with source browsing
+- **Test-first development** - create __tests__ folder and start with tests
+- **Refactoring safety** - tests clearly grouped with their subjects
+- **Code review** - test changes are clearly separated
+
+## Test Import Patterns
+
+### Relative Imports for Source Files
+```typescript
+// ✅ Correct: Import from parent directory
+// File: components/ui/__tests__/button.test.tsx
+import {Button} from '../button';
+import {render, screen} from '@testing-library/react';
+
+// File: hooks/__tests__/useAuth.test.ts
+import {useAuth} from '../useAuth';
+import {renderHook} from '@testing-library/react';
+
+// File: services/__tests__/characterService.test.ts
+import {characterService} from '../characterService';
+```
+
+### Absolute Imports for Utilities
+```typescript
+// ✅ Correct: Use absolute imports for shared utilities
+// File: components/ui/__tests__/button.test.tsx
+import {render, screen} from '@testing-library/react';
+import {describe, it, expect} from 'vitest';
+import {userEvent} from '@testing-library/user-event';
+
+// File: hooks/__tests__/useAuth.test.ts
+import {renderHook, waitFor} from '@testing-library/react';
+import {describe, it, expect, vi} from 'vitest';
+```
+
+## Test File Structure Template
+
+### Component Test Template
+```typescript
+// components/ui/__tests__/button.test.tsx
+import {render, screen} from '@testing-library/react';
+import {describe, it, expect} from 'vitest';
+import userEvent from '@testing-library/user-event';
+
+import {Button} from '../button';
+
+describe('Button', () => {
+  it('renders button text', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByRole('button', {name: 'Click me'})).toBeInTheDocument();
+  });
+
+  it('calls onClick handler when clicked', async () => {
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
+    
+    render(<Button onClick={handleClick}>Click me</Button>);
+    
+    await user.click(screen.getByRole('button'));
+    expect(handleClick).toHaveBeenCalledOnce();
+  });
+
+  it('applies variant styles correctly', () => {
+    render(<Button variant="destructive">Delete</Button>);
+    expect(screen.getByRole('button')).toHaveClass('bg-destructive');
+  });
+});
+```
+
+### Hook Test Template
+```typescript
+// hooks/__tests__/useAuth.test.ts
+import {renderHook, waitFor} from '@testing-library/react';
+import {describe, it, expect, vi} from 'vitest';
+
+import {useAuth} from '../useAuth';
+
+describe('useAuth', () => {
+  it('returns initial auth state', () => {
+    const {result} = renderHook(() => useAuth());
+    
+    expect(result.current.user).toBeNull();
+    expect(result.current.loading).toBe(true);
+  });
+
+  it('handles login successfully', async () => {
+    const {result} = renderHook(() => useAuth());
+    
+    await waitFor(() => {
+      result.current.signIn('test@example.com', 'password');
+    });
+    
+    expect(result.current.user).toBeTruthy();
+    expect(result.current.loading).toBe(false);
+  });
+});
+```
+
+### Service Test Template
+```typescript
+// services/__tests__/characterService.test.ts
+import {describe, it, expect, vi, beforeEach} from 'vitest';
+
+import {characterService} from '../characterService';
+
+// Mock Supabase
+vi.mock('@/lib/supabase', () => ({
+  supabase: {
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => Promise.resolve({data: [], error: null}))
+      }))
+    }))
+  }
+}));
+
+describe('characterService', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('fetches characters successfully', async () => {
+    const mockCharacters = [{id: '1', name: 'Test Character'}];
+    
+    // Setup mock response
+    const mockFrom = vi.fn(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => Promise.resolve({data: mockCharacters, error: null}))
+      }))
+    }));
+    
+    const result = await characterService.getByUserId('user-id');
+    expect(result).toEqual(mockCharacters);
+  });
+});
+```
+
+## Migration from Inline Tests
+
+### Moving Existing Tests
+```bash
+# Create __tests__ folders
+mkdir -p src/components/ui/__tests__
+mkdir -p src/hooks/__tests__
+mkdir -p src/lib/__tests__
+
+# Move existing inline tests
+mv src/App.test.tsx src/__tests__/App.test.tsx
+mv src/components/ui/button.test.tsx src/components/ui/__tests__/button.test.tsx
+
+# Update import paths in moved tests (change from './button' to '../button')
+```
+
+### Update Test Imports
+```typescript
+// Before (inline test):
+import {Button} from './button';
+
+// After (in __tests__ folder):
+import {Button} from '../button';
+```
+
+## Best Practices
+
+### Test Organization
+- **One test file per source file** when possible
+- **Group related tests** in describe blocks
+- **Use descriptive test names** that explain behavior
+- **Follow AAA pattern** (Arrange, Act, Assert)
+
+### File Management
+- **Create __tests__ folders** as soon as you add the first test
+- **Keep test files small** and focused
+- **Use shared test utilities** in `src/test/` for common setup
+- **Mock external dependencies** consistently across tests
+
+### Naming Consistency
+- **Match source file names** exactly (case-sensitive)
+- **Use .test extension** consistently
+- **Organize by feature** not by test type
+- **Keep folder structure** parallel to source structure

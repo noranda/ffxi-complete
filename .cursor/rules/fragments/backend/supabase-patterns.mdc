@@ -1,0 +1,559 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Supabase Patterns & Best Practices
+
+## Project Setup Patterns
+
+### Environment Configuration
+```typescript
+// supabaseClient.ts - Central client configuration
+import {createClient} from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Why this pattern:
+// - Single source of truth for Supabase client
+// - Environment variables keep secrets secure
+// - TypeScript ensures type safety across the app
+```
+
+### Database Types Generation
+```bash
+# Generate TypeScript types from your database schema
+npx supabase gen types typescript --project-id YOUR_PROJECT_ID > src/types/database.types.ts
+
+# Why this is important:
+# - Automatic type safety for database operations
+# - Catches schema changes at compile time
+# - Better IDE autocomplete and error detection
+```
+
+## Authentication Patterns
+
+### Auth Context Pattern
+```typescript
+// AuthContext.tsx - Centralized auth state management
+type AuthContextType = {
+  user: User | null;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
+};
+
+// Why this pattern:
+// - Centralized auth state across the app
+// - Consistent loading states
+// - Type-safe auth operations
+```
+
+### Protected Route Pattern
+```typescript
+// ProtectedRoute.tsx - Route guards for authenticated users
+const ProtectedRoute = ({children}: {children: React.ReactNode}) => {
+  const {user, loading} = useAuth();
+  
+  if (loading) return <LoadingSpinner />;
+  if (!user) return <Navigate to="/login" replace />;
+  
+  return <>{children}</>;
+};
+
+// Why this pattern:
+// - Consistent auth checking across routes
+// - Proper loading states
+// - Automatic redirects for unauthenticated users
+```
+
+## Database Schema Patterns
+
+### User-Owned Data Pattern
+```sql
+-- Core pattern: All user data references auth.users
+CREATE TABLE characters (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  server TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Why this pattern:
+-- - Clear ownership relationship
+-- - Automatic cleanup when user is deleted
+-- - Foundation for Row Level Security
+```
+
+### Progress Tracking Pattern
+```sql
+-- Pattern: Composite keys for progress tracking
+CREATE TABLE job_progress (
+  character_id UUID REFERENCES characters(id) ON DELETE CASCADE,
+  job_type TEXT NOT NULL,
+  level INTEGER NOT NULL DEFAULT 1,
+  experience INTEGER DEFAULT 0,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (character_id, job_type)
+);
+
+-- Why this pattern:
+-- - Prevents duplicate entries per character/job
+-- - Efficient queries for character progress
+-- - Natural relationship modeling
+```
+
+## Row Level Security (RLS) Patterns
+
+### User Data Isolation
+```sql
+-- Enable RLS
+ALTER TABLE characters ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Users can only access their own characters
+CREATE POLICY "users_own_characters" ON characters
+  FOR ALL USING (auth.uid() = user_id);
+
+-- Why this pattern:
+-- - Automatic data isolation at database level
+-- - No need to add WHERE clauses in application code
+-- - Security by default, not as an afterthought
+```
+
+### Cascading Security
+```sql
+-- Policy: Users can access progress for their own characters
+CREATE POLICY "users_own_progress" ON job_progress
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM characters 
+      WHERE characters.id = job_progress.character_id 
+      AND characters.user_id = auth.uid()
+    )
+  );
+
+-- Why this pattern:
+-- - Security follows data relationships
+-- - Consistent access control across related tables
+-- - Prevents orphaned or unauthorized data access
+```
+
+## Query Patterns
+
+### Basic CRUD Operations
+```typescript
+// Service pattern for database operations
+export const characterService = {
+  // Create with proper typing
+  async create(character: Omit<Character, 'id' | 'created_at' | 'updated_at'>) {
+    const {data, error} = await supabase
+      .from('characters')
+      .insert(character)
+      .select()
+      .single();
+    
+    if (error) throw new Error(`Failed to create character: ${error.message}`);
+    return data;
+  },
+
+  // Read with filtering
+  async getByUserId(userId: string) {
+    const { data, error } = await supabase
+      .from('characters')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw new Error(`Failed to fetch characters: ${error.message}`);
+    return data;
+  },
+
+  // Update with optimistic locking
+  async update(id: string, updates: Partial<Character>) {
+    const { data, error } = await supabase
+      .from('characters')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw new Error(`Failed to update character: ${error.message}`);
+    return data;
+  }
+};
+
+// Why this pattern:
+// - Centralized database logic
+// - Consistent error handling
+// - Type safety with proper return types
+// - Reusable across components
+```
+
+### Upsert Pattern for Progress Tracking
+```typescript
+// Progress update with conflict resolution
+export const progressService = {
+  async updateJobLevel(characterId: string, jobType: string, level: number) {
+    const { data, error } = await supabase
+      .from('job_progress')
+      .upsert({
+        character_id: characterId,
+        job_type: jobType,
+        level,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'character_id,job_type'
+      })
+      .select()
+      .single();
+    
+    if (error) throw new Error(`Failed to update job progress: ${error.message}`);
+    return data;
+  }
+};
+
+// Why upsert:
+// - Handles both new and existing records
+// - Idempotent operations (safe to retry)
+// - Simpler application logic
+// - Better performance than check-then-insert/update
+```
+
+## Real-time Patterns
+
+### Subscription Management
+```typescript
+// useRealtimeSubscription hook
+export const useRealtimeSubscription = <T>(
+  table: string,
+  filter?: string,
+  callback?: (payload: any) => void
+) => {
+  useEffect(() => {
+    const subscription = supabase
+      .channel(`${table}_changes`)
+      .on(
+        'postgres_changes',
+        { 
+          event: '*', 
+          schema: 'public', 
+          table,
+          filter 
+        },
+        (payload) => {
+          console.log('Real-time update:', payload);
+          callback?.(payload);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [table, filter]);
+};
+
+// Why this pattern:
+// - Automatic cleanup on unmount
+// - Reusable across different tables
+// - Optional callback for custom handling
+// - Proper subscription management
+```
+
+## Error Handling Patterns
+
+### Service Layer Error Handling
+```typescript
+// Consistent error handling across services
+export class DatabaseError extends Error {
+  constructor(
+    message: string,
+    public operation: string,
+    public table: string,
+    public originalError?: any
+  ) {
+    super(message);
+    this.name = 'DatabaseError';
+  }
+}
+
+export const handleDatabaseError = (
+  error: any,
+  operation: string,
+  table: string
+): never => {
+  console.error(`Database ${operation} failed on ${table}:`, error);
+  throw new DatabaseError(
+    `Failed to ${operation} ${table}: ${error.message}`,
+    operation,
+    table,
+    error
+  );
+};
+
+// Usage in services:
+const { data, error } = await supabase.from('characters').select('*');
+if (error) handleDatabaseError(error, 'fetch', 'characters');
+
+// Why this pattern:
+// - Consistent error types across the app
+// - Better debugging with structured error info
+// - Centralized error logging
+// - Type-safe error handling in components
+```
+
+### React Query Integration
+```typescript
+// Using React Query with Supabase for better state management
+export const useCharacters = () => {
+  return useQuery({
+    queryKey: ['characters'],
+    queryFn: () => characterService.getByUserId(user.id),
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+export const useUpdateCharacter = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<Character> }) =>
+      characterService.update(id, updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    },
+  });
+};
+
+// Why React Query:
+// - Automatic caching and background updates
+// - Optimistic updates with rollback
+// - Loading and error states handled
+// - Deduplication of requests
+```
+
+## Performance Patterns
+
+### Pagination Pattern
+```typescript
+// Efficient pagination for large datasets
+export const usePaginatedQuery = <T>(
+  table: string,
+  pageSize: number = 50,
+  filters?: Record<string, any>
+) => {
+  const [page, setPage] = useState(0);
+  
+  const { data, isLoading, error } = useQuery({
+    queryKey: [table, 'paginated', page, filters],
+    queryFn: async () => {
+      let query = supabase
+        .from(table)
+        .select('*', { count: 'exact' })
+        .range(page * pageSize, (page + 1) * pageSize - 1);
+      
+      // Apply filters
+      Object.entries(filters || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+          query = query.eq(key, value);
+        }
+      });
+      
+      const { data, error, count } = await query;
+      if (error) throw error;
+      
+      return {
+        data: data || [],
+        count: count || 0,
+        hasMore: count ? (page + 1) * pageSize < count : false
+      };
+    }
+  });
+  
+  return {
+    ...data,
+    isLoading,
+    error,
+    page,
+    setPage,
+    nextPage: () => setPage(p => p + 1),
+    prevPage: () => setPage(p => Math.max(0, p - 1))
+  };
+};
+
+// Why this pattern:
+// - Efficient memory usage for large datasets
+// - Consistent pagination interface
+// - Built-in loading and error states
+// - Extensible filtering system
+```
+
+### Optimized Queries
+```typescript
+// Selecting only needed columns
+const { data: characters } = await supabase
+  .from('characters')
+  .select('id, name, server') // Only select what you need
+  .eq('user_id', userId);
+
+// Using joins instead of multiple queries
+const { data: charactersWithProgress } = await supabase
+  .from('characters')
+  .select(`
+    id,
+    name,
+    server,
+    job_progress(job_type, level)
+  `)
+  .eq('user_id', userId);
+
+// Why optimize queries:
+// - Reduced bandwidth usage
+// - Faster response times
+// - Lower database load
+// - Better user experience
+```
+
+## Security Best Practices
+
+### Input Validation
+```typescript
+// Always validate inputs before database operations
+import { z } from 'zod';
+
+const CharacterSchema = z.object({
+  name: z.string().min(1).max(15), // FFXI character name limits
+  server: z.string().min(1)
+});
+
+export const createCharacter = async (input: unknown) => {
+  const validated = CharacterSchema.parse(input);
+  // Now we know the input is safe to use
+  return characterService.create(validated);
+};
+
+// Why validate inputs:
+// - Prevent malicious data injection
+// - Ensure data consistency
+// - Better error messages for users
+// - Type safety at runtime
+```
+
+### Environment Security
+```typescript
+// Never expose sensitive keys in client code
+// ❌ Don't do this:
+// const supabase = createClient('url', 'SERVICE_ROLE_KEY');
+
+// ✅ Do this:
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY // Anon key is safe for client
+);
+
+// Why this matters:
+// - Service role key has admin privileges
+// - Client code is visible to users
+// - Anon key respects RLS policies
+// - Principle of least privilege
+```
+
+## Testing Patterns
+
+### Database Testing with Vitest
+```typescript
+// Test utilities for Supabase
+import { vi } from 'vitest';
+
+export const createTestSupabaseClient = () => {
+  return createClient(
+    process.env.VITE_SUPABASE_URL!,
+    process.env.VITE_SUPABASE_ANON_KEY!
+  );
+};
+
+export const createTestUser = async () => {
+  const testClient = createTestSupabaseClient();
+  const { data, error } = await testClient.auth.signUp({
+    email: `test-${Date.now()}@example.com`,
+    password: 'test-password-123'
+  });
+  
+  if (error) throw error;
+  return data.user;
+};
+
+// Mock Supabase for unit tests
+export const mockSupabase = () => {
+  return {
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({ data: [], error: null })),
+      insert: vi.fn(() => ({ data: {}, error: null })),
+      update: vi.fn(() => ({ data: {}, error: null })),
+      delete: vi.fn(() => ({ data: null, error: null })),
+    })),
+    auth: {
+      getUser: vi.fn(() => ({ data: { user: null }, error: null })),
+      signInWithPassword: vi.fn(),
+      signUp: vi.fn(),
+      signOut: vi.fn(),
+    }
+  };
+};
+
+// Why test with real database for integration:
+// - Tests RLS policies
+// - Validates actual query performance
+// - Catches schema changes
+// - More confidence in production behavior
+```
+
+## Common Pitfalls & Solutions
+
+### Pitfall: Forgetting RLS
+```typescript
+// ❌ This won't work if RLS is enabled but no policy exists
+const { data } = await supabase.from('characters').select('*');
+
+// ✅ Ensure proper RLS policies are in place
+// And understand that RLS automatically filters results
+```
+
+### Pitfall: Not Handling Auth State
+```typescript
+// ❌ Don't assume user is always authenticated
+const user = supabase.auth.getUser(); // Might be null
+
+// ✅ Always check auth state
+const { data: { user }, error } = await supabase.auth.getUser();
+if (!user) {
+  // Handle unauthenticated state
+  return;
+}
+```
+
+### Pitfall: Inefficient Queries
+```typescript
+// ❌ N+1 query problem
+const characters = await supabase.from('characters').select('*');
+for (const character of characters) {
+  const progress = await supabase
+    .from('job_progress')
+    .select('*')
+    .eq('character_id', character.id);
+}
+
+// ✅ Use joins or batch queries
+const charactersWithProgress = await supabase
+  .from('characters')
+  .select(`
+    *,
+    job_progress(*)
+  `);
+```

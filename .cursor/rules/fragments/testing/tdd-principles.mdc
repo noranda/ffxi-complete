@@ -1,0 +1,267 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Test-Driven Development (TDD)
+
+## TDD Cycle: Red-Green-Refactor
+
+### 1. Red Phase - Write Failing Test
+```typescript
+// Write the test first - it should fail
+describe('JobProgress', () => {
+  it('should display job level', () => {
+    render(<JobProgress job="WAR" level={75} />);
+    expect(screen.getByText('WAR: 75')).toBeInTheDocument();
+  });
+});
+```
+
+### 2. Green Phase - Minimal Implementation
+```typescript
+// Write the LEAST code to make the test pass
+const JobProgress = ({ job, level }: { job: string; level: number }) => {
+  return <div>{job}: {level}</div>;
+};
+```
+
+### 3. Refactor Phase - Clean Up
+```typescript
+// Only refactor after test passes - improve without changing behavior
+const JobProgress = ({ job, level }: { job: string; level: number }) => {
+  return (
+    <div className="job-progress">
+      <span className="job-name">{job}</span>
+      <span className="job-level">: {level}</span>
+    </div>
+  );
+};
+```
+
+## TDD Principles
+
+### Minimal Implementation Rule
+- **Write the absolute minimum code** to make the test pass
+- **No premature optimization** - only add what the test requires
+- **Hardcode values initially** if it gets the test passing faster
+- **Refactor only after** the test is green
+
+### Test-First Approach
+```typescript
+// ❌ Don't write implementation first
+const calculateJobExp = (currentLevel: number, targetLevel: number) => {
+  // Complex implementation...
+};
+
+// ✅ Write test first, then minimal implementation
+describe('calculateJobExp', () => {
+  it('should return 0 for same level', () => {
+    expect(calculateJobExp(50, 50)).toBe(0);
+  });
+});
+
+// Minimal implementation to pass
+const calculateJobExp = (currentLevel: number, targetLevel: number) => {
+  return 0; // Hardcode the simplest case first
+};
+```
+
+### Progressive Enhancement
+```typescript
+// Start with the simplest case
+it('should handle level 1 to 2', () => {
+  expect(calculateJobExp(1, 2)).toBe(100);
+});
+
+// Add more complex cases incrementally
+it('should handle level 1 to 3', () => {
+  expect(calculateJobExp(1, 3)).toBe(300);
+});
+
+// Implementation grows with tests
+const calculateJobExp = (currentLevel: number, targetLevel: number) => {
+  if (currentLevel === targetLevel) return 0;
+  if (currentLevel === 1 && targetLevel === 2) return 100;
+  if (currentLevel === 1 && targetLevel === 3) return 300;
+  return 0; // Default case
+};
+```
+
+## TDD for React Components
+
+### Component Testing Strategy
+```typescript
+// 1. Test the component's public interface first
+describe('JobTracker', () => {
+  it('should render job list', () => {
+    render(<JobTracker jobs={['WAR', 'MNK']} />);
+    expect(screen.getByText('WAR')).toBeInTheDocument();
+    expect(screen.getByText('MNK')).toBeInTheDocument();
+  });
+
+  it('should call onJobSelect when job is clicked', () => {
+    const mockOnJobSelect = jest.fn();
+    render(<JobTracker jobs={['WAR']} onJobSelect={mockOnJobSelect} />);
+    
+    fireEvent.click(screen.getByText('WAR'));
+    expect(mockOnJobSelect).toHaveBeenCalledWith('WAR');
+  });
+});
+
+// 2. Minimal implementation
+const JobTracker = ({ jobs, onJobSelect }: { jobs: string[]; onJobSelect: (job: string) => void }) => {
+  return (
+    <div>
+      {jobs.map(job => (
+        <button key={job} onClick={() => onJobSelect(job)}>
+          {job}
+        </button>
+      ))}
+    </div>
+  );
+};
+```
+
+## TDD for Hooks
+
+### Custom Hook Testing
+```typescript
+// 1. Test the hook's behavior
+describe('useJobProgress', () => {
+  it('should return job level', () => {
+    const { result } = renderHook(() => useJobProgress('WAR'));
+    expect(result.current.level).toBe(1); // Default level
+  });
+
+  it('should update level when setLevel is called', () => {
+    const { result } = renderHook(() => useJobProgress('WAR'));
+    
+    act(() => {
+      result.current.setLevel(75);
+    });
+    
+    expect(result.current.level).toBe(75);
+  });
+});
+
+// 2. Minimal implementation
+const useJobProgress = (jobId: string) => {
+  const [level, setLevel] = useState(1);
+  return { level, setLevel };
+};
+```
+
+## TDD for API Integration
+
+### Service Layer Testing
+```typescript
+// 1. Test the service interface
+describe('jobService', () => {
+  it('should fetch job progress', async () => {
+    const mockData = { jobId: 'WAR', level: 75 };
+    global.fetch = jest.fn().mockResolvedValue({
+      json: () => Promise.resolve(mockData)
+    });
+
+    const result = await jobService.getJobProgress('WAR');
+    expect(result).toEqual(mockData);
+  });
+});
+
+// 2. Minimal implementation
+const jobService = {
+  async getJobProgress(jobId: string) {
+    const response = await fetch(`/api/jobs/${jobId}`);
+    return response.json();
+  }
+};
+```
+
+## TDD Best Practices
+
+### Test Organization
+```typescript
+// Group related tests
+describe('JobProgress Component', () => {
+  describe('when job level is displayed', () => {
+    it('should show current level', () => {
+      // Test implementation
+    });
+  });
+
+  describe('when level is updated', () => {
+    it('should call onLevelChange', () => {
+      // Test implementation
+    });
+  });
+});
+```
+
+### Test Data Management
+```typescript
+// Use factories for test data
+const createJobProgress = (overrides = {}) => ({
+  jobId: 'WAR',
+  level: 1,
+  experience: 0,
+  ...overrides
+});
+
+// Use in tests
+it('should display job progress', () => {
+  const jobData = createJobProgress({ level: 75, experience: 50000 });
+  render(<JobProgress {...jobData} />);
+  // Test assertions
+});
+```
+
+### Mocking Strategy
+```typescript
+// Mock external dependencies
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: () => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn(() => Promise.resolve({ data: [], error: null }))
+      }))
+    }))
+  })
+}));
+```
+
+## TDD Workflow
+
+### Daily TDD Process
+1. **Write a failing test** for the next feature/requirement
+2. **Write minimal code** to make the test pass
+3. **Refactor** if needed (only after test is green)
+4. **Repeat** for the next requirement
+
+### Feature Development
+```typescript
+// 1. Start with acceptance test
+describe('Job Level Tracking', () => {
+  it('should allow user to update job level', async () => {
+    render(<JobTracker />);
+    
+    // User clicks on WAR job
+    fireEvent.click(screen.getByText('WAR'));
+    
+    // User enters new level
+    fireEvent.change(screen.getByLabelText('Level'), { target: { value: '75' } });
+    
+    // User saves
+    fireEvent.click(screen.getByText('Save'));
+    
+    // Level is updated
+    await waitFor(() => {
+      expect(screen.getByText('WAR: 75')).toBeInTheDocument();
+    });
+  });
+});
+
+// 2. Break down into smaller unit tests
+// 3. Implement each unit with minimal code
+// 4. Integrate and refactor
+```

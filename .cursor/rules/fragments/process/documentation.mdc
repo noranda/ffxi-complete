@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Documentation
+
+## Code Documentation
+- JSDoc comments for complex functions
+- README files for major components
+- API documentation for services
+- Type definitions for all data structures
+
+## User Documentation
+- In-app help tooltips
+- User guide for complex features
+- FAQ section

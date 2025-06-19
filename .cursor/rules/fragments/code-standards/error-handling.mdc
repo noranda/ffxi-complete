@@ -1,0 +1,406 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Error Handling Standards
+
+## Error Management Patterns
+
+Consistent error handling ensures robust applications with predictable failure modes and good user experience.
+
+## React Error Boundaries
+
+### Error Boundary Implementation
+```typescript
+import {Component, type ErrorInfo, type ReactNode} from 'react';
+
+type ErrorBoundaryProps = {
+  children: ReactNode;
+  fallback?: ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+};
+
+type ErrorBoundaryState = {
+  hasError: boolean;
+  error?: Error;
+};
+
+/**
+ * Error boundary component for catching and handling React errors
+ * Provides fallback UI and error reporting capabilities
+ */
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = {hasError: false};
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Update state to show fallback UI
+    return {hasError: true, error};
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Log error details for debugging
+    console.error('Error Boundary caught an error:', error, errorInfo);
+    
+    // Report to error tracking service
+    this.props.onError?.(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || (
+        <div className="error-boundary">
+          <h2>Something went wrong</h2>
+          <p>We're sorry, but something unexpected happened.</p>
+          <button onClick={() => this.setState({hasError: false})}>
+            Try again
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+```
+
+### Error Boundary Usage
+```typescript
+// ✅ Correct: Wrap components that might throw errors
+const App: React.FC<unknown> = () => (
+  <ErrorBoundary
+    fallback={<ErrorFallback />}
+    onError={(error, errorInfo) => {
+      // Report to monitoring service
+      errorReporting.captureException(error, {extra: errorInfo});
+    }}
+  >
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/characters" element={<CharacterList />} />
+      </Routes>
+    </Router>
+  </ErrorBoundary>
+);
+```
+
+## Async Operation Error Handling
+
+### Hook Pattern for Async Operations
+```typescript
+/**
+ * Generic hook for handling async operations with error states
+ * Provides loading, error, and success states with proper typing
+ */
+const useAsyncOperation = <T, P extends any[] = []>(
+  operation: (...args: P) => Promise<T>
+) => {
+  const [data, setData] = useState<T | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const execute = useCallback(async (...args: P) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await operation(...args);
+      setData(result);
+      return result;
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Unknown error');
+      setError(error);
+      throw error; // Re-throw for caller handling
+    } finally {
+      setLoading(false);
+    }
+  }, [operation]);
+
+  const reset = useCallback(() => {
+    setData(null);
+    setError(null);
+    setLoading(false);
+  }, []);
+
+  return {data, error, loading, execute, reset};
+};
+
+// Usage
+const useCharacterCreation = () => {
+  return useAsyncOperation(async (characterData: CreateCharacterRequest) => {
+    const response = await api.post('/characters', characterData);
+    return response.data;
+  });
+};
+```
+
+### Service Layer Error Handling
+```typescript
+/**
+ * Custom error class for API-related errors
+ * Provides structured error information for better handling
+ */
+class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public code?: string,
+    public details?: any
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+/**
+ * Service layer with consistent error handling
+ * Transforms API errors into structured format
+ */
+export const characterService = {
+  async create(character: CreateCharacterRequest): Promise<Character> {
+    try {
+      const {data, error} = await supabase
+        .from('characters')
+        .insert(character)
+        .select()
+        .single();
+      
+      if (error) {
+        throw new ApiError(
+          `Failed to create character: ${error.message}`,
+          400,
+          error.code,
+          error.details
+        );
+      }
+      
+      return data;
+    } catch (err) {
+      if (err instanceof ApiError) {
+        throw err; // Re-throw API errors as-is
+      }
+      
+      // Handle unexpected errors
+      console.error('Unexpected error in characterService.create:', err);
+      throw new ApiError(
+        'An unexpected error occurred while creating the character',
+        500,
+        'UNKNOWN_ERROR',
+        err
+      );
+    }
+  },
+
+  async getById(id: string): Promise<Character | null> {
+    try {
+      const {data, error} = await supabase
+        .from('characters')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+      
+      if (error) {
+        throw new ApiError(
+          `Failed to fetch character: ${error.message}`,
+          400,
+          error.code
+        );
+      }
+      
+      return data;
+    } catch (err) {
+      if (err instanceof ApiError) {
+        throw err;
+      }
+      
+      throw new ApiError(
+        'Failed to fetch character',
+        500,
+        'FETCH_ERROR',
+        err
+      );
+    }
+  },
+};
+```
+
+## Component Error Handling
+
+### Error State Management in Components
+```typescript
+type ComponentErrorState = {
+  hasError: boolean;
+  error?: Error;
+  retryCount: number;
+};
+
+/**
+ * Component with built-in error handling and retry capability
+ * Demonstrates proper error state management patterns
+ */
+const DataComponent: React.FC<DataComponentProps> = ({userId}) => {
+  const [errorState, setErrorState] = useState<ComponentErrorState>({
+    hasError: false,
+    retryCount: 0,
+  });
+  
+  const {data, error, loading, execute} = useAsyncOperation(
+    () => characterService.getByUserId(userId)
+  );
+
+  // Handle errors from async operations
+  useEffect(() => {
+    if (error) {
+      setErrorState(prev => ({
+        hasError: true,
+        error,
+        retryCount: prev.retryCount + 1,
+      }));
+    }
+  }, [error]);
+
+  const handleRetry = useCallback(() => {
+    setErrorState(prev => ({
+      ...prev,
+      hasError: false,
+      error: undefined,
+    }));
+    execute();
+  }, [execute]);
+
+  // Show error state with retry option
+  if (errorState.hasError && errorState.error) {
+    return (
+      <div className="error-state">
+        <h3>Failed to load data</h3>
+        <p>{errorState.error.message}</p>
+        {errorState.retryCount < 3 && (
+          <button onClick={handleRetry}>
+            Retry ({errorState.retryCount}/3)
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  if (loading) return <LoadingSpinner />;
+
+  return (
+    <div>
+      {data?.map(item => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+    </div>
+  );
+};
+```
+
+## Error Reporting and Monitoring
+
+### Error Context Provider
+```typescript
+type ErrorContextType = {
+  reportError: (error: Error, context?: Record<string, any>) => void;
+  clearError: () => void;
+  lastError?: Error;
+};
+
+const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
+
+export const ErrorProvider: React.FC<{children: ReactNode}> = ({children}) => {
+  const [lastError, setLastError] = useState<Error>();
+
+  const reportError = useCallback((error: Error, context?: Record<string, any>) => {
+    setLastError(error);
+    
+    // Log to console in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error reported:', error, context);
+    }
+    
+    // Report to monitoring service in production
+    if (process.env.NODE_ENV === 'production') {
+      // Example: Sentry, LogRocket, etc.
+      errorReporting.captureException(error, {
+        tags: {component: 'user-action'},
+        extra: context,
+      });
+    }
+  }, []);
+
+  const clearError = useCallback(() => {
+    setLastError(undefined);
+  }, []);
+
+  return (
+    <ErrorContext.Provider value={{reportError, clearError, lastError}}>
+      {children}
+    </ErrorContext.Provider>
+  );
+};
+
+export const useErrorReporting = () => {
+  const context = useContext(ErrorContext);
+  if (!context) {
+    throw new Error('useErrorReporting must be used within ErrorProvider');
+  }
+  return context;
+};
+```
+
+## User-Friendly Error Messages
+
+### Error Message Mapping
+```typescript
+/**
+ * Maps technical error codes to user-friendly messages
+ * Provides contextual error messages based on error type
+ */
+const getErrorMessage = (error: Error): string => {
+  if (error instanceof ApiError) {
+    switch (error.code) {
+      case 'PGRST116': // Row not found
+        return 'The requested item could not be found.';
+      case 'PGRST301': // Row-level security policy violated
+        return 'You do not have permission to perform this action.';
+      case '23505': // Unique constraint violation
+        return 'An item with this name already exists.';
+      case 'CONNECTION_ERROR':
+        return 'Unable to connect to the server. Please check your internet connection.';
+      default:
+        return 'An unexpected error occurred. Please try again.';
+    }
+  }
+  
+  // Handle network errors
+  if (error.message.includes('fetch')) {
+    return 'Network error. Please check your connection and try again.';
+  }
+  
+  // Fallback message
+  return 'Something went wrong. Please try again later.';
+};
+```
+
+## Best Practices
+
+- **Use Error Boundaries** to catch and handle React component errors
+- **Implement retry logic** with exponential backoff for transient failures
+- **Provide user-friendly error messages** instead of technical error details
+- **Log errors appropriately** with context for debugging
+- **Handle async operations** with proper loading and error states
+- **Use structured error types** for consistent error handling
+- **Test error scenarios** to ensure graceful degradation
+- **Monitor errors** in production with proper reporting tools
+
+## Error Prevention
+
+- **Validate inputs** before processing to prevent runtime errors
+- **Use TypeScript** strictly to catch type-related errors at compile time
+- **Implement proper null checks** and optional chaining
+- **Handle edge cases** explicitly in business logic
+- **Use defensive programming** techniques for external dependencies

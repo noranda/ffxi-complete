@@ -1,0 +1,96 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# TypeScript Standards
+
+## Configuration and Patterns
+
+Use strict TypeScript configuration with proper type definitions and patterns for consistent code quality.
+
+## Type Definitions
+
+### Prefer Types Over Interfaces
+```typescript
+// ✅ Correct: Use types for object shapes (not extending a library)
+type Character = {
+  id: string;
+  name: string;
+  userId: string;
+  createdAt: Date;
+};
+
+// ❌ Incorrect: Using interface for simple object shapes
+interface Character {
+  id: string;
+  name: string;
+  userId: string;
+  createdAt: Date;
+}
+```
+
+### Enums for Fixed Sets
+```typescript
+// ✅ Correct: Use enums for fixed sets of values
+enum JobType {
+  WAR = 'WAR',
+  MNK = 'MNK',
+  WHM = 'WHM',
+  BLM = 'BLM',
+  // ... etc
+}
+
+// Usage
+const currentJob: JobType = JobType.WAR;
+```
+
+### Union Types for Flexibility
+```typescript
+// ✅ Correct: Use union types for flexible but constrained values
+type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
+type Theme = 'light' | 'dark' | 'system';
+
+// Usage
+const status: ProgressStatus = 'in_progress';
+```
+
+## Type Organization
+
+### Prop Types
+```typescript
+// ✅ Correct: Define prop types outside component definition
+type ButtonProps = React.ComponentProps<'button'> & {
+  /** Button size variant */
+  size?: 'sm' | 'md' | 'lg';
+  /** Button visual style variant */
+  variant?: 'primary' | 'secondary' | 'destructive';
+  /** Render as child using composition pattern */
+  asChild?: boolean;
+};
+```
+
+### Utility Types
+```typescript
+// ✅ Correct: Use TypeScript utility types effectively
+type PartialCharacter = Partial<Character>;
+type RequiredId = Pick<Character, 'id'>;
+type CharacterUpdate = Omit<Character, 'id' | 'createdAt'>;
+
+// Generic types for reusability
+type ApiResponse<T> = {
+  data: T;
+  error: string | null;
+  success: boolean;
+};
+```
+
+## Best Practices
+
+- **Always use strict TypeScript configuration**
+- **Prefer `type` over `interface` for object shapes**
+- **Use `enum` for fixed sets of related values**
+- **Use union types for flexible constraints**
+- **Define types outside of component definitions**
+- **Leverage TypeScript utility types for transformations**
+- **Use generic types for reusable patterns**

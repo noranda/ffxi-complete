@@ -1,0 +1,302 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Code Documentation Standards
+
+## JSDoc and Inline Documentation
+
+Comprehensive documentation ensures code maintainability and helps developers understand component APIs and functionality.
+
+## JSDoc Comment Standards (Required)
+
+### Component Documentation
+```typescript
+/**
+ * Component props extending HTML element attributes
+ * Always define props type outside component definition
+ */
+type ButtonProps = React.ComponentProps<'button'> & {
+  /** Render as child using composition pattern */
+  asChild?: boolean;
+  /** Button size variant */
+  size?: 'sm' | 'md' | 'lg';
+  /** Button visual style variant */
+  variant?: 'primary' | 'secondary' | 'destructive';
+};
+
+/**
+ * Versatile button component with multiple styling variants
+ * Built on HTML button with design system integration
+ * 
+ * @example
+ * ```tsx
+ * <Button onClick={handleClick} size="lg" variant="primary">
+ *   Save Changes
+ * </Button>
+ * 
+ * <Button asChild>
+ *   <Link to="/dashboard">Go to Dashboard</Link>
+ * </Button>
+ * ```
+ */
+const Button: React.FC<ButtonProps> = ({
+  asChild = false,
+  children,
+  className,
+  size = 'md',
+  variant = 'primary',
+  ...props
+}) => {
+  // Component-specific logic and hooks
+  const handleInternalClick = useCallback(() => {
+    // Implementation details
+  }, []);
+
+  // Early returns for different states
+  if (asChild) {
+    return <Slot className={buttonVariants({variant, size, className})} {...props} />;
+  }
+
+  return (
+    <button
+      className={buttonVariants({variant, size, className})}
+      onClick={handleInternalClick}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+### Type Documentation
+```typescript
+/**
+ * User preference configuration object
+ * Handles application-wide user settings and personalization
+ */
+type UserPreferences = {
+  /** User's preferred theme setting */
+  theme: 'light' | 'dark' | 'system';
+  /** Whether to show completion notifications */
+  notifications: boolean;
+  /** Default character to load on login */
+  defaultCharacterId?: string;
+  /** Language preference for UI text */
+  language: 'en' | 'ja' | 'fr' | 'de';
+};
+
+/**
+ * API response wrapper for consistent error handling
+ * Used across all API endpoints for standardized responses
+ */
+type ApiResponse<T> = {
+  /** Response data if successful */
+  data: T;
+  /** Error message if request failed */
+  error: string | null;
+  /** Whether the request was successful */
+  success: boolean;
+  /** Additional metadata about the response */
+  meta?: {
+    timestamp: string;
+    requestId: string;
+  };
+};
+```
+
+### Hook Documentation
+```typescript
+/**
+ * Custom hook for managing user preferences
+ * Handles persistence to localStorage and provides reactive updates
+ * 
+ * @returns Object with current preferences and update function
+ * 
+ * @example
+ * ```tsx
+ * const {preferences, updatePreference} = useUserPreferences();
+ * 
+ * const handleThemeChange = (theme: Theme) => {
+ *   updatePreference('theme', theme);
+ * };
+ * ```
+ */
+const useUserPreferences = (): UserPreferencesReturn => {
+  // Implementation with inline comments for complex logic
+  const [preferences, setPreferences] = useState<UserPreferences>(() => {
+    // Load initial preferences from localStorage
+    const stored = localStorage.getItem('userPreferences');
+    return stored ? JSON.parse(stored) : DEFAULT_PREFERENCES;
+  });
+
+  const updatePreference = useCallback(<K extends keyof UserPreferences>(
+    key: K,
+    value: UserPreferences[K]
+  ) => {
+    setPreferences(prev => {
+      // Create new preferences object
+      const updated = {...prev, [key]: value};
+      
+      // Persist to localStorage
+      localStorage.setItem('userPreferences', JSON.stringify(updated));
+      
+      return updated;
+    });
+  }, []);
+
+  return {preferences, updatePreference};
+};
+```
+
+## Inline Documentation (Required)
+
+### Section Comments for Complex Components
+```typescript
+/**
+ * Complex dashboard component with multiple responsibilities
+ * Break down implementation with section comments
+ */
+const ComplexDashboard: React.FC<DashboardProps> = ({userId, initialData}) => {
+  // State management section
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Data fetching section
+  const {data: userData, error} = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => fetchUserData(userId),
+    initialData,
+  });
+
+  // Event handlers section
+  const handleTabChange = useCallback((tab: TabType) => {
+    // Validate tab before switching
+    if (isValidTab(tab)) {
+      setActiveTab(tab);
+      
+      // Track analytics event
+      analytics.track('dashboard_tab_changed', {tab, userId});
+    }
+  }, [userId]);
+
+  // Render logic with clear sections
+  return (
+    <div className="dashboard">
+      {/* Header section */}
+      <DashboardHeader user={userData} />
+
+      {/* Navigation section */}
+      <TabNavigation 
+        activeTab={activeTab} 
+        onTabChange={handleTabChange}
+      />
+
+      {/* Main content section */}
+      <div className="dashboard-content">
+        {activeTab === 'overview' && <OverviewTab data={userData} />}
+        {activeTab === 'characters' && <CharactersTab userId={userId} />}
+        {activeTab === 'settings' && <SettingsTab />}
+      </div>
+    </div>
+  );
+};
+```
+
+### Logic Explanation Comments
+```typescript
+const useDataSync = <T>(data: T[], endpoint: string) => {
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'error'>('idle');
+
+  const syncData = useCallback(async () => {
+    setSyncStatus('syncing');
+    
+    try {
+      // Batch updates to reduce API calls
+      const batches = chunk(data, 50); // Process in chunks of 50
+      
+      for (const batch of batches) {
+        // Process each batch sequentially to avoid rate limiting
+        await api.post(`${endpoint}/batch`, {items: batch});
+        
+        // Small delay between batches to be respectful to the server
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
+      setSyncStatus('idle');
+    } catch (error) {
+      // Log error details for debugging
+      console.error('Data sync failed:', {endpoint, dataCount: data.length, error});
+      setSyncStatus('error');
+    }
+  }, [data, endpoint]);
+
+  return {syncData, syncStatus};
+};
+```
+
+## Documentation Requirements
+
+### Required Documentation
+- **All exported functions** must have JSDoc comments
+- **All exported components** must have JSDoc comments with examples
+- **All exported types** must have JSDoc comments
+- **Complex logic** must have inline comments explaining the approach
+- **Section comments** for components with multiple responsibilities
+
+### JSDoc Tags to Use
+```typescript
+/**
+ * Description of the function/component/type
+ * 
+ * @param paramName - Description of parameter
+ * @returns Description of return value
+ * @throws Description of when errors are thrown
+ * @example
+ * ```tsx
+ * // Usage example here
+ * ```
+ * 
+ * @see RelatedComponent - Links to related functionality
+ * @since v1.2.0 - When this was added
+ * @deprecated Use NewComponent instead
+ */
+```
+
+### Example Quality Standards
+```typescript
+// ✅ Good example: Specific, practical, copy-pasteable
+/**
+ * @example
+ * ```tsx
+ * <Button onClick={() => save()} size="lg" variant="primary">
+ *   Save Changes
+ * </Button>
+ * 
+ * <Button asChild variant="ghost">
+ *   <Link to="/settings">Settings</Link>
+ * </Button>
+ * ```
+ */
+
+// ❌ Poor example: Vague, not practical
+/**
+ * @example
+ * ```tsx
+ * <Button>Click me</Button>
+ * ```
+ */
+```
+
+## Best Practices
+
+- **Write documentation first** when designing new APIs
+- **Update documentation** whenever implementation changes
+- **Use concrete examples** that developers can copy and adapt
+- **Explain the "why"** not just the "what" in complex logic
+- **Keep comments current** - outdated comments are worse than no comments
+- **Use section comments** to break down complex components
+- **Document edge cases** and special behavior
+- **Link related functionality** with @see tags

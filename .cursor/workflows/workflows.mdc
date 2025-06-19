@@ -1,0 +1,63 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Cursor Workflows
+
+## How Workflows Work
+
+Workflows are sequential processes that guide the AI assistant through complex multi-step tasks. Each workflow consists of numbered rule files that must be executed in order.
+
+### Workflow Execution Rules
+
+1. **Sequential Processing**: Execute files in numerical order (1, 2, 3, etc.)
+2. **User Confirmation**: Stop after each step and wait for user approval to proceed
+3. **Context Gathering**: Always ask for required context before starting each step
+4. **No Assumptions**: Never assume missing information - always prompt the user
+5. **Completion Summary**: After the final step, report what was accomplished and list all files created
+
+### Triggering Workflows
+
+When a user says something like "run the [workflow-name] workflow":
+
+1. **Identify the workflow folder** (e.g., `feature-development`)
+2. **Ask for initial context** needed for the first step
+3. **Execute step 1** according to its rule file
+4. **Stop and ask for permission** to proceed to step 2
+5. **Repeat** until all numbered steps are complete
+6. **Provide completion summary** with file list
+
+### Available Workflows
+
+- **feature-development**: 3-step process for creating PRDs, generating tasks, and managing implementation
+
+## Example Usage
+
+```
+User: "Run the feature-development workflow"
+AI: "I'll run the feature-development workflow. This will guide us through creating a PRD, generating tasks, and managing implementation. 
+
+To start with step 1 (create-prd), I need to know:
+- What feature would you like to create a PRD for?
+- Do you have any initial requirements or ideas?"
+
+User: [provides context]
+AI: [executes step 1, creates PRD]
+AI: "Step 1 complete! I've created the PRD. Ready to proceed to step 2 (generate-tasks)?"
+
+User: "yes"
+AI: [executes step 2]
+... and so on
+```
+
+## Workflow Structure
+
+Each workflow folder should contain:
+- Numbered rule files (1-xxx.mdc, 2-xxx.mdc, etc.)
+- Each file should specify:
+  - Goal of the step
+  - Required context/inputs
+  - Process to follow
+  - Expected outputs
+  - Instructions for the AI

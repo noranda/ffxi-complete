@@ -1,0 +1,174 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# UI/UX Guidelines
+
+## Design Philosophy - Collection-Focused Usability
+
+Inspired by [XIV-Complete](mdc:https:/xiv-complete.com), the FFXI Progress Tracker prioritizes **collection management** and **quick navigation** between different tracking categories. The design emphasizes clean organization, visual progress indicators, and efficient workflows for completionist players.
+
+## Core Design Patterns
+
+### Tab-Based Navigation
+- **Primary navigation** via horizontal tabs at the top
+- **Progress indicators** in tab labels (e.g., "Jobs 15/22", "Trusts 142/287")
+- **Active state** clearly distinguished from inactive tabs
+- **Responsive behavior** - stack or scroll on mobile devices
+- **Quick switching** between different collection types
+
+### Collection List Layout
+- **Vertical list structure** for all collection items
+- **Row-based items** with consistent spacing and alignment
+- **Expandable/collapsible sections** using accordion pattern
+- **Visual state indicators** (completed, in-progress, not started)
+- **Hover effects** for interactive feedback
+
+### Search & Filtering System
+- **Prominent search bar** at the top of each collection
+- **Quick filter buttons** (All, Acquired, Unacquired)
+- **Advanced filters** in collapsible panels or dropdowns
+- **Real-time filtering** as user types or selects options
+- **Clear filter state** with easy reset options
+
+## Component Patterns
+
+### Progress Indicators
+- **Circular progress** for completion percentages
+- **Progress bars** for skill levels, experience, etc.
+- **Badge counters** showing completion ratios (15/22)
+- **Color coding** for different progress states
+- **Visual hierarchy** to highlight important metrics
+
+### Item Cards/Rows
+- **Consistent item layout** across all collections
+- **Icon + Name + Progress** as primary information
+- **Secondary info** revealed on expansion
+- **Status indicators** (checkmarks, progress bars, etc.)
+- **Quick actions** available without expansion
+
+### State Management
+- **Visual feedback** for all user interactions
+- **Loading states** during data operations
+- **Error handling** with clear messaging
+- **Success confirmations** for updates
+- **Undo capabilities** where appropriate
+
+## Responsive Design
+
+### Desktop (1024px+)
+- **Full tab navigation** with progress indicators
+- **Multi-column layouts** where appropriate
+- **Sidebar filters** for advanced filtering
+- **Hover states** and keyboard shortcuts
+- **Efficient use of screen space**
+
+### Tablet (768px - 1023px)
+- **Horizontal scrolling tabs** if needed
+- **Touch-friendly targets** (44px minimum)
+- **Collapsed filters** in slide-out panels
+- **Optimized spacing** for touch interaction
+
+### Mobile (< 768px)
+- **Bottom tab navigation** or hamburger menu
+- **Single column layout** for all collections
+- **Swipe gestures** for navigation
+- **Thumb-friendly touch targets**
+- **Minimal chrome** to maximize content space
+
+## Accessibility Standards
+
+### Keyboard Navigation
+- **Tab order** follows logical flow
+- **Enter/Space** for activation
+- **Arrow keys** for list navigation
+- **Escape** to close modals/filters
+- **Focus indicators** clearly visible
+
+### Screen Reader Support
+- **Semantic HTML** structure
+- **ARIA labels** for complex interactions
+- **Progress announcements** for dynamic updates
+- **Clear headings** hierarchy
+- **Alt text** for all images/icons
+
+### Visual Accessibility
+- **Color contrast** minimum 4.5:1 ratio
+- **Focus indicators** highly visible
+- **No color-only** information
+- **Scalable text** up to 200%
+- **Reduced motion** preferences respected
+
+## Theme & Visual Design
+
+### Color System
+- **Dark theme primary** with light theme option
+- **Progress colors**: Green (complete), Blue (in-progress), Gray (not started)
+- **Accent colors** for interactive elements
+- **Semantic colors** for success, warning, error states
+- **Brand colors** that reflect FFXI aesthetic
+
+### Typography
+- **Clear hierarchy** with consistent sizing
+- **Readable fonts** optimized for data display
+- **Monospace** for numerical data when appropriate
+- **Line spacing** optimized for scanning lists
+- **Font weights** to establish information hierarchy
+
+### Spacing & Layout
+- **Consistent spacing scale** (4px, 8px, 16px, 24px, 32px)
+- **Grid system** for alignment
+- **White space** to prevent cognitive overload
+- **Breathing room** around interactive elements
+- **Visual grouping** through proximity
+
+## Collection-Specific Patterns
+
+### Jobs/Skills Tracking
+- **Level input fields** with validation
+- **Progress bars** showing current progress to next level
+- **Job icons** for quick visual identification
+- **Level-up celebrations** for milestone achievements
+
+### Checklist Collections (Trusts, Mounts, etc.)
+- **Checkbox interactions** with satisfying feedback
+- **Completion percentages** prominently displayed
+- **Filtering by obtained status**
+- **Bulk actions** for mass updates
+
+### Complex Collections (Quests, Missions)
+- **Hierarchical organization** (expansion → area → quest)
+- **Dependency visualization** showing prerequisites
+- **Rich metadata** in expansion panels
+- **Status tracking** with multiple states
+
+## Performance Considerations
+
+### Large Lists
+- **Virtual scrolling** for 500+ items
+- **Lazy loading** of images and metadata
+- **Debounced search** to prevent excessive API calls
+- **Efficient filtering** with client-side caching
+
+### Data Updates
+- **Optimistic updates** for immediate feedback
+- **Conflict resolution** for concurrent edits
+- **Auto-save** functionality with visual indicators
+- **Offline support** with sync when reconnected
+
+## Interaction Design
+
+### Micro-Interactions
+- **Satisfying completion** animations
+- **Smooth transitions** between states
+- **Tactile feedback** for mobile interactions
+- **Progress celebrations** for milestones
+- **Subtle sound effects** (optional)
+
+### Navigation Flow
+- **Breadcrumb trails** for complex hierarchies
+- **Back button** functionality
+- **Deep linking** to specific collections/items
+- **Search result navigation**
+- **Contextual actions** based on current view

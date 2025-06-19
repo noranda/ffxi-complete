@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure
+
+```
+src/
+├── components/         # Reusable UI components
+│   ├── ui/             # shadcn/ui components
+│   ├── forms/          # Form components
+│   │   ├── JobForm.tsx
+│   │   └── JobForm.test.tsx  # Co-located tests
+│   └── layout/         # Layout components
+├── hooks/              # Custom React hooks
+│   ├── useJobProgress.ts
+│   └── useJobProgress.test.ts  # Co-located tests
+├── lib/                # Utility functions and configurations
+├── pages/              # Page components
+│   ├── Dashboard.tsx
+│   └── Dashboard.test.tsx  # Co-located tests
+├── types/              # TypeScript type definitions
+├── data/               # Static game data
+├── services/           # API and external service integrations
+│   ├── jobService.ts
+│   └── jobService.test.ts  # Co-located tests
+└── contexts/           # React Context providers
+    ├── AuthContext.tsx
+    └── AuthContext.test.tsx  # Co-located tests
+```

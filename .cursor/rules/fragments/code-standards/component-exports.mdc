@@ -1,0 +1,187 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Component Export Patterns
+
+## Export Strategies for Different Component Types
+
+Different component architectures require different export patterns for optimal developer experience and API clarity.
+
+## Compound Component Export Pattern (Required)
+
+### For Components with Shared State/Logic
+```typescript
+// ✅ Correct: Compound components export only the root with sub-components as properties
+// For components that share state/logic (built on libraries like Radix, Vaul, etc.)
+
+// tabs.tsx - Compound component with shared state
+const Tabs = Object.assign(TabsRoot, {
+  Content: TabsContent,
+  List: TabsList,
+  Trigger: TabsTrigger,
+});
+
+// Namespaced types for compound component
+type TabsTypes = {
+  Props: TabsProps;
+  ContentProps: TabsContentProps;
+  ListProps: TabsListProps;
+  TriggerProps: TabsTriggerProps;
+};
+
+export {Tabs, type TabsTypes};
+
+// Usage:
+import {Tabs, type TabsTypes} from '@/components/ui/tabs';
+
+// Component usage
+<Tabs defaultValue="tab1">
+  <Tabs.List>
+    <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
+    <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="tab1">Content 1</Tabs.Content>
+  <Tabs.Content value="tab2">Content 2</Tabs.Content>
+</Tabs>
+
+// Type usage - only namespaced types exported
+const tabProps: TabsTypes.Props = {defaultValue: 'tab1'};
+const contentProps: TabsTypes.ContentProps = {value: 'tab1'};
+const listProps: TabsTypes.ListProps = {};
+const triggerProps: TabsTypes.TriggerProps = {value: 'tab1'};
+```
+
+## Composable Component Export Pattern (Required)
+
+### For Components with Only Styling/Layout
+```typescript
+// ✅ Correct: Composable components export all components individually
+// For components that only provide styling/layout coordination
+
+// card.tsx - Composable components with no shared state
+export {Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
+
+// Usage:
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
+<Card>
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+    <CardDescription>Description</CardDescription>
+  </CardHeader>
+  <CardContent>Content</CardContent>
+</Card>
+```
+
+## Single Component Export Pattern
+
+### For Standalone Components
+```typescript
+// ✅ Correct: Single components export normally
+export {Button, type ButtonProps};
+export {Input, type InputProps};
+
+// Usage:
+import {Button, type ButtonProps} from '@/components/ui/button';
+import {Input, type InputProps} from '@/components/ui/input';
+```
+
+## Export Formatting (Required)
+
+### Single Line vs Multi-line Rules
+```typescript
+// ✅ Correct: Single line exports when possible
+export {Button, type ButtonProps};
+export {Tabs, type TabsTypes};
+export {Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
+
+// ✅ Correct: Multi-line when exports exceed reasonable line length (>80 chars)
+export {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+};
+
+// ❌ Incorrect: Separate value and type exports when they could be combined
+export {Button};
+export type {ButtonProps};
+
+// ❌ Incorrect: Unnecessary multi-line for short exports
+export {
+  Button,
+  type ButtonProps,
+};
+
+// ✅ Correct: Combine value and type exports into single line when possible
+export {Button, type ButtonProps};
+```
+
+## Component Type Guidelines
+
+### Compound vs Composable vs Single
+
+**Compound components** (Tabs, Drawer):
+- Share state/logic through underlying libraries (Radix, Vaul, etc.)
+- Export only root with sub-components as properties
+- Use namespaced types for cleaner API
+
+**Composable components** (Card):
+- Only coordinate styling/layout
+- Export all components individually
+- No shared state or complex logic
+
+**Single components** (Button, Input):
+- Standalone functionality
+- Export normally with their types
+
+## Benefits of Each Pattern
+
+### Compound Component Benefits
+- **Clearer API**: `Tabs.Content` clearly shows relationship to Tabs
+- **Namespace organization**: Prevents naming conflicts
+- **Autocomplete**: Better IDE support for discovering related components
+- **Semantic grouping**: Shows which components work together
+
+### Composable Component Benefits
+- **Flexibility**: Mix and match components as needed
+- **Simple imports**: Import only what you use
+- **Clear separation**: Each component has distinct purpose
+- **Easy discovery**: All related components visible in import
+
+## Export Formatting Guidelines
+
+- **Combine value and type exports** into single statements when possible: `export {Button, type ButtonProps};`
+- **Use single line** when the combined line stays under 80 characters
+- **Use multi-line** only when the single line would exceed 80 characters
+- **Sort exports alphabetically** within each group
+- **Prefer fewer export statements** over multiple separate statements
+
+## Anti-Patterns to Avoid
+
+```typescript
+// ❌ Incorrect: Exporting compound components individually
+export {Tabs, TabsContent, TabsList, TabsTrigger}; // Don't do this for compound components
+
+// ❌ Incorrect: Using Object.assign for composable components
+const Card = Object.assign(CardRoot, {
+  Header: CardHeader,
+  Content: CardContent,
+}); // Don't do this for composable components
+
+// ❌ Incorrect: Multiple export statements when they could be combined
+export {Button};
+export type {ButtonProps};
+// Should be: export {Button, type ButtonProps};
+```

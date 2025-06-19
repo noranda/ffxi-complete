@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Security Considerations
+
+## Authentication
+- Use Supabase Auth with proper session management
+- Implement proper logout flows
+- Store sensitive data server-side only
+
+## Data Protection
+- Implement Row Level Security (RLS) policies
+- Validate user permissions for all operations
+- Sanitize user inputs to prevent injection attacks
+
+## Privacy
+- Minimize data collection
+- Provide data export/deletion options
+- Follow GDPR principles

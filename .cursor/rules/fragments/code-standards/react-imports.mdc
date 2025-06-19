@@ -1,0 +1,115 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# React Import Standards
+
+## Import Rules and Patterns
+
+Modern React applications should follow specific import patterns for consistency and maintainability.
+
+## React Import Rules (Required)
+
+### No Global React Import
+```typescript
+// ✅ Correct: No global React import, use React.* for types inline
+import {useState, useEffect} from 'react';
+import {Button} from '@/components/ui/button';
+
+type ComponentProps = {
+  title: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  children: React.ReactNode;
+};
+
+const MyComponent: React.FC<ComponentProps> = ({title, onClick, children}) => {
+  const [count, setCount] = useState<number>(0);
+  
+  return (
+    <div className="component">
+      <h2>{title}</h2>
+      <Button onClick={onClick}>{children}</Button>
+    </div>
+  );
+};
+
+// ❌ Incorrect: Global React import
+import * as React from 'react';
+import React from 'react';
+
+// ❌ Incorrect: Importing React for JSX (not needed in modern React)
+import React, {useState} from 'react';
+```
+
+## Import Formatting and Sorting (Required)
+
+### Automatic Import Groups
+```typescript
+// ✅ Correct - Import groups sorted automatically by ESLint
+import {useState} from 'react';
+
+import {createClient} from '@supabase/supabase-js';
+import {describe, it, expect} from 'vitest';
+
+import {Button} from '@/components/ui/button';
+import {utils} from '@/lib/utils';
+
+import {formatDate} from '../utils/date';
+
+import {CONFIG} from './config';
+
+import './styles.css';
+
+// ✅ Correct - Members sorted alphabetically within imports
+import {createClient} from '@supabase/supabase-js';
+import {describe, expect, it} from 'vitest';
+import {render, screen} from '@testing-library/react';
+
+// ❌ Incorrect - Wrong import order, bracket spacing violations
+import { createClient } from '@supabase/supabase-js';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import './styles.css';
+import { formatDate } from '../utils/date';
+```
+
+### Import Sorting Groups (Automatic)
+
+ESLint automatically sorts imports into these groups:
+
+1. **Side effect imports** (rare, stay in original order)
+2. **React imports** (always first)
+3. **External packages** (npm packages, alphabetical)
+4. **Internal packages** (imports with `@/` prefix)
+5. **Parent directory imports** (imports with `../`)
+6. **Same directory imports** (imports with `./`)
+7. **Style imports** (CSS/SCSS files, always last)
+
+### Bracket Spacing (Critical)
+
+```typescript
+// ✅ Correct - No spaces inside brackets (bracketSpacing: false)
+import {useState, useEffect} from 'react';
+import {Button} from '@/components/ui/button';
+const {data, error} = await supabase.from('table').select('*');
+
+// ❌ Incorrect - Spaces inside brackets
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+const { data, error } = await supabase.from('table').select('*');
+```
+
+## Best Practices
+
+- **No global React imports** - Import only what you need from React
+- **Use React.* for types** - Access React types inline (React.FC, React.MouseEventHandler)
+- **Automatic sorting** - Let ESLint handle import organization with `--fix`
+- **Consistent bracket spacing** - Follow Prettier configuration (no spaces)
+- **Alphabetical members** - Sort imported members alphabetically within imports
+
+## Notes
+
+- Import sorting is handled automatically by ESLint with `--fix`
+- All imports within each group are sorted alphabetically
+- The grouping system ensures logical organization and prevents conflicts

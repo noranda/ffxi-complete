@@ -1,0 +1,499 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Rule Management Guidelines
+
+## Rule System Architecture
+
+Our cursor rules follow a **modular, fragment-based architecture** designed for maintainability, clarity, and scalability. The system consists of:
+
+- **Main rule files** in `.cursor/rules/` that provide overview and reference fragments
+- **Fragment files** in `.cursor/rules/fragments/` that contain focused, single-purpose guidelines  
+- **Workflow files** in `.cursor/workflows/` that define sequential processes
+
+## Fragment Length Guidelines
+
+### Recommended Length Limit: **300 lines**
+
+**Rationale:**
+- **Cognitive Load**: Maintains focus on a single topic without overwhelming detail
+- **Reading Comfort**: Manageable length for thorough review and reference
+- **Editor Friendly**: Fits well within typical editor viewports
+- **Maintenance**: Easy to update and modify without losing context
+
+### Length Management Rules
+
+#### When a Fragment Exceeds 300 Lines
+1. **Evaluate for splitting** - Look for natural topic boundaries
+2. **Identify subtopics** - Find sections that could stand alone
+3. **Create focused fragments** - Split into multiple single-purpose files
+4. **Update references** - Modify main rules to reference new fragments
+5. **Maintain logical flow** - Ensure the learning progression remains intact
+
+#### Splitting Strategies
+- **By functionality**: Separate different aspects of the same technology
+- **By complexity**: Split basic patterns from advanced implementations  
+- **By domain**: Separate frontend patterns from backend patterns
+- **By workflow**: Split setup from usage from optimization
+
+#### Example Split Scenarios
+```
+backend/supabase-patterns.mdc (559 lines) could become:
+├── backend/supabase-setup.mdc          # Project setup and configuration
+├── backend/supabase-auth.mdc           # Authentication patterns
+├── backend/supabase-database.mdc       # Database operations and RLS
+└── backend/supabase-realtime.mdc       # Real-time subscriptions
+
+foundation/development-environment.mdc (378 lines) could become:
+├── foundation/development-setup.mdc    # IDE, tools, and configuration
+├── foundation/database-setup.mdc       # Database and testing environment
+└── foundation/development-workflow.mdc # Commands and debugging
+```
+
+### Length Quality Indicators
+
+#### Well-Sized Fragments (100-300 lines)
+- ✅ **Focused scope** with clear boundaries
+- ✅ **Complete coverage** of the topic
+- ✅ **Easy to navigate** and reference
+- ✅ **Maintainable** without context switching
+
+#### Too Long (>300 lines)
+- ⚠️ **Multiple topics** covered in one file
+- ⚠️ **Difficult to scan** for specific information
+- ⚠️ **High cognitive load** for readers
+- ⚠️ **Maintenance complexity** when making changes
+
+#### Too Short (<50 lines)
+- ⚠️ **Overly granular** fragmentation
+- ⚠️ **Context switching** between many small files
+- ⚠️ **Incomplete coverage** of related concepts
+- ⚠️ **Reference overhead** with too many fragments
+
+### Fragment Length Monitoring
+
+#### Check All Fragment Lengths
+```bash
+# Get sorted list of all fragment lengths with folder paths
+find .cursor/rules/fragments -name "*.mdc" -exec sh -c 'echo "$(wc -l < "$1") lines: $(echo "$1" | sed "s|.cursor/rules/fragments/||")"' _ {} \; | sort -nr
+```
+
+#### Identify Files Needing Attention
+```bash
+# Files over 300 lines (candidates for splitting)
+find .cursor/rules/fragments -name "*.mdc" -exec sh -c 'lines=$(wc -l < "$1"); if [ $lines -gt 300 ]; then echo "⚠️  $lines lines: $(echo "$1" | sed "s|.cursor/rules/fragments/||")"; fi' _ {} \;
+
+# Files under 50 lines (might be too granular)
+find .cursor/rules/fragments -name "*.mdc" -exec sh -c 'lines=$(wc -l < "$1"); if [ $lines -lt 50 ]; then echo "📏 $lines lines: $(echo "$1" | sed "s|.cursor/rules/fragments/||")"; fi' _ {} \;
+```
+
+#### Length Summary Statistics
+```bash
+# Get length distribution summary
+find .cursor/rules/fragments -name "*.mdc" -exec wc -l {} \; | awk '{
+  lines=$1; 
+  if(lines > 300) over++;
+  else if(lines >= 100) good++;
+  else under++;
+  total++
+} END {
+  print "Fragment Length Distribution:";
+  print "✅ Well-sized (100-300): " good;
+  print "⚠️  Too long (>300): " over;
+  print "📏 Too short (<100): " under;
+  print "📊 Total fragments: " total
+}'
+```
+
+### Current Fragment Status (Baseline)
+
+As of the latest reorganization, our fragment distribution is:
+- ✅ **Well-sized (100-300 lines)**: 9 fragments (39%)
+- ⚠️ **Too long (>300 lines)**: 4 fragments (17%) - Candidates for splitting
+- 📏 **Too short (<100 lines)**: 10 fragments (44%) - Acceptable for focused topics
+
+**Files over 300 lines requiring attention:**
+1. `backend/supabase-patterns.mdc` (559 lines) - Priority for splitting
+2. `code-standards/error-handling.mdc` (406 lines) - Could separate React vs service patterns  
+3. `foundation/development-environment.mdc` (378 lines) - Could split setup vs workflows
+4. `code-standards/code-documentation.mdc` (302 lines) - Just over limit, monitor for growth
+
+**Monitoring Schedule:**
+- Check fragment lengths quarterly or when adding significant content
+- Split files immediately when they exceed 350 lines 
+- Consider consolidation if multiple related fragments stay under 75 lines
+
+## Rule Creation Process
+
+### When to Create New Rules
+
+Create new rules when you encounter:
+- **New development patterns** that should be standardized
+- **Repeated decisions** that need consistent guidance
+- **Complex processes** that benefit from step-by-step documentation
+- **Knowledge gaps** that slow down development
+- **Quality issues** that could be prevented with clear guidelines
+
+### Types of Rules to Create
+
+#### 1. Main Rules (`.cursor/rules/`)
+- **Overview files** that reference multiple fragments
+- **High-level guidelines** that span multiple concerns
+- **Ordered reading lists** for complex topics
+- **Integration guides** for how fragments work together
+
+#### 2. Fragment Rules (`.cursor/rules/fragments/`)
+
+Our fragments are now organized into focused folders for better maintainability:
+
+- **foundation/** - Core project setup and architectural decisions
+- **code-standards/** - Coding patterns, formatting, and technical standards  
+- **backend/** - Database, API, and server-side patterns
+- **testing/** - Testing strategies and quality assurance
+- **design/** - UI/UX guidelines and design patterns
+- **process/** - Development workflow and optimization
+
+Fragment types:
+- **Single-focused guidelines** (one concern per file)
+- **Reusable patterns** that apply across multiple contexts
+- **Technical standards** for specific technologies
+- **Best practices** for particular domains
+
+#### 3. Workflow Rules (`.cursor/workflows/`)
+- **Sequential processes** with numbered steps
+- **Multi-stage development** workflows
+- **Guided procedures** that require user interaction
+- **Complex tasks** that benefit from structured execution
+
+## Rule Creation Guidelines
+
+### Fragment Rule Structure
+
+Every fragment should follow this structure:
+
+```markdown
+# [Clear, Descriptive Title]
+
+## [Primary Concept/Pattern]
+
+### [Specific Guideline 1]
+- **Key principle**: Brief explanation
+- **Implementation**: How to apply this
+- **Example**: Code or process example
+- **Rationale**: Why this matters
+
+### [Specific Guideline 2]
+[Same structure as above]
+
+## [Secondary Concept if needed]
+[Follow same pattern]
+
+## [Additional Sections as needed]
+- Common Pitfalls
+- Related Patterns  
+- References
+```
+
+### Main Rule Structure
+
+Main rules should:
+```markdown
+# [Topic] - Guidelines
+
+## 🎭 Persona (if applicable)
+[Who these rules are for and their context]
+
+## 📚 Rule Fragments
+
+Read the following fragments in order:
+
+1. **@fragment-name** - Brief description of what this covers
+2. **@another-fragment** - Brief description
+[etc.]
+
+## [Additional context or integration notes]
+```
+
+### Workflow Structure
+
+Workflows should:
+```markdown
+# Rule: [Workflow Step Name]
+
+## Goal
+[What this step accomplishes]
+
+## Required Context
+[What information is needed before starting]
+
+## Process
+1. [Step 1]
+2. [Step 2]
+[etc.]
+
+## Expected Output
+[What should be produced]
+
+## AI Instructions
+[Specific guidance for the AI agent]
+```
+
+## Rule Updating Process
+
+### When to Update Rules
+
+Update existing rules when:
+- **New technologies** are adopted (React 19, new libraries)
+- **Patterns evolve** based on experience and feedback
+- **Standards change** in the broader community
+- **Project requirements** shift or expand
+- **Pain points** are discovered in current guidelines
+
+### Update Methodology
+
+#### 1. Identify Impact Scope
+- **Single fragment**: Update affects one focused area
+- **Multiple fragments**: Changes span several concerns
+- **Main rule**: Overview or integration needs updating
+- **Workflow**: Process steps need modification
+
+#### 2. Make Atomic Updates
+- **One change per commit** when possible
+- **Update related fragments** in parallel if needed
+- **Maintain consistency** across referenced files
+- **Test guidance** by following updated rules
+
+#### 3. Document Changes
+- **Update commit messages** to explain rule changes
+- **Reference issues** or discussions that prompted updates
+- **Note breaking changes** that affect existing code
+- **Update related documentation** as needed
+
+## Fragment Organization Principles
+
+### Single Responsibility
+- Each fragment covers **one primary concern**
+- **Focused scope** that can be understood independently
+- **Clear boundaries** with other fragments
+- **Minimal overlap** between fragments
+
+### Logical Grouping
+- **Related concepts** in the same fragment
+- **Progressive complexity** within fragments
+- **Clear dependencies** between fragments
+- **Intuitive naming** for easy discovery
+
+#### Fragment Ordering System
+Our fragments are organized in **focused folders** that follow a **learning progression and practical workflow**:
+
+**🎓 foundation/** - Core Setup & Architecture
+- Learning approach and development environment setup
+- **New fragments here**: Developer onboarding, educational methodologies, tool configurations
+
+**⚙️ code-standards/** - Development Practices  
+- Core methodology, coding standards, and patterns
+- **New fragments here**: New coding patterns, framework-specific guidelines, style guides
+
+**💾 backend/** - Data & Backend Management
+- Database design, backend patterns, and security
+- **New fragments here**: New database technologies, API patterns, auth methods
+
+**🔍 testing/** - Quality Assurance
+- Testing, TDD principles, and quality standards
+- **New fragments here**: New testing frameworks, CI/CD, code review processes
+
+**🎨 design/** - User Experience
+- UI/UX guidelines and design system patterns
+- **New fragments here**: New design tools, accessibility patterns, responsive design
+
+**🚀 process/** - Optimization & Workflow
+- Performance, documentation, git workflow, and scalability planning
+- **New fragments here**: Monitoring, deployment, advanced optimizations
+
+#### Fragment Placement Rules
+When adding new fragments:
+
+1. **Identify the category folder** - Which of the 6 folders does it belong to?
+2. **Find the insertion point** - Where in that folder should it logically fit?
+3. **Update code-guidelines.mdc** - Insert at the appropriate numbered position
+4. **Renumber subsequent fragments** - Update all following numbers in the list
+5. **Consider dependencies** - Ensure prerequisites come before dependents
+6. **Test the flow** - Read through the updated sequence to verify logical progression
+
+**Example**: Adding a new authentication framework fragment:
+- **Category**: backend/ (Data & Backend Management)
+- **Position**: After security-considerations but before general patterns
+- **Action**: Insert as new backend fragment, renumber subsequent fragments in code-guidelines.mdc
+
+**Required Actions for New Fragments**:
+- [ ] Determine correct folder placement
+- [ ] Update numbered list in code-guidelines.mdc
+- [ ] Renumber subsequent fragments if needed
+- [ ] Verify logical flow from prerequisite knowledge
+- [ ] Check that the learning progression still makes sense
+
+### Maintainability
+- **Moderate length** (not too long or too short)
+- **Clear structure** with consistent formatting
+- **Actionable guidance** rather than abstract theory
+- **Examples and rationale** for key decisions
+
+## Naming Conventions
+
+### Fragment Files
+- **kebab-case** for file names
+- **Descriptive but concise** names
+- **Domain-specific** when appropriate
+- **Avoid abbreviations** unless widely understood
+- **Organized in focused folders** for better discoverability
+
+Examples:
+- `foundation/architecture-principles.mdc`
+- `code-standards/code-formatting-linting.mdc`
+- `design/ui-ux-guidelines.mdc`
+- `testing/testing-strategy.mdc`
+- `backend/supabase-patterns.mdc`
+- `process/git-workflow.mdc`
+
+### Main Rule Files
+- **Domain or process** focused names
+- **Clear hierarchy** indication
+- **Consistent with fragment references**
+
+Examples:
+- `code-guidelines.mdc` (references multiple code fragments)
+- `development-process.mdc` (references process fragments)
+
+### Workflow Files
+- **Sequential numbering** for ordered steps
+- **Clear action-oriented** descriptions
+- **Consistent within workflow** folder
+
+Examples:
+- `1-create-prd.mdc`
+- `2-generate-tasks.mdc`
+- `3-process-task-list.mdc`
+
+## Quality Standards
+
+### Content Quality
+- **Clear, actionable** guidance
+- **Specific examples** where helpful
+- **Rationale provided** for non-obvious decisions
+- **Current and accurate** information
+- **Free of contradictions** with other rules
+- **Code examples follow established standards** (e.g., prefer types over interfaces, bracket spacing rules)
+
+### Structure Quality
+- **Consistent formatting** across all rules
+- **Logical organization** within each rule
+- **Appropriate depth** for the audience
+- **Easy to scan** and reference quickly
+
+### Maintenance Quality
+- **Regular review** for relevance
+- **Prompt updates** when needs change
+- **Version control** for change tracking
+- **Clear ownership** of rule domains
+
+### Code Example Consistency
+- **Follow current code standards** - All TypeScript/React examples must use established patterns
+- **Verify formatting rules** - Examples must match Prettier configuration (bracketSpacing: false, singleQuote: true, etc.)
+- **Use type over interface** - React component props should use `type` not `interface` for object shapes
+- **Check imports and destructuring** - No spaces inside brackets for imports and object destructuring
+- **Review before publishing** - Validate all code examples against current standards before committing rule changes
+
+## Integration with Development
+
+### Rule Discovery
+- **IDE integration** via cursor rules system
+- **Search functionality** across all rule files
+- **Cross-references** between related rules
+- **Quick access** to frequently used guidelines
+
+### Enforcement
+- **Code review** processes reference rules
+- **Automated tools** implement rule requirements where possible
+- **Documentation** links to relevant rules
+- **Onboarding** includes rule system overview
+
+### Feedback Loop
+- **Track pain points** in rule application
+- **Gather feedback** from rule users
+- **Identify gaps** in current coverage
+- **Prioritize updates** based on impact
+
+## Common Patterns for Rule Creation
+
+### Development Standards
+```markdown
+# [Technology/Domain] Standards
+
+## Configuration
+[Setup and config guidelines]
+
+## Usage Patterns
+[How to use properly]
+
+## Code Style
+[Formatting and structure]
+
+## Common Pitfalls
+[What to avoid]
+```
+
+### Process Guidelines
+```markdown
+# [Process Name] Guidelines
+
+## Overview
+[When and why to use this process]
+
+## Prerequisites
+[What needs to be in place]
+
+## Steps
+[Detailed process steps]
+
+## Validation
+[How to verify success]
+```
+
+### Architecture Decisions
+```markdown
+# [Architecture Topic]
+
+## Principles
+[Core architectural principles]
+
+## Patterns
+[Approved patterns to use]
+
+## Trade-offs
+[Decisions made and why]
+
+## Implementation
+[How to apply these decisions]
+```
+
+## Rule Evolution Strategy
+
+### Versioning Approach
+- **Incremental updates** for minor clarifications
+- **Major versions** for significant pattern changes
+- **Deprecation notices** for outdated approaches
+- **Migration guides** for breaking changes
+
+### Community Integration
+- **Stakeholder input** on rule changes
+- **Testing period** for new guidelines
+- **Feedback collection** on rule effectiveness
+- **Regular review cycles** for all rules
+
+### Future-Proofing
+- **Technology-agnostic** principles where possible
+- **Extensible patterns** that accommodate growth
+- **Flexible structures** that adapt to new needs
+- **Clear upgrade paths** for evolving practices

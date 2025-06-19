@@ -1,0 +1,94 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Status Check Reporting
+
+## End-of-Response Status Checks (Required)
+
+When completing code changes or tasks, always include a status check section at the end of the response to provide immediate feedback on code quality.
+
+## Status Check Format
+
+### Required Checks
+```
+## ✅ **Status Check**
+
+🟢/🟠/🔴 **Lint**: [Status description]  
+🟢/🟠/🔴 **Tests**: [Status description]  
+🟢/🟠/🔴 **Format**: [Status description]  
+```
+
+### Color Coding Standards
+- **🟢 Green dot**: All checks pass with no issues
+- **🟠 Orange dot**: Warnings present but no errors
+- **🔴 Red dot**: Errors present that need to be fixed
+
+### Commands to Run
+```bash
+# Check linting status
+yarn lint
+
+# Check test status  
+yarn test:run
+
+# Check formatting status
+yarn prettier --check .
+```
+
+## Status Examples
+
+### All Green (Perfect)
+```
+## ✅ **Status Check**
+
+🟢 **Lint**: No issues found  
+🟢 **Tests**: All 101 tests passing  
+🟢 **Format**: All files properly formatted  
+```
+
+### Mixed Status (Warnings)
+```
+## ✅ **Status Check**
+
+🟠 **Lint**: 3 warnings (coverage files - non-critical)  
+🟢 **Tests**: All 101 tests passing  
+🟢 **Format**: All files properly formatted  
+```
+
+### Critical Issues (Errors)
+```
+## ✅ **Status Check**
+
+🔴 **Lint**: 5 errors found - must be fixed  
+🔴 **Tests**: 3 tests failing  
+🟢 **Format**: All files properly formatted  
+```
+
+## When to Include Status Checks
+
+### Always Include
+- After completing any code changes
+- After finishing a task or feature
+- After major refactoring or updates
+- When user requests verification
+
+### Status Check Content
+- **Lint**: ESLint results with error/warning counts
+- **Tests**: Test pass/fail status with counts
+- **Format**: Prettier formatting compliance
+
+### Benefits
+- **Immediate feedback** on code quality
+- **Visual indicators** for what needs attention
+- **Confidence building** when all checks pass
+- **Quick identification** of issues requiring fixes
+
+## Implementation Notes
+
+- Run actual commands to get real status
+- Don't assume status - always verify
+- Include brief descriptions of issues found
+- Prioritize red dots (errors) over orange dots (warnings)
+- Keep descriptions concise but informative
