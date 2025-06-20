@@ -68,13 +68,7 @@ export type UpdateProgressData =
 // CONVENIENCE TYPES - For common app-specific use cases
 // =============================================================================
 
-/**
- * Character with related progress data
- * Used when we need to display a character along with their progress
- */
-export type CharacterWithProgress = Character & {
-  progress: CharacterProgress[];
-};
+// Removed: CharacterWithProgress - see comprehensive definition below
 
 /**
  * Progress categories used throughout the app
@@ -139,15 +133,7 @@ export type {User} from '@supabase/supabase-js';
 // API RESPONSE TYPES - For handling API calls
 // =============================================================================
 
-/**
- * Standard API response structure
- * Provides consistent error handling across the app
- */
-export type ApiResponse<T> = {
-  data: T | null;
-  error: string | null;
-  success: boolean;
-};
+// Removed: ApiResponse - see comprehensive definition below
 
 /**
  * Paginated response structure
@@ -191,3 +177,195 @@ Type Organization Best Practices:
 This structure makes the codebase more maintainable and provides better
 developer experience with autocomplete and type checking.
 */
+
+/**
+ * Convenient type aliases for database entities
+ * Re-exports from database.types.ts for easier importing
+ */
+
+// =============================================================================
+// CHARACTER TYPES
+// =============================================================================
+
+export type CharacterInsert =
+  Database['public']['Tables']['characters']['Insert'];
+export type CharacterUpdate =
+  Database['public']['Tables']['characters']['Update'];
+
+// =============================================================================
+// JOB SYSTEM TYPES
+// =============================================================================
+
+export type Job = Database['public']['Tables']['jobs']['Row'];
+export type JobInsert = Database['public']['Tables']['jobs']['Insert'];
+export type JobUpdate = Database['public']['Tables']['jobs']['Update'];
+
+export type CharacterJobProgress =
+  Database['public']['Tables']['character_job_progress']['Row'];
+export type CharacterJobProgressInsert =
+  Database['public']['Tables']['character_job_progress']['Insert'];
+export type CharacterJobProgressUpdate =
+  Database['public']['Tables']['character_job_progress']['Update'];
+
+// Job type enums
+export type JobType = 'combat' | 'support' | 'craft';
+
+// =============================================================================
+// SKILL SYSTEM TYPES
+// =============================================================================
+
+export type Skill = Database['public']['Tables']['skills']['Row'];
+export type SkillInsert = Database['public']['Tables']['skills']['Insert'];
+export type SkillUpdate = Database['public']['Tables']['skills']['Update'];
+
+export type CharacterSkillProgress =
+  Database['public']['Tables']['character_skill_progress']['Row'];
+export type CharacterSkillProgressInsert =
+  Database['public']['Tables']['character_skill_progress']['Insert'];
+export type CharacterSkillProgressUpdate =
+  Database['public']['Tables']['character_skill_progress']['Update'];
+
+// Skill type enums
+export type SkillType = 'weapon' | 'combat_support' | 'magic' | 'craft';
+
+// =============================================================================
+// PROGRESS TRACKING TYPES
+// =============================================================================
+
+// Character with full progress data
+export type CharacterWithProgress = {
+  character: Character;
+  jobs: Array<{
+    job: Job;
+    progress: CharacterJobProgress;
+  }>;
+  skills: Array<{
+    skill: Skill;
+    progress: CharacterSkillProgress;
+  }>;
+};
+
+// Job progress with job details
+export type JobProgressWithDetails = CharacterJobProgress & {
+  job: Job;
+};
+
+// Skill progress with skill details
+export type SkillProgressWithDetails = CharacterSkillProgress & {
+  skill: Skill;
+};
+
+// =============================================================================
+// EXPANSION TYPES
+// =============================================================================
+
+export type FFXIExpansion =
+  | 'Rise of the Zilart'
+  | 'Chains of Promathia'
+  | 'Treasures of Aht Urhgan'
+  | 'Wings of the Goddess'
+  | 'Seekers of Adoulin'
+  | "Rhapsodies of Vana'diel";
+
+// =============================================================================
+// DATABASE FUNCTION TYPES
+// =============================================================================
+
+export type DatabaseFunctions = Database['public']['Functions'];
+
+// Character privacy function types
+export type ToggleCharacterPrivacyArgs =
+  DatabaseFunctions['toggle_character_privacy']['Args'];
+export type GetCharacterBySlugArgs =
+  DatabaseFunctions['get_character_by_slug']['Args'];
+export type GetCharacterProgressSummaryArgs =
+  DatabaseFunctions['get_character_progress_summary']['Args'];
+
+// Progress update function types
+export type UpdateJobProgressArgs =
+  DatabaseFunctions['update_job_progress']['Args'];
+export type UpdateSkillProgressArgs =
+  DatabaseFunctions['update_skill_progress']['Args'];
+
+// =============================================================================
+// API RESPONSE TYPES
+// =============================================================================
+
+// Standard API response wrapper
+export type ApiResponse<T> = {
+  data: T | null;
+  error: string | null;
+  success: boolean;
+};
+
+// Progress calculation results
+export type ProgressSummary = {
+  totalJobs: number;
+  unlockedJobs: number;
+  masteredJobs: number;
+  totalSkills: number;
+  skilledUpSkills: number;
+  completionPercentage: number;
+};
+
+// =============================================================================
+// FORM TYPES
+// =============================================================================
+
+// Character creation form
+export type CharacterFormData = {
+  name: string;
+  server: string;
+  race: string;
+  gender: string;
+  face: number;
+  hair: string;
+};
+
+// Job progress update form
+export type JobProgressFormData = {
+  jobId: string;
+  mainLevel?: number;
+  subLevel?: number;
+  jobPoints?: number;
+  masterLevel?: number;
+};
+
+// Skill progress update form
+export type SkillProgressFormData = {
+  skillId: string;
+  currentLevel: number;
+};
+
+// =============================================================================
+// UTILITY TYPES
+// =============================================================================
+
+// For handling loading states
+export type LoadingState<T> = {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+};
+
+// For handling pagination
+export type PaginationState = {
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+// For handling filters
+export type JobFilter = {
+  jobType?: JobType;
+  expansion?: FFXIExpansion | null;
+  isUnlocked?: boolean;
+  isAdvanced?: boolean;
+};
+
+export type SkillFilter = {
+  skillType?: SkillType;
+  category?: string;
+  hasProgress?: boolean;
+};

@@ -79,29 +79,188 @@ export type Database = {
         Row: {
           created_at: string;
           id: string;
-          is_public: boolean;
           name: string;
-          server: string;
+          server: string | null;
           updated_at: string;
           user_id: string;
+          is_public: boolean;
+          public_url_slug: string | null;
+          privacy_updated_at: string;
         };
         Insert: {
           created_at?: string;
           id?: string;
-          is_public?: boolean;
           name: string;
-          server: string;
+          server?: string | null;
           updated_at?: string;
           user_id: string;
+          is_public?: boolean;
+          public_url_slug?: string | null;
+          privacy_updated_at?: string;
         };
         Update: {
           created_at?: string;
           id?: string;
-          is_public?: boolean;
           name?: string;
-          server?: string;
+          server?: string | null;
           updated_at?: string;
           user_id?: string;
+          is_public?: boolean;
+          public_url_slug?: string | null;
+          privacy_updated_at?: string;
+        };
+        Relationships: [];
+      };
+      character_job_progress: {
+        Row: {
+          character_id: string;
+          id: string;
+          is_unlocked: boolean;
+          job_id: string;
+          job_points: number;
+          main_level: number;
+          master_level: number;
+          sub_level: number;
+          updated_at: string;
+        };
+        Insert: {
+          character_id: string;
+          id?: string;
+          is_unlocked?: boolean;
+          job_id: string;
+          job_points?: number;
+          main_level?: number;
+          master_level?: number;
+          sub_level?: number;
+          updated_at?: string;
+        };
+        Update: {
+          character_id?: string;
+          id?: string;
+          is_unlocked?: boolean;
+          job_id?: string;
+          job_points?: number;
+          main_level?: number;
+          master_level?: number;
+          sub_level?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'character_job_progress_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'character_job_progress_job_id_fkey';
+            columns: ['job_id'];
+            isOneToOne: false;
+            referencedRelation: 'jobs';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      character_skill_progress: {
+        Row: {
+          character_id: string;
+          current_level: number;
+          id: string;
+          skill_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          character_id: string;
+          current_level?: number;
+          id?: string;
+          skill_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          character_id?: string;
+          current_level?: number;
+          id?: string;
+          skill_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'character_skill_progress_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'character_skill_progress_skill_id_fkey';
+            columns: ['skill_id'];
+            isOneToOne: false;
+            referencedRelation: 'skills';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      jobs: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_advanced_job: boolean;
+          job_type: string;
+          name: string;
+          required_expansion: string | null;
+          short_name: string;
+          sort_order: number;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_advanced_job?: boolean;
+          job_type: string;
+          name: string;
+          required_expansion?: string | null;
+          short_name: string;
+          sort_order: number;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_advanced_job?: boolean;
+          job_type?: string;
+          name?: string;
+          required_expansion?: string | null;
+          short_name?: string;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      skills: {
+        Row: {
+          category: string | null;
+          created_at: string;
+          id: string;
+          max_base_level: number;
+          name: string;
+          skill_type: string;
+          sort_order: number;
+        };
+        Insert: {
+          category?: string | null;
+          created_at?: string;
+          id?: string;
+          max_base_level?: number;
+          name: string;
+          skill_type: string;
+          sort_order: number;
+        };
+        Update: {
+          category?: string | null;
+          created_at?: string;
+          id?: string;
+          max_base_level?: number;
+          name?: string;
+          skill_type?: string;
+          sort_order?: number;
         };
         Relationships: [];
       };
@@ -110,7 +269,44 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_character_by_slug: {
+        Args: {
+          slug: string;
+        };
+        Returns: Json;
+      };
+      get_character_progress_summary: {
+        Args: {
+          character_uuid: string;
+        };
+        Returns: Json;
+      };
+      toggle_character_privacy: {
+        Args: {
+          character_uuid: string;
+          new_is_public: boolean;
+        };
+        Returns: Json;
+      };
+      update_job_progress: {
+        Args: {
+          character_uuid: string;
+          job_uuid: string;
+          new_main_level?: number;
+          new_sub_level?: number;
+          new_job_points?: number;
+          new_master_level?: number;
+        };
+        Returns: Json;
+      };
+      update_skill_progress: {
+        Args: {
+          character_uuid: string;
+          skill_uuid: string;
+          new_level: number;
+        };
+        Returns: Json;
+      };
     };
     Enums: {
       [_ in never]: never;
