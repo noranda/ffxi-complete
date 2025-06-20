@@ -1,0 +1,1026 @@
+[
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-hume-male-face1-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face1-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-hume-male-face1-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face1-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-hume-male-face2-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face2-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-hume-male-face2-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face2-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-hume-male-face3-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face3-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-hume-male-face3-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face3-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-hume-male-face4-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face4-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-hume-male-face4-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face4-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-hume-male-face5-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face5-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-hume-male-face5-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face5-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-hume-male-face6-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face6-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-hume-male-face6-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face6-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-hume-male-face7-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face7-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-hume-male-face7-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face7-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-hume-male-face8-hairA.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face8-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "male",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-hume-male-face8-hairB.webp",
+    "path": "/portraits/hume/male/portrait-hume-male-face8-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-hume-female-face1-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face1-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-hume-female-face1-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face1-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-hume-female-face2-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face2-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-hume-female-face2-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face2-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-hume-female-face3-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face3-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-hume-female-face3-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face3-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-hume-female-face4-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face4-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-hume-female-face4-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face4-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-hume-female-face5-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face5-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-hume-female-face5-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face5-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-hume-female-face6-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face6-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-hume-female-face6-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face6-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-hume-female-face7-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face7-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-hume-female-face7-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face7-hairB.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-hume-female-face8-hairA.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face8-hairA.webp"
+  },
+  {
+    "race": "hume",
+    "gender": "female",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-hume-female-face8-hairB.webp",
+    "path": "/portraits/hume/female/portrait-hume-female-face8-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face1-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face1-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face1-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face1-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face2-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face2-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face2-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face2-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face3-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face3-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face3-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face3-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face4-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face4-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face4-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face4-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face5-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face5-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face5-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face5-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face6-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face6-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face6-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face6-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face7-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face7-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face7-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face7-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-elvaan-male-face8-hairA.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face8-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "male",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-elvaan-male-face8-hairB.webp",
+    "path": "/portraits/elvaan/male/portrait-elvaan-male-face8-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face1-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face1-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face1-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face1-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face2-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face2-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face2-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face2-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face3-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face3-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face3-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face3-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face4-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face4-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face4-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face4-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face5-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face5-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face5-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face5-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face6-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face6-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face6-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face6-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face7-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face7-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face7-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face7-hairB.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-elvaan-female-face8-hairA.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face8-hairA.webp"
+  },
+  {
+    "race": "elvaan",
+    "gender": "female",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-elvaan-female-face8-hairB.webp",
+    "path": "/portraits/elvaan/female/portrait-elvaan-female-face8-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face1-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face1-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face1-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face1-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face2-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face2-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face2-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face2-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face3-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face3-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face3-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face3-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face4-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face4-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face4-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face4-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face5-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face5-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face5-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face5-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face6-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face6-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face6-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face6-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face7-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face7-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face7-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face7-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-tarutaru-male-face8-hairA.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face8-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "male",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-tarutaru-male-face8-hairB.webp",
+    "path": "/portraits/tarutaru/male/portrait-tarutaru-male-face8-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face1-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face1-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face1-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face1-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face2-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face2-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face2-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face2-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face3-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face3-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face3-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face3-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face4-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face4-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face4-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face4-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face5-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face5-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face5-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face5-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face6-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face6-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face6-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face6-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face7-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face7-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face7-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face7-hairB.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-tarutaru-female-face8-hairA.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face8-hairA.webp"
+  },
+  {
+    "race": "tarutaru",
+    "gender": "female",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-tarutaru-female-face8-hairB.webp",
+    "path": "/portraits/tarutaru/female/portrait-tarutaru-female-face8-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face1-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face1-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face1-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face1-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face2-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face2-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face2-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face2-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face3-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face3-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face3-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face3-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face4-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face4-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face4-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face4-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face5-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face5-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face5-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face5-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face6-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face6-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face6-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face6-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face7-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face7-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face7-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face7-hairB.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-mithra-female-face8-hairA.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face8-hairA.webp"
+  },
+  {
+    "race": "mithra",
+    "gender": "female",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-mithra-female-face8-hairB.webp",
+    "path": "/portraits/mithra/female/portrait-mithra-female-face8-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 1,
+    "hair": "A",
+    "filename": "portrait-galka-male-face1-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face1-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 1,
+    "hair": "B",
+    "filename": "portrait-galka-male-face1-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face1-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 2,
+    "hair": "A",
+    "filename": "portrait-galka-male-face2-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face2-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 2,
+    "hair": "B",
+    "filename": "portrait-galka-male-face2-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face2-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 3,
+    "hair": "A",
+    "filename": "portrait-galka-male-face3-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face3-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 3,
+    "hair": "B",
+    "filename": "portrait-galka-male-face3-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face3-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 4,
+    "hair": "A",
+    "filename": "portrait-galka-male-face4-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face4-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 4,
+    "hair": "B",
+    "filename": "portrait-galka-male-face4-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face4-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 5,
+    "hair": "A",
+    "filename": "portrait-galka-male-face5-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face5-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 5,
+    "hair": "B",
+    "filename": "portrait-galka-male-face5-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face5-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 6,
+    "hair": "A",
+    "filename": "portrait-galka-male-face6-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face6-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 6,
+    "hair": "B",
+    "filename": "portrait-galka-male-face6-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face6-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 7,
+    "hair": "A",
+    "filename": "portrait-galka-male-face7-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face7-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 7,
+    "hair": "B",
+    "filename": "portrait-galka-male-face7-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face7-hairB.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 8,
+    "hair": "A",
+    "filename": "portrait-galka-male-face8-hairA.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face8-hairA.webp"
+  },
+  {
+    "race": "galka",
+    "gender": "male",
+    "face": 8,
+    "hair": "B",
+    "filename": "portrait-galka-male-face8-hairB.webp",
+    "path": "/portraits/galka/male/portrait-galka-male-face8-hairB.webp"
+  }
+]

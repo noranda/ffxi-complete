@@ -10,22 +10,26 @@ A modern web application for tracking your Final Fantasy XI character progressio
 ## ✨ Features
 
 ### 📊 Character Progression
+
 - **Job Level Tracking** - Track all 22 jobs with experience and level progression
 - **Skill Monitoring** - Combat, magic, and crafting skill progression
 - **Merit Point Management** - Track merit point allocations and builds
 
 ### 🎯 Collection Tracking
+
 - **Trust Collection** - Track all 287 available Trust NPCs
 - **Mount Collection** - Monitor chocobo and other mount acquisitions
 - **Key Item Library** - Comprehensive key item checklist
 - **Equipment Sets** - Track gear sets and equipment progression
 
 ### 🗺️ Content Completion
+
 - **Mission Progress** - Track story missions across all expansions
 - **Quest Completion** - Comprehensive quest tracking system
 - **Achievement Hunting** - Monitor Records of Eminence and other achievements
 
 ### 🔧 Quality of Life
+
 - **Multi-Character Support** - Manage multiple FFXI characters
 - **Data Export/Import** - Backup and share your progress data
 - **Dark/Light Themes** - Customizable interface themes
@@ -34,6 +38,7 @@ A modern web application for tracking your Final Fantasy XI character progressio
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Node.js** 18+ (LTS recommended)
 - **Yarn** package manager
 - **Git** for version control
@@ -82,22 +87,26 @@ yarn clean:install # Clean install dependencies
 ## 🏗️ Tech Stack
 
 ### Frontend
+
 - **[React 19](https://react.dev/)** - UI library with concurrent features
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
 - **[Vite](https://vitejs.dev/)** - Fast build tool and dev server
 - **[TailwindCSS v4](https://tailwindcss.com/)** - Utility-first CSS framework
 
 ### UI Components
+
 - **[shadcn/ui](https://ui.shadcn.com/)** - High-quality component library
 - **[Radix UI](https://www.radix-ui.com/)** - Accessible component primitives
 - **[tailwind-variants](https://www.tailwind-variants.org/)** - Component styling variants
 
 ### Backend (Planned)
+
 - **[Supabase](https://supabase.com/)** - Backend-as-a-Service
 - **PostgreSQL** - Relational database
 - **Row Level Security** - Data protection and user isolation
 
 ### Development Tools
+
 - **[Vitest](https://vitest.dev/)** - Fast unit test framework
 - **[React Testing Library](https://testing-library.com/react)** - Component testing utilities
 - **[ESLint](https://eslint.org/)** - Code linting and quality
@@ -176,6 +185,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ## 📋 Roadmap
 
 ### Phase 1.0 - Foundation ✅
+
 - [x] React 19 + TypeScript setup
 - [x] TailwindCSS v4 + shadcn/ui integration
 - [x] Comprehensive testing infrastructure
@@ -183,24 +193,28 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 - [x] Code standards and documentation
 
 ### Phase 2.0 - Backend Integration 🚧
+
 - [ ] Supabase setup and configuration
 - [ ] User authentication system
 - [ ] Database schema design
 - [ ] API integration layer
 
 ### Phase 3.0 - Character Management
+
 - [ ] Character creation and management
 - [ ] Job level tracking system
 - [ ] Skill progression monitoring
 - [ ] Merit point allocation
 
 ### Phase 4.0 - Collection Systems
+
 - [ ] Trust collection tracking
 - [ ] Mount and pet management
 - [ ] Key item checklist
 - [ ] Equipment set tracking
 
 ### Phase 5.0 - Content Tracking
+
 - [ ] Mission progress system
 - [ ] Quest completion tracking
 - [ ] Achievement monitoring

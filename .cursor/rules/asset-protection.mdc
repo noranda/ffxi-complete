@@ -1,0 +1,82 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Asset Protection Rules
+
+## Critical Asset Protection System
+
+This rule protects irreplaceable assets that represent significant manual work and time investment.
+
+## 🛡️ Protected Assets
+
+### FFXI Character Portraits
+**Location**: `src/assets/portraits/`  
+**Status**: 128 manually sorted character portraits  
+**Protection Level**: CRITICAL - NEVER MODIFY WITHOUT EXPLICIT PERMISSION
+
+#### Protected Files:
+- All portrait files: `portrait-{race}-{gender}-face{1-8}-hair{A|B}.jpg`
+- Directory structure: `src/assets/portraits/{race}/{gender}/`
+
+#### Protection Requirements:
+Before ANY operation affecting these files:
+1. ✋ **STOP** - Ask for explicit user permission
+2. 📝 Explain exactly what will happen  
+3. 💾 Offer to create additional backups
+4. ⚠️ Never assume operations are "safe"
+
+## 🚨 AI Agent Instructions
+
+### CRITICAL PROTECTION PROTOCOLS
+
+**NEVER** perform the following operations on protected assets without explicit user permission:
+- Move, rename, or relocate files
+- Delete or remove files
+- Modify file contents
+- Change directory structure
+- Run scripts that might affect these files
+- Perform bulk operations on these directories
+
+### Required Actions Before Protected Asset Operations:
+1. **Ask Permission First**: Always request explicit permission before any operation
+2. **Explain Impact**: Clearly describe what will happen to the files
+3. **Offer Backups**: Suggest creating additional backups
+4. **Confirm Understanding**: Ensure user understands the risks
+5. **Wait for Approval**: Never proceed without clear confirmation
+
+### Emergency Recovery Information:
+- **Manual Work**: These represent hours of manual classification and sorting
+- **Irreplaceable**: Cannot be easily regenerated
+- **Business Critical**: Essential for character creation functionality
+
+## 🔒 Extension Guidelines
+
+### Adding New Protected Assets:
+When new critical assets need protection:
+1. Add them to the "Protected Assets" section above
+2. Specify the protection level (CRITICAL, HIGH, MEDIUM)
+3. Define specific protection requirements
+4. Update AI agent instructions if needed
+
+### Protection Levels:
+- **CRITICAL**: Never modify without explicit permission
+- **HIGH**: Require permission and backup before modification  
+- **MEDIUM**: Warn before modification, suggest backups
+
+## 📋 Asset Inventory
+
+### Currently Protected:
+- `src/assets/portraits/` - 128 FFXI character portraits (CRITICAL)
+
+### Future Considerations:
+- Database seed files
+- Configuration files
+- User data exports
+- Other manually curated content
+
+---
+**Last Updated**: Initial creation after portrait processing completion  
+**Total Protected Assets**: 128 portrait files  
+**Protection Status**: ✅ ACTIVE
