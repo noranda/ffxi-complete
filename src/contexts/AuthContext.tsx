@@ -1,7 +1,15 @@
-import {useEffect, useState} from 'react';
+/**
+ * Authentication Context for FFXI Complete
+ *
+ * Provides centralized authentication state management across the entire application.
+ * This context manages user sessions, loading states, and authentication operations
+ * in a single place to ensure consistency and prevent multiple auth listeners.
+ */
+
+import {createContext, useContext, useEffect, useState} from 'react';
 import type {User} from '@supabase/supabase-js';
 
-import type {AuthProvider, AuthResult} from '@/lib/auth';
+import type {AuthProvider as AuthProviderType, AuthResult} from '@/lib/auth';
 import {
   getCurrentUser,
   resetPassword,
@@ -14,25 +22,23 @@ import {
 import {supabase} from '@/lib/supabase';
 
 /**
- * Authentication hook state and methods
+ * Authentication context type definition
  *
- * Provides complete authentication state management including:
- * - Current user session
- * - Loading states for all operations
- * - Error handling with user-friendly messages
- * - Convenient methods for all auth operations
+ * Defines the shape of authentication state and methods available
+ * throughout the application via the AuthContext.
  */
-export type UseAuthReturn = {
-  // Current state
+export type AuthContextType = {
+  // Authentication state
   user: User | null;
   loading: boolean;
   error: string | null;
+  isAuthenticated: boolean;
 
   // Authentication methods
   signUp: (email: string, password: string) => Promise<AuthResult>;
   signIn: (email: string, password: string) => Promise<AuthResult>;
   signInWithProvider: (
-    provider: AuthProvider
+    provider: AuthProviderType
   ) => Promise<Omit<AuthResult, 'data'>>;
   signOut: () => Promise<Omit<AuthResult, 'data'>>;
   resetPassword: (email: string) => Promise<Omit<AuthResult, 'data'>>;
@@ -44,44 +50,60 @@ export type UseAuthReturn = {
 };
 
 /**
- * Authentication hook for the FFXI Progress Tracker
+ * Authentication context
  *
- * This hook provides complete authentication state management including:
- * - Automatic session detection and refresh
- * - Real-time auth state changes via Supabase listeners
- * - Loading states for all operations
- * - Consistent error handling
- * - Convenient methods for all authentication operations
+ * React context that provides authentication state and methods to all
+ * child components. Should be consumed via the useAuth hook.
+ */
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
+
+/**
+ * Props for the AuthProvider component
+ */
+type AuthProviderProps = {
+  children: React.ReactNode;
+};
+
+/**
+ * Authentication Provider Component
  *
- * @returns Object with current auth state and authentication methods
+ * Manages authentication state for the entire application and provides
+ * it to all child components via React Context. Should wrap the root
+ * App component to ensure authentication state is available everywhere.
+ *
+ * Features:
+ * - Automatic session detection and restoration
+ * - Real-time auth state synchronization
+ * - Centralized loading and error state management
+ * - Single Supabase auth listener for the entire app
+ * - Session persistence and refresh handling
+ *
+ * @param children - Child components that will have access to auth context
  *
  * @example
  * ```tsx
- * const {user, loading, signIn, signOut, error} = useAuth();
- *
- * const handleLogin = async (email: string, password: string) => {
- *   const result = await signIn(email, password);
- *   if (!result.success) {
- *     console.error('Login failed:', result.error);
- *   }
- * };
- *
- * if (loading) return <div>Loading...</div>;
- * if (user) return <div>Welcome, {user.email}</div>;
- * return <LoginForm onSubmit={handleLogin} />;
+ * // In App.tsx or main.tsx
+ * <AuthProvider>
+ *   <App />
+ * </AuthProvider>
  * ```
  */
-export const useAuth = (): UseAuthReturn => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   // Core authentication state
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize authentication state on mount
+  // Derived state
+  const isAuthenticated = !!user;
+
+  // Initialize authentication state and set up listeners
   useEffect(() => {
     let isMounted = true;
 
-    // Get initial session
+    // Initialize auth state from current session
     const initializeAuth = async () => {
       try {
         const currentUser = await getCurrentUser();
@@ -98,12 +120,13 @@ export const useAuth = (): UseAuthReturn => {
       }
     };
 
-    initializeAuth();
+    // Start initialization
+    void initializeAuth();
 
-    // Listen for auth state changes
+    // Set up Supabase auth state listener
     const {
       data: {subscription},
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (!isMounted) return;
 
       console.log('🔐 Auth state changed:', event, session?.user?.email);
@@ -112,12 +135,12 @@ export const useAuth = (): UseAuthReturn => {
       setUser(session?.user ?? null);
       setLoading(false);
 
-      // Clear any existing errors on successful auth
+      // Clear errors on successful authentication
       if (session?.user) {
         setError(null);
       }
 
-      // Handle specific auth events
+      // Handle specific auth events for logging and potential side effects
       switch (event) {
         case 'SIGNED_IN':
           console.log('✅ User signed in successfully');
@@ -131,6 +154,9 @@ export const useAuth = (): UseAuthReturn => {
         case 'USER_UPDATED':
           console.log('👤 User profile updated');
           break;
+        case 'PASSWORD_RECOVERY':
+          console.log('🔑 Password recovery initiated');
+          break;
       }
     });
 
@@ -141,7 +167,8 @@ export const useAuth = (): UseAuthReturn => {
     };
   }, []);
 
-  // Authentication methods with consistent error handling and loading states
+  // Authentication method implementations with consistent error handling
+
   const handleSignUp = async (
     email: string,
     password: string
@@ -183,7 +210,7 @@ export const useAuth = (): UseAuthReturn => {
   };
 
   const handleSignInWithProvider = async (
-    provider: AuthProvider
+    provider: AuthProviderType
   ): Promise<Omit<AuthResult, 'data'>> => {
     setLoading(true);
     setError(null);
@@ -197,7 +224,7 @@ export const useAuth = (): UseAuthReturn => {
 
       return result;
     } finally {
-      // Note: Loading state will be updated by auth state listener
+      // Note: Loading state will be updated by the auth state listener
       // when OAuth redirect completes
       setLoading(false);
     }
@@ -249,6 +276,7 @@ export const useAuth = (): UseAuthReturn => {
   };
 
   // Utility methods
+
   const clearError = (): void => {
     setError(null);
   };
@@ -268,13 +296,15 @@ export const useAuth = (): UseAuthReturn => {
     }
   };
 
-  return {
-    // Current state
+  // Context value
+  const contextValue: AuthContextType = {
+    // State
     user,
     loading,
     error,
+    isAuthenticated,
 
-    // Authentication methods
+    // Methods
     signUp: handleSignUp,
     signIn: handleSignIn,
     signInWithProvider: handleSignInWithProvider,
@@ -282,29 +312,70 @@ export const useAuth = (): UseAuthReturn => {
     resetPassword: handleResetPassword,
     updatePassword: handleUpdatePassword,
 
-    // Utility methods
+    // Utilities
     clearError,
     refresh,
   };
+
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
 };
 
 /**
- * Helper hook to check if user is authenticated
+ * Hook to consume authentication context
  *
- * @returns True if user is signed in, false otherwise
+ * Provides access to authentication state and methods from the AuthContext.
+ * Must be used within an AuthProvider component tree.
+ *
+ * @returns Authentication context value with state and methods
+ * @throws Error if used outside of AuthProvider
  *
  * @example
  * ```tsx
- * const isAuthenticated = useIsAuthenticated();
+ * const MyComponent = () => {
+ *   const {user, loading, signIn, signOut, error} = useAuth();
  *
- * if (isAuthenticated) {
+ *   if (loading) return <div>Loading...</div>;
+ *   if (user) return <div>Welcome, {user.email}</div>;
+ *   return <LoginForm onSubmit={signIn} />;
+ * };
+ * ```
+ */
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+
+  return context;
+};
+
+/**
+ * Helper hook to check authentication status
+ *
+ * Convenience hook that returns only the authentication status
+ * from the auth context. Useful when you only need to check
+ * if a user is logged in.
+ *
+ * @returns True if user is authenticated, false otherwise
+ * @throws Error if used outside of AuthProvider
+ *
+ * @example
+ * ```tsx
+ * const ProtectedComponent = () => {
+ *   const isAuthenticated = useIsAuthenticated();
+ *
+ *   if (!isAuthenticated) {
+ *     return <Navigate to="/login" replace />;
+ *   }
+ *
  *   return <Dashboard />;
- * } else {
- *   return <LoginPage />;
- * }
+ * };
  * ```
  */
 export const useIsAuthenticated = (): boolean => {
-  const {user} = useAuth();
-  return !!user;
+  const {isAuthenticated} = useAuth();
+  return isAuthenticated;
 };

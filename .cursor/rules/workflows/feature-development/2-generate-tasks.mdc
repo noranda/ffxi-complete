@@ -1,8 +1,8 @@
 ---
-description: 
-globs: 
-alwaysApply: false
+description: "Workflow step 2: Generate detailed task lists from PRDs with parent/sub-task structure"
+globs:
 ---
+
 # Rule: Generating a Task List from a PRD
 
 ## Goal

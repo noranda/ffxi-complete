@@ -259,12 +259,12 @@ describe('Authentication Utilities', () => {
 
     it('should handle password update errors', async () => {
       // Use a more flexible mock structure for error cases
-      const mockResponse = {
+      const mockResponse: UserResponse = {
         data: {user: null},
         error: createMockAuthError(
           'Password should be at least 6 characters'
         ) as AuthError,
-      } as UserResponse;
+      };
       mockAuth.updateUser.mockResolvedValue(mockResponse);
 
       const result = await updatePassword('123');

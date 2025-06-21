@@ -5,8 +5,11 @@
  * - Source maps for debugging
  * - Optimized dependency pre-bundling
  */
-import {useEffect, useState} from 'react';
+import './App.css';
 
+import {useCallback, useEffect, useState} from 'react';
+
+import {RegisterForm} from '@/components/auth/RegisterForm';
 import {Button} from '@/components/ui/button';
 import {
   Card,
@@ -16,10 +19,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
-import {useAuth} from '@/hooks/useAuth';
+import {useAuth} from '@/hooks';
 import {supabase} from '@/lib/supabase';
-
-import './App.css';
 
 const App: React.FC<unknown> = () => {
   const {user, loading, signUp, signIn, signInWithProvider, signOut} =
@@ -31,6 +32,7 @@ const App: React.FC<unknown> = () => {
     'testing' | 'connected' | 'error'
   >('testing');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
 
   useEffect(() => {
     // Test Supabase connection on component mount
@@ -53,7 +55,7 @@ const App: React.FC<unknown> = () => {
       }
     };
 
-    testConnection();
+    void testConnection();
   }, []);
 
   const getStatusColor = () => {
@@ -82,7 +84,7 @@ const App: React.FC<unknown> = () => {
     }
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = useCallback(async () => {
     try {
       setMessage('Signing up...');
       const result = await signUp(email, password);
@@ -91,10 +93,12 @@ const App: React.FC<unknown> = () => {
       } else {
         setMessage(`❌ Sign up failed: ${result.error}`);
       }
-    } catch (error) {
-      setMessage(`❌ Error: ${error}`);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      setMessage(`❌ Error: ${errorMessage}`);
     }
-  };
+  }, [email, password, signUp]);
 
   const handleSignIn = async () => {
     try {
@@ -105,8 +109,10 @@ const App: React.FC<unknown> = () => {
       } else {
         setMessage(`❌ Sign in failed: ${result.error}`);
       }
-    } catch (error) {
-      setMessage(`❌ Error: ${error}`);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      setMessage(`❌ Error: ${errorMessage}`);
     }
   };
 
@@ -119,8 +125,10 @@ const App: React.FC<unknown> = () => {
       } else {
         setMessage(`❌ ${provider} sign in failed: ${result.error}`);
       }
-    } catch (error) {
-      setMessage(`❌ Error: ${error}`);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      setMessage(`❌ Error: ${errorMessage}`);
     }
   };
 
@@ -133,8 +141,10 @@ const App: React.FC<unknown> = () => {
       } else {
         setMessage(`❌ Sign out failed: ${result.error}`);
       }
-    } catch (error) {
-      setMessage(`❌ Error: ${error}`);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      setMessage(`❌ Error: ${errorMessage}`);
     }
   };
 
@@ -154,7 +164,7 @@ const App: React.FC<unknown> = () => {
     <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto p-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4">FFXI Progress Tracker</h1>
+          <h1 className="text-4xl font-bold mb-4">FFXI Complete</h1>
           <p className="text-muted-foreground">
             Track your Final Fantasy XI character progress across jobs, skills,
             and collections
@@ -210,30 +220,80 @@ const App: React.FC<unknown> = () => {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              {!user ? (
+              {/* Toggle between test interface and RegisterForm */}
+              <div className="flex gap-2 mb-4">
+                <Button
+                  variant={!showRegisterForm ? 'default' : 'outline'}
+                  onClick={() => {
+                    setShowRegisterForm(false);
+                  }}
+                  size="sm"
+                >
+                  Test Interface
+                </Button>
+                <Button
+                  variant={showRegisterForm ? 'default' : 'outline'}
+                  onClick={() => {
+                    setShowRegisterForm(true);
+                  }}
+                  size="sm"
+                >
+                  Register Form
+                </Button>
+              </div>
+
+              {showRegisterForm ? (
+                <div className="max-w-md mx-auto">
+                  <RegisterForm
+                    onSuccess={() => {
+                      setMessage(
+                        '✅ Registration successful from RegisterForm!'
+                      );
+                      setShowRegisterForm(false);
+                    }}
+                    onSwitchToLogin={() => {
+                      setMessage(
+                        'Switch to login clicked (login form coming in task 3.3)'
+                      );
+                      setShowRegisterForm(false);
+                    }}
+                  />
+                </div>
+              ) : !user ? (
                 <>
                   <div className="space-y-2">
                     <Input
                       placeholder="Email"
                       type="email"
                       value={email}
-                      onChange={e => setEmail(e.target.value)}
+                      onChange={e => {
+                        setEmail(e.target.value);
+                      }}
                     />
                     <Input
                       placeholder="Password"
                       type="password"
                       value={password}
-                      onChange={e => setPassword(e.target.value)}
+                      onChange={e => {
+                        setPassword(e.target.value);
+                      }}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Button className="w-full" onClick={handleSignUp}>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        void handleSignUp();
+                      }}
+                    >
                       Sign Up
                     </Button>
                     <Button
                       className="w-full"
-                      onClick={handleSignIn}
+                      onClick={() => {
+                        void handleSignIn();
+                      }}
                       variant="outline"
                     >
                       Sign In
@@ -243,14 +303,18 @@ const App: React.FC<unknown> = () => {
                   <div className="space-y-2">
                     <Button
                       className="w-full"
-                      onClick={() => handleOAuthSignIn('discord')}
+                      onClick={() => {
+                        void handleOAuthSignIn('discord');
+                      }}
                       variant="secondary"
                     >
                       Sign in with Discord
                     </Button>
                     <Button
                       className="w-full"
-                      onClick={() => handleOAuthSignIn('google')}
+                      onClick={() => {
+                        void handleOAuthSignIn('google');
+                      }}
                       variant="secondary"
                     >
                       Sign in with Google
@@ -261,18 +325,23 @@ const App: React.FC<unknown> = () => {
                 <div className="space-y-4">
                   <div className="text-center space-y-2">
                     <div className="text-sm text-muted-foreground">
-                      User ID: {user.id}
+                      User ID: {user?.id}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Email: {user.email}
+                      Email: {user?.email}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Created: {new Date(user.created_at).toLocaleDateString()}
+                      Created:{' '}
+                      {user?.created_at
+                        ? new Date(user.created_at).toLocaleDateString()
+                        : 'Unknown'}
                     </div>
                   </div>
                   <Button
                     className="w-full"
-                    onClick={handleSignOut}
+                    onClick={() => {
+                      void handleSignOut();
+                    }}
                     variant="outline"
                   >
                     Sign Out

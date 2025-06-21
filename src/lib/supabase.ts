@@ -23,8 +23,8 @@ import type {Database} from '@/types/database.types';
  * - Never use the service_role key in client-side code
  */
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 // Validate environment variables in development
 if (!supabaseUrl || !supabaseAnonKey) {

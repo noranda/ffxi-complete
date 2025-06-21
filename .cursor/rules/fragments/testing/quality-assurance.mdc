@@ -1,23 +1,76 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Quality assurance standards and accessibility guidelines for production-ready code"
+globs:
+  - "src/**/*.{ts,tsx}"
+  - "**/*.test.{ts,tsx}"
 ---
-# Quality Assurance
+
+# Quality Assurance Standards
 
 ## Code Quality
-- Use ESLint and Prettier with the configurations above
-- Run TypeScript compiler with strict mode
-- Use Husky for pre-commit hooks with lint-staged
-- Regular dependency updates
 
-## Accessibility
-- WCAG 2.1 AA compliance
-- Keyboard navigation support
-- Screen reader compatibility
-- Color contrast requirements
+- **ESLint and Prettier** with strict configurations
+- **TypeScript compiler** with strict mode enabled
+- **Pre-commit hooks** using Husky with lint-staged
+- **Regular dependency updates** to maintain security
+- **Test coverage** monitoring and maintenance
+
+## Accessibility (WCAG 2.1 AA)
+
+- **Keyboard navigation** support for all interactive elements
+- **Screen reader compatibility** with proper ARIA labels
+- **Color contrast** minimum 4.5:1 ratio for text
+- **Focus indicators** clearly visible on all focusable elements
+- **Semantic HTML** structure with proper heading hierarchy
 
 ## Browser Support
-- Modern evergreen browsers (Chrome, Firefox, Safari, Edge)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-- Graceful degradation for older browsers
+
+- **Modern evergreen browsers**: Chrome, Firefox, Safari, Edge (latest versions)
+- **Mobile browsers**: iOS Safari, Chrome Mobile
+- **Graceful degradation** for older browsers where possible
+- **Progressive enhancement** approach for new features
+
+## Implementation Patterns
+
+```typescript
+// ✅ Accessible button with proper ARIA
+<button
+  aria-label="Save character progress"
+  onClick={handleSave}
+  type="button"
+>
+  Save
+</button>
+
+// ✅ Keyboard navigation support
+const handleKeyDown = (e: React.KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    handleAction();
+  }
+};
+
+// ✅ Screen reader friendly form
+<label htmlFor="character-name">Character Name</label>
+<input
+  aria-describedby="name-help"
+  id="character-name"
+  type="text"
+/>
+<div id="name-help">Enter your FFXI character name</div>
+```
+
+## Quality Gates
+
+- **All tests pass** before deployment
+- **No ESLint errors** in production code
+- **TypeScript compilation** without errors
+- **Accessibility audit** passes for new features
+- **Performance budgets** maintained for bundle size
+
+## Best Practices
+
+- **Test accessibility** with screen readers and keyboard-only navigation
+- **Validate HTML** semantics and structure
+- **Monitor performance** metrics in production
+- **Regular security audits** of dependencies
+- **Cross-browser testing** for critical user flows

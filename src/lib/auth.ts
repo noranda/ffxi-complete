@@ -3,7 +3,7 @@ import type {AuthError, User} from '@supabase/supabase-js';
 import {supabase} from './supabase';
 
 /**
- * Authentication utility functions for the FFXI Progress Tracker
+ * Authentication utility functions for FFXI Complete
  *
  * This module provides:
  * - Type-safe authentication operations

@@ -1,0 +1,107 @@
+---
+description: "Commit workflow step 4: Execute git commit with approved message (no push)"
+globs:
+---
+
+# Step 4: Execute Commit
+
+## Goal
+
+Execute the git commit using the approved commit message from step 3. Add all changes to staging and commit them locally without pushing to remote.
+
+## Required Context/Inputs
+
+- Approved commit message from step 3
+- User has given explicit "okay" or "yes" approval
+- All quality checks passed in step 1
+- Code analysis completed in step 2
+
+## Process
+
+1. **Stage All Changes**: Run `git add -A` to stage all modified, added, and deleted files
+2. **Verify Staging**: Run `git status` to confirm what will be committed
+3. **Execute Commit**: Run `git commit -m "approved message"` using the exact approved message
+4. **Confirm Success**: Verify commit was created successfully
+5. **Report Results**: Show commit hash and summary
+
+## Pre-Commit Verification
+
+Before executing the commit:
+- ✅ User has explicitly approved the commit message
+- ✅ All files intended for commit are properly staged
+- ✅ No unintended files are being committed
+- ✅ Quality checks from step 1 are still valid
+
+## Git Commands Sequence
+
+```bash
+# Stage all changes
+git add -A
+
+# Verify what will be committed
+git status
+
+# Execute the commit with approved message
+git commit -m "[approved commit message]"
+
+# Show the new commit
+git log --oneline -1
+```
+
+## Expected Outputs
+
+- Confirmation that all files are staged
+- Successful commit execution
+- New commit hash and summary
+- Clear indication that commit is local only (not pushed)
+
+## Instructions for AI
+
+1. **Verify approval**: Ensure user has given explicit approval in step 3
+2. **Stage changes**: Use `git add -A` to stage all changes
+3. **Show staging status**: Display what will be committed for final verification
+4. **Execute commit**: Use the exact approved commit message
+5. **Confirm success**: Show the new commit hash and details
+6. **Remind about push**: Note that changes are committed locally but not pushed
+7. **Provide completion summary**: List what was accomplished
+
+## Success Confirmation
+
+After successful commit, provide this summary:
+
+```
+## Commit Workflow Complete ✅
+
+### Commit Details
+- **Hash**: [commit hash]
+- **Message**: [commit message]
+- **Files Changed**: [number] files
+- **Lines Changed**: +[added] -[removed]
+
+### Quality Status
+- ✅ All status checks passed
+- ✅ Code analysis completed
+- ✅ Commit message approved
+- ✅ Changes committed locally
+
+### Next Steps
+- Changes are committed locally but NOT pushed to remote
+- Run `git push` when ready to share changes
+- Consider running the feature-development workflow for new features
+```
+
+## Error Handling
+
+If commit fails:
+- Display the exact git error message
+- Suggest common solutions (merge conflicts, permissions, etc.)
+- Do NOT attempt to auto-fix - let user resolve issues
+- Offer to restart the workflow after issues are resolved
+
+## Important Notes
+
+- **No Push**: This workflow only commits locally, never pushes
+- **All Changes**: Uses `git add -A` to include all modifications
+- **Exact Message**: Uses the precise approved commit message
+- **Verification**: Shows staging status before committing
+- **Safety**: Requires explicit user approval at each step

@@ -1,0 +1,92 @@
+---
+description: "Commit workflow step 2: Analyze code changes since last commit to understand scope and impact"
+globs:
+---
+
+# Step 2: Analyze Code Changes
+
+## Goal
+
+Examine all code changes since the last commit to understand the scope, impact, and nature of modifications. This analysis will inform the commit message generation in step 3.
+
+## Required Context/Inputs
+
+- Clean git working directory status from step 1
+- All quality checks must have passed in step 1
+
+## Process
+
+1. **Get Clean Git Status**: Run `git status --porcelain` to get machine-readable format of actual changes
+2. **Get Change Statistics**: Run `git diff --stat` to see quantified changes per file
+3. **Focus on Actual Changes**: Only analyze files that appear in git diff, not intermediate states
+4. **Analyze File Categories**: Group changes by type (frontend, backend, tests, docs, config, etc.)
+5. **Identify Change Patterns**: Look for themes like:
+   - New features vs bug fixes vs refactoring
+   - Component additions/modifications
+   - Test updates
+   - Configuration changes
+   - Documentation updates
+6. **Assess Impact Level**: Determine if changes are:
+   - Major (new features, breaking changes)
+   - Minor (enhancements, non-breaking additions)
+   - Patch (bug fixes, small improvements)
+
+## Analysis Categories
+
+### File Type Classification
+- **Source Code**: `src/**/*.{ts,tsx}` - Application logic and components
+- **Tests**: `**/*.test.{ts,tsx}` - Test files and test utilities
+- **Configuration**: Config files (eslint, prettier, vite, etc.)
+- **Documentation**: README, markdown files
+- **Assets**: Images, static files
+- **Rules/Workflows**: Cursor rules and workflow files
+
+### Change Type Detection
+- **feat**: New functionality, components, or capabilities
+- **fix**: Bug corrections, error handling improvements
+- **refactor**: Code restructuring without behavior changes
+- **test**: Test additions, updates, or improvements
+- **docs**: Documentation only changes
+- **style**: Formatting, linting fixes
+- **chore**: Build tools, dependencies, maintenance
+
+## Expected Outputs
+
+- Summary of files changed by category
+- Quantified change statistics (lines added/removed)
+- Primary change type identification
+- Impact assessment (major/minor/patch)
+- Key themes and patterns in the changes
+
+## Instructions for AI
+
+1. Run `git status --porcelain` and `git diff --stat` to gather actual change data
+2. Focus ONLY on files that appear in the git diff - ignore intermediate steps or processes
+3. Categorize all changed files by type and purpose
+4. Identify the primary nature of changes (feat, fix, refactor, etc.)
+5. Summarize the scope and impact of modifications visible in git diff
+6. Do NOT reference migration steps, intermediate states, or processes not visible in git
+7. Prepare structured analysis for commit message generation
+8. Do NOT generate the commit message yet - save that for step 3
+9. Present analysis clearly and wait for user approval to proceed
+
+## Analysis Format
+
+Present findings in this structure:
+```
+### Change Summary
+- X files modified, Y files added, Z files deleted
+- +A lines added, -B lines removed
+
+### File Categories
+- Source Code: [list key files and changes]
+- Tests: [test-related changes]
+- Configuration: [config file changes]
+- Documentation: [doc changes]
+- Other: [miscellaneous changes]
+
+### Primary Change Type
+- [feat/fix/refactor/etc.] based on dominant pattern
+
+### Impact Assessment
+- [Major/Minor/Patch] with reasoning

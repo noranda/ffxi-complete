@@ -1,24 +1,37 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Future planning considerations for scalability, integration, and monitoring"
+globs:
+  - "**/README.md"
+  - "**/docs/**"
+  - "**/*.md"
 ---
+
 # Future Considerations
 
-## Scalability
-- Design for multi-character support
-- Plan for community features
-- Consider internationalization
-- Prepare for mobile app development
+## Scalability Planning
 
-## Integration
-- Windower addon integration
-- EliteAPI integration
-- Export/import functionality
-- Community data sharing
+- **Multi-character support** - Design data structures for multiple characters per user
+- **Community features** - Plan for sharing and collaboration functionality
+- **Internationalization** - Consider localization framework early
+- **Mobile development** - Prepare responsive design for mobile app transition
 
-## Monitoring
-- Error tracking (Sentry)
-- Performance monitoring
-- User analytics (privacy-focused)
-- Database performance metrics
+## Integration Opportunities
+
+- **Windower addon** integration for real-time data sync
+- **EliteAPI** integration for game state monitoring
+- **Export/import** functionality for data portability
+- **Community data sharing** for collaborative tracking
+
+## Monitoring & Analytics
+
+- **Error tracking** (Sentry) for production issue monitoring
+- **Performance monitoring** for database and frontend optimization
+- **Privacy-focused analytics** for user behavior insights
+- **Database metrics** for query performance optimization
+
+## Implementation Approach
+
+- **Design with flexibility** - avoid hard-coding assumptions
+- **Plan integration points** - define clear API boundaries
+- **Document decisions** - capture reasoning for future reference
+- **Incremental adoption** - implement features progressively

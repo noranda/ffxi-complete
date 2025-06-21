@@ -43,17 +43,17 @@ describe('Database Verification', () => {
 
     it('should prevent unauthorized inserts due to RLS', async () => {
       // Attempting to insert without proper authentication should fail
-      const {error} = await supabase
-        .from('characters')
-        .insert({
-          name: 'TestCharacter',
-          server: 'TestServer',
-          user_id: '00000000-0000-0000-0000-000000000000', // Fake UUID
-        });
+      const {error} = await supabase.from('characters').insert({
+        name: 'TestCharacter',
+        server: 'TestServer',
+        user_id: '00000000-0000-0000-0000-000000000000', // Fake UUID
+      });
 
       // Should fail due to RLS policy
       expect(error).toBeTruthy();
-      expect(error?.message).toContain('new row violates row-level security policy');
+      expect(error?.message).toContain(
+        'new row violates row-level security policy'
+      );
     });
   });
-}); 
+});

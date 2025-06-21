@@ -1,19 +1,55 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Performance optimization guidelines for frontend and database operations"
+globs:
+  - "**/*.tsx"
+  - "**/*.ts"
+  - "**/vite.config.ts"
+  - "**/*.sql"
 ---
+
 # Performance Guidelines
 
 ## Frontend Performance
-- Lazy load components and routes
-- Optimize bundle size with code splitting
-- React 19's automatic memoization handles component optimization
-- Implement virtual scrolling for large lists
-- Leverage React 19's concurrent features for better user experience
+
+- **Lazy loading** - Components and routes loaded on demand
+- **Code splitting** - Bundle optimization with dynamic imports
+- **React 19 automatic memoization** - Leverage built-in optimizations
+- **Virtual scrolling** - For large lists (500+ items)
+- **Concurrent features** - Use React 19's concurrent rendering for better UX
 
 ## Database Performance
-- Use proper indexes for frequently queried columns
-- Implement pagination for large datasets
-- Use database views for complex queries
-- Monitor query performance
+
+- **Proper indexing** - Index frequently queried columns
+- **Pagination** - Implement for large datasets (50+ items)
+- **Database views** - Use for complex, repeated queries
+- **Query monitoring** - Track performance and optimize slow queries
+
+## Implementation Patterns
+
+```typescript
+// ✅ Lazy loading components
+const CharacterForm = lazy(() => import('./CharacterForm'));
+
+// ✅ Virtual scrolling for large lists
+const VirtualizedList = ({items}) => (
+  <FixedSizeList height={400} itemCount={items.length} itemSize={50}>
+    {({index, style}) => <div style={style}>{items[index].name}</div>}
+  </FixedSizeList>
+);
+
+// ✅ Paginated queries
+const {data} = useQuery({
+  queryKey: ['characters', page],
+  queryFn: () => supabase
+    .from('characters')
+    .select('*')
+    .range(page * 50, (page + 1) * 50 - 1)
+});
+```
+
+## Best Practices
+
+- **Measure first** - Profile before optimizing
+- **Progressive enhancement** - Start simple, optimize as needed
+- **Monitor production** - Track real-world performance
+- **User-focused metrics** - Optimize for perceived performance

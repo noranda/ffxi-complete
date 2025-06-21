@@ -1,4 +1,4 @@
-# FFXI Progress Tracker
+# FFXI Complete
 
 A modern web application for tracking your Final Fantasy XI character progression, collections, and achievements. Built with React 19, TypeScript, and TailwindCSS.
 
@@ -134,7 +134,7 @@ yarn test:ui
 
 ## 🎨 Design Philosophy
 
-Inspired by [XIV-Complete](https://xiv-complete.com), the FFXI Progress Tracker emphasizes:
+Inspired by [XIV-Complete](https://xiv-complete.com), FFXI Complete emphasizes:
 
 - **Collection-Focused UI** - Optimized for tracking large datasets
 - **Quick Navigation** - Tab-based interface with progress indicators

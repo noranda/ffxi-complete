@@ -1,17 +1,30 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Documentation requirements and standards for code and user-facing content"
+globs:
+  - "**/README.md"
+  - "**/docs/**"
+  - "**/*.md"
 ---
-# Documentation
+
+# Documentation Standards
 
 ## Code Documentation
-- JSDoc comments for complex functions
-- README files for major components
-- API documentation for services
-- Type definitions for all data structures
+
+- **JSDoc comments** for all exported functions and components
+- **README files** for major components and project setup
+- **API documentation** for services and data layers
+- **Type definitions** with descriptive comments
 
 ## User Documentation
-- In-app help tooltips
-- User guide for complex features
-- FAQ section
+
+- **In-app help** tooltips for complex features
+- **User guides** for multi-step workflows
+- **FAQ section** for common questions
+- **Setup instructions** for development and deployment
+
+## Best Practices
+
+- **Keep current** - update docs when code changes
+- **Be specific** - provide concrete examples
+- **Test instructions** - verify setup steps work
+- **Link related docs** - cross-reference where helpful

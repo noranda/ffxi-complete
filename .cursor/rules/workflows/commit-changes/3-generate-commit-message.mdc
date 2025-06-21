@@ -1,0 +1,109 @@
+---
+description: "Commit workflow step 3: Generate conventional commit message following git-workflow standards and get user approval"
+globs:
+---
+
+# Step 3: Generate Commit Message
+
+## Goal
+
+Create a well-structured commit message that follows the project's git-workflow conventions based on the code analysis from step 2. Present the message to the user for approval before proceeding to commit.
+
+## Required Context/Inputs
+
+- Change analysis from step 2
+- Understanding of modified files and their purposes
+- Primary change type and impact assessment
+
+## Process
+
+1. **Apply Conventional Commits Format**: Use `<type>[optional scope]: <description>` pattern
+2. **Determine Commit Type**: Based on step 2 analysis (feat, fix, refactor, docs, test, chore, style)
+3. **Craft Subject Line**: 
+   - 50 characters or less
+   - Imperative mood ("Add feature" not "Added feature")
+   - No ending period
+   - Clear and descriptive
+4. **Add Body (if needed)**:
+   - Wrap at 72 characters
+   - Explain what and why (not how)
+   - Include quantified impact when significant
+   - List major components/areas affected
+5. **Add Footer (if applicable)**:
+   - Reference issues or breaking changes
+   - Note significant metrics or achievements
+
+## Commit Message Guidelines
+
+### Subject Line Requirements
+- **Imperative mood**: "Add", "Fix", "Update", "Remove"
+- **Lowercase after colon**: "feat: add user authentication"
+- **No period**: Don't end with punctuation
+- **Descriptive**: Clear what was accomplished
+
+### Body Requirements (for complex changes)
+- **Explain the what and why**: Not the how
+- **Quantify impact**: File counts, line changes, performance improvements
+- **Group related changes**: Organize by functional area
+- **Use bullet points**: For multiple distinct changes
+
+### Type Selection Criteria
+- **feat**: New features, components, capabilities
+- **fix**: Bug corrections, error handling
+- **refactor**: Code restructuring without behavior changes
+- **test**: Test additions, updates, improvements
+- **docs**: Documentation only changes
+- **style**: Formatting, linting, code style
+- **chore**: Build tools, dependencies, maintenance tasks
+
+## Expected Outputs
+
+- Complete commit message following conventional commits format
+- Clear presentation for user review
+- Explanation of why this type and structure was chosen
+- Request for explicit user approval
+
+## Instructions for AI
+
+1. **Analyze step 2 results** to determine appropriate commit type and scope
+2. **Focus only on actual git changes** - do not reference intermediate steps, migrations, or processes
+3. **Generate commit message** following all git-workflow standards based solely on git diff
+4. **Present message clearly** with formatting preserved
+5. **Explain reasoning** for type selection and message structure
+6. **Ask for explicit approval** - user must confirm before proceeding
+7. **Accept feedback** and revise if user requests changes
+8. **Do NOT commit yet** - wait for step 4
+
+## Approval Process
+
+Present the commit message in this format:
+
+```
+## Proposed Commit Message
+
+```
+[commit message here exactly as it will appear]
+```
+
+### Reasoning
+- **Type**: [chosen type] because [explanation]
+- **Scope**: [scope if used] because [explanation]
+- **Structure**: [single line vs multi-line] because [explanation]
+
+### Review Checklist
+- ✅ Follows conventional commits format
+- ✅ Subject line ≤ 50 characters
+- ✅ Uses imperative mood
+- ✅ Body wrapped at 72 characters (if present)
+- ✅ Accurately describes changes
+
+**Do you approve this commit message? (yes/no/revise)**
+```
+
+## Revision Handling
+
+If user requests changes:
+- Listen to specific feedback
+- Revise the message accordingly
+- Re-present for approval
+- Continue until user gives explicit approval

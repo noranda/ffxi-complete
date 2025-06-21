@@ -1,35 +1,29 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Component styling patterns using tailwind-variants and design system integration"
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/tailwind.config.ts"
 ---
+
 # Styling Patterns
 
-## Component Styling with tailwind-variants
+## tailwind-variants Usage (Required)
 
-Use tailwind-variants for consistent component styling with built-in class merging functionality.
+**Use tailwind-variants for component styling with built-in class merging:**
 
-## Component Styling Standards (Required)
-
-### tailwind-variants Usage
 ```typescript
-// ✅ Correct: Use tailwind-variants for component styling
 import {tv, type VariantProps} from 'tailwind-variants';
 
-/**
- * Button variants using tailwind-variants
- * Provides consistent styling with built-in tw-merge functionality
- */
 const buttonVariants = tv({
-  base: "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50",
+  base: "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:opacity-50",
   variants: {
     variant: {
       default: "bg-primary text-primary-foreground hover:bg-primary/90",
       destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-      outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+      outline: "border border-input bg-background hover:bg-accent",
       secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
       ghost: "hover:bg-accent hover:text-accent-foreground",
-      link: "text-primary underline-offset-4 hover:underline",
     },
     size: {
       default: "h-10 px-4 py-2",
@@ -49,23 +43,35 @@ type ButtonProps = React.ComponentProps<'button'> &
     asChild?: boolean;
   };
 
-// ❌ Incorrect: Using class-variance-authority
-import {cva, type VariantProps} from 'class-variance-authority';
-
-const buttonVariants = cva(
-  "base-classes",
-  {
-    variants: {
-      // variants
-    }
-  }
-);
+// ❌ Don't use class-variance-authority
+import {cva} from 'class-variance-authority'; // Avoid this
 ```
 
-### Variant Structure
+## Component Integration
 
 ```typescript
-// ✅ Correct: Well-organized variant structure
+import {cn} from '@/lib/utils';
+
+const Button: React.FC<ButtonProps> = ({
+  className,
+  size,
+  variant,
+  ...props
+}) => (
+  <button
+    className={cn(buttonVariants({size, variant}), className)}
+    {...props}
+  />
+);
+
+// ❌ Don't manually concatenate classes
+className={`${buttonVariants({variant})} ${className}`} // Avoid this
+```
+
+## Variant Structure
+
+**Organize variants logically:**
+```typescript
 const componentVariants = tv({
   base: "base-classes-here",
   variants: {
@@ -73,7 +79,6 @@ const componentVariants = tv({
     variant: {
       default: "default-styling",
       primary: "primary-styling",
-      secondary: "secondary-styling",
       destructive: "destructive-styling",
     },
     // Size variants
@@ -88,7 +93,7 @@ const componentVariants = tv({
       false: "",
     },
   },
-  // Compound variants for complex interactions
+  // Complex interactions
   compoundVariants: [
     {
       variant: "primary",
@@ -99,91 +104,15 @@ const componentVariants = tv({
   defaultVariants: {
     variant: "default",
     size: "md",
-    disabled: false,
   },
 });
-```
-
-## Integration with Component Props
-
-### Type Integration
-```typescript
-// ✅ Correct: Proper integration with component props
-import {tv, type VariantProps} from 'tailwind-variants';
-import {cn} from '@/lib/utils';
-
-const cardVariants = tv({
-  base: "rounded-lg border bg-card text-card-foreground shadow-sm",
-  variants: {
-    padding: {
-      none: "",
-      sm: "p-4",
-      md: "p-6", 
-      lg: "p-8",
-    },
-    elevation: {
-      none: "shadow-none",
-      sm: "shadow-sm",
-      md: "shadow-md",
-      lg: "shadow-lg",
-    },
-  },
-  defaultVariants: {
-    padding: "md",
-    elevation: "sm",
-  },
-});
-
-type CardProps = React.ComponentProps<'div'> &
-  VariantProps<typeof cardVariants> & {
-    /** Additional CSS classes */
-    className?: string;
-  };
-
-const Card: React.FC<CardProps> = ({
-  className,
-  elevation,
-  padding,
-  ...props
-}) => (
-  <div
-    className={cn(cardVariants({elevation, padding}), className)}
-    {...props}
-  />
-);
-```
-
-## Class Name Utilities
-
-### cn() Utility Usage
-```typescript
-// ✅ Correct: Use cn() for merging classes
-import {cn} from '@/lib/utils';
-
-const Component: React.FC<ComponentProps> = ({className, variant, ...props}) => (
-  <div
-    className={cn(
-      componentVariants({variant}),
-      className
-    )}
-    {...props}
-  />
-);
-
-// ❌ Incorrect: Manual class concatenation
-const Component: React.FC<ComponentProps> = ({className, variant, ...props}) => (
-  <div
-    className={`${componentVariants({variant})} ${className}`}
-    {...props}
-  />
-);
 ```
 
 ## Design System Integration
 
-### Consistent Naming
+**Use consistent naming across components:**
 ```typescript
-// ✅ Correct: Consistent variant naming across components
+// ✅ Consistent variant names
 const buttonVariants = tv({
   variants: {
     variant: {
@@ -191,14 +120,11 @@ const buttonVariants = tv({
       primary: "...",
       secondary: "...",
       destructive: "...",
-      ghost: "...",
-      link: "...",
     },
     size: {
       sm: "...",
-      md: "...", // or "default"
+      md: "...",
       lg: "...",
-      icon: "...",
     },
   },
 });
@@ -218,26 +144,24 @@ const inputVariants = tv({
 });
 ```
 
-### Color Token Usage
+**Use design system color tokens:**
 ```typescript
-// ✅ Correct: Use design system color tokens
+// ✅ Correct - Use design tokens
 const alertVariants = tv({
-  base: "rounded-lg border p-4",
   variants: {
     variant: {
       default: "bg-background text-foreground border-border",
       destructive: "bg-destructive/10 text-destructive border-destructive/20",
       warning: "bg-warning/10 text-warning border-warning/20",
-      success: "bg-success/10 text-success border-success/20",
     },
   },
 });
 
-// ❌ Incorrect: Hardcoded colors
+// ❌ Incorrect - Hardcoded colors
 const alertVariants = tv({
   variants: {
     variant: {
-      destructive: "bg-red-50 text-red-900 border-red-200",
+      destructive: "bg-red-50 text-red-900 border-red-200", // Avoid this
     },
   },
 });
@@ -247,16 +171,15 @@ const alertVariants = tv({
 
 - **Use tailwind-variants** instead of class-variance-authority
 - **Organize variants logically** (visual, size, state)
-- **Use compound variants** for complex style interactions
 - **Set default variants** for consistent behavior
-- **Integrate with TypeScript** using VariantProps
 - **Use cn() utility** for proper class merging
-- **Follow design system** color tokens and naming conventions
+- **Follow design system** color tokens and naming
+- **Use compound variants** for complex style interactions
 - **Document variant purposes** with JSDoc comments
 
-## Performance Considerations
+## Performance Benefits
 
-- **tailwind-variants includes tw-merge** functionality automatically
-- **Variant calculations** are optimized and cached
-- **Class merging** handles conflicts intelligently
-- **Bundle size** is minimal with tree-shaking
+- **Built-in tw-merge** functionality
+- **Optimized variant calculations** with caching
+- **Intelligent class conflict resolution**
+- **Minimal bundle size** with tree-shaking

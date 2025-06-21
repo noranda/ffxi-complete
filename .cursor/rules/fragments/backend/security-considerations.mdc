@@ -1,8 +1,11 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Authentication, data protection, and privacy guidelines"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "supabase/**"
 ---
+
 # Security Considerations
 
 ## Authentication

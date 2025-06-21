@@ -1,96 +1,84 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "TypeScript coding standards and patterns for type definitions and property organization"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
 ---
+
 # TypeScript Standards
-
-## Configuration and Patterns
-
-Use strict TypeScript configuration with proper type definitions and patterns for consistent code quality.
 
 ## Type Definitions
 
-### Prefer Types Over Interfaces
+**Prefer types over interfaces** for object shapes:
 ```typescript
-// ✅ Correct: Use types for object shapes (not extending a library)
+// ✅ Correct
 type Character = {
+  createdAt: Date;
   id: string;
   name: string;
   userId: string;
-  createdAt: Date;
 };
 
-// ❌ Incorrect: Using interface for simple object shapes
-interface Character {
-  id: string;
-  name: string;
-  userId: string;
-  createdAt: Date;
-}
+// ❌ Avoid interfaces for simple objects
+interface Character { ... }
 ```
 
-### Enums for Fixed Sets
+**Use enums for fixed sets**:
 ```typescript
-// ✅ Correct: Use enums for fixed sets of values
 enum JobType {
-  WAR = 'WAR',
-  MNK = 'MNK',
-  WHM = 'WHM',
   BLM = 'BLM',
-  // ... etc
+  MNK = 'MNK',
+  WAR = 'WAR',
+  WHM = 'WHM',
 }
-
-// Usage
-const currentJob: JobType = JobType.WAR;
 ```
 
-### Union Types for Flexibility
+**Union types for flexibility**:
 ```typescript
-// ✅ Correct: Use union types for flexible but constrained values
-type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
-type Theme = 'light' | 'dark' | 'system';
-
-// Usage
-const status: ProgressStatus = 'in_progress';
+type ProgressStatus = 'completed' | 'in_progress' | 'not_started';
+type Theme = 'dark' | 'light' | 'system';
 ```
 
-## Type Organization
+## Property Sorting (Required)
 
-### Prop Types
+**All properties must be sorted alphabetically**:
 ```typescript
-// ✅ Correct: Define prop types outside component definition
-type ButtonProps = React.ComponentProps<'button'> & {
-  /** Button size variant */
-  size?: 'sm' | 'md' | 'lg';
-  /** Button visual style variant */
-  variant?: 'primary' | 'secondary' | 'destructive';
-  /** Render as child using composition pattern */
-  asChild?: boolean;
+// ✅ Correct
+type FormErrors = {
+  confirmPassword?: string;
+  email?: string;
+  general?: string;
+  password?: string;
+};
+
+// ❌ Incorrect - not alphabetical
+type FormErrors = {
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  general?: string;
 };
 ```
 
-### Utility Types
-```typescript
-// ✅ Correct: Use TypeScript utility types effectively
-type PartialCharacter = Partial<Character>;
-type RequiredId = Pick<Character, 'id'>;
-type CharacterUpdate = Omit<Character, 'id' | 'createdAt'>;
+## Utility Types
 
-// Generic types for reusability
+```typescript
 type ApiResponse<T> = {
   data: T;
   error: string | null;
   success: boolean;
 };
+
+// Use built-in utility types
+type PartialCharacter = Partial<Character>;
+type RequiredId = Pick<Character, 'id'>;
+type CharacterUpdate = Omit<Character, 'createdAt' | 'id'>;
 ```
 
 ## Best Practices
 
-- **Always use strict TypeScript configuration**
-- **Prefer `type` over `interface` for object shapes**
-- **Use `enum` for fixed sets of related values**
-- **Use union types for flexible constraints**
-- **Define types outside of component definitions**
-- **Leverage TypeScript utility types for transformations**
-- **Use generic types for reusable patterns**
+- Use strict TypeScript configuration
+- Sort all properties alphabetically
+- Prefer `type` over `interface` for object shapes
+- Use utility types for transformations
+- Define types outside component definitions

@@ -1,0 +1,109 @@
+---
+description: "Evidence-based code guidelines assessment methodology and systematic review requirements"
+globs:
+  - "**/*.md"
+  - "**/*.mdc"
+---
+
+# Code Guidelines Assessment Methodology
+
+## Evidence-Based Assessment (MANDATORY)
+
+**All Code Guidelines checks must use systematic evidence-based assessment with complete documentation.**
+
+## Assessment Protocol (Required)
+
+### Step 1: File Inventory
+**Use git status to identify ALL changed files:**
+```bash
+git status --porcelain
+```
+
+**Document complete inventory:**
+```markdown
+## CHANGED FILES INVENTORY
+- Files Created: [list with line counts]
+- Files Modified: [list with descriptions]
+- Files Updated: [list with changes]
+- Total Files Requiring Assessment: [number]
+```
+
+### Step 2: Fragment Applicability
+**Consider all 28 fragments for each file:**
+- Foundation: learning-focused-development, development-environment, architecture-principles, project-structure
+- Code Standards: typescript-standards, react-imports, react-components, component-exports, shared-component-types, styling-patterns, code-documentation, error-handling, code-formatting-linting
+- Backend: data-management, supabase-patterns, security-considerations
+- Testing: tdd-principles, testing-strategy, test-organization, quality-assurance
+- Design: ui-ux-guidelines
+- Process: git-workflow, performance-guidelines, documentation, future-considerations, rule-management, status-check-reporting, code-guidelines-assessment
+
+### Step 3: Evidence-Based Assessment Template
+**For EACH applicable fragment, use this mandatory template:**
+
+```markdown
+### Fragment: [exact fragment name]
+**Requirement**: [exact quote from fragment]
+**Lines Examined**: [specific line numbers or "entire file"]
+**Manual Verification**: [what specifically examined]
+**Findings**: [specific evidence or violations with line numbers]
+**Tool Validation**: [command + result]
+**Assessment**: 🟢/🟠/🔴 [reasoning with evidence]
+```
+
+## Critical Requirements
+
+### Zero Tolerance for Sampling
+❌ **PROHIBITED**: "Examined lines 220-260", "Checked representative sections", "Sampled JSX elements"  
+✅ **REQUIRED**: "Examined entire file line-by-line", "Complete file scan", "Full file review"
+
+### Manual First, Tools Second
+1. **Read exact requirement** from fragment
+2. **Scan ENTIRE file** for that pattern
+3. **Document every instance** with line numbers
+4. **Run validation tools** AFTER manual verification
+5. **Compare and reconcile** manual vs tool findings
+
+### Fragment-Specific Manual Checks
+
+**JSX Formatting** (code-formatting-linting):
+- Multi-line JSX elements must have newlines before/after
+- Single-line elements can be grouped
+- Check conditional JSX expressions for proper newlines
+
+**Prop Sorting** (react-components):
+- Component parameters alphabetically sorted
+- JSX attributes alphabetically sorted
+- Type properties alphabetically sorted
+
+**JSDoc Examples** (code-documentation):
+- JSDoc example code must follow ALL code standards
+- Props in examples must be alphabetically sorted
+- Examples must be practical and copy-pasteable
+
+## Assessment Validity
+
+### INVALID Assessment:
+❌ Any applicable fragment lacks complete evidence log  
+❌ Tool results used without manual verification  
+❌ Claims made without specific line evidence  
+❌ Sampling used instead of complete examination
+
+### VALID Assessment:
+✅ All applicable fragments have complete evidence logs  
+✅ Manual verification performed before tool validation  
+✅ All claims supported by specific evidence  
+✅ Tool results reconciled with manual findings
+
+## Color Coding
+
+- **🟢 Green**: All applicable fragments show complete adherence
+- **🟠 Orange**: Minor violations found (list specific violations)
+- **🔴 Red**: Multiple violations requiring immediate fixes
+
+## Zero Tolerance Policy
+
+- **🔴 Red status**: MUST fix immediately before proceeding
+- **🟠 Orange status**: MUST fix unless explicitly documented sub-task
+- **🟢 Green status**: Continue with confidence
+
+**No assessment is complete without following this evidence-based protocol.**

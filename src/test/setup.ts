@@ -13,16 +13,18 @@ beforeAll(() => {
   // Mock window.matchMedia for Drawer component (vaul library)
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: vi.fn().mockImplementation(query => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(), // deprecated
-      removeListener: vi.fn(), // deprecated
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
+    value: vi.fn().mockImplementation(
+      (query: string): MediaQueryList => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(), // deprecated
+        removeListener: vi.fn(), // deprecated
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })
+    ),
   });
 
   // Mock ResizeObserver for Drawer component
@@ -51,7 +53,7 @@ beforeAll(() => {
   });
 
   // Add the fromRect static method
-  (global.DOMRect as typeof DOMRect).fromRect = vi
+  global.DOMRect.fromRect = vi
     .fn()
     .mockImplementation(() => mockDOMRectInstance);
 

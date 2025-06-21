@@ -1,115 +1,118 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "React import patterns and type usage standards"
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
 ---
+
 # React Import Standards
-
-## Import Rules and Patterns
-
-Modern React applications should follow specific import patterns for consistency and maintainability.
 
 ## React Import Rules (Required)
 
-### No Global React Import
+**No global React import** - Import only what you need:
 ```typescript
-// ✅ Correct: No global React import, use React.* for types inline
+// ✅ Correct - No global React import
 import {useState, useEffect} from 'react';
-import {Button} from '@/components/ui/button';
 
 type ComponentProps = {
-  title: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  title: string;
 };
 
-const MyComponent: React.FC<ComponentProps> = ({title, onClick, children}) => {
+const MyComponent: React.FC<ComponentProps> = ({children, onClick, title}) => {
   const [count, setCount] = useState<number>(0);
   
   return (
     <div className="component">
       <h2>{title}</h2>
-      <Button onClick={onClick}>{children}</Button>
+      <button onClick={onClick}>{children}</button>
     </div>
   );
 };
 
-// ❌ Incorrect: Global React import
+// ❌ Incorrect - Global React import
 import * as React from 'react';
 import React from 'react';
-
-// ❌ Incorrect: Importing React for JSX (not needed in modern React)
 import React, {useState} from 'react';
 ```
 
-## Import Formatting and Sorting (Required)
+## React Types - NEVER Import Directly (Critical)
 
-### Automatic Import Groups
+**Always use React.* inline, never import React types directly:**
+
 ```typescript
-// ✅ Correct - Import groups sorted automatically by ESLint
+// ❌ NEVER do this - importing React types directly
+import type {
+  FormEvent,
+  MouseEvent,
+  ChangeEvent,
+  ReactNode,
+  ComponentProps,
+} from 'react';
+
+// ✅ ALWAYS do this - use React.* inline
 import {useState} from 'react';
 
+// Event handlers
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { /* ... */ };
+const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => { /* ... */ };
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { /* ... */ };
+
+// Component types
+type ComponentProps = {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+// Component prop spreading
+type ButtonProps = React.ComponentProps<'button'> & {
+  variant?: 'primary' | 'secondary';
+};
+```
+
+## Import Formatting (ESLint Automatic)
+
+**Bracket spacing and sorting handled by ESLint:**
+```typescript
+// ✅ Correct - No bracket spacing, alphabetical sorting
 import {createClient} from '@supabase/supabase-js';
-import {describe, it, expect} from 'vitest';
+import {describe, expect, it} from 'vitest';
+import {render, screen} from '@testing-library/react';
+import {useState, useEffect} from 'react';
 
 import {Button} from '@/components/ui/button';
 import {utils} from '@/lib/utils';
 
 import {formatDate} from '../utils/date';
 
-import {CONFIG} from './config';
-
-import './styles.css';
-
-// ✅ Correct - Members sorted alphabetically within imports
-import {createClient} from '@supabase/supabase-js';
-import {describe, expect, it} from 'vitest';
-import {render, screen} from '@testing-library/react';
-
-// ❌ Incorrect - Wrong import order, bracket spacing violations
-import { createClient } from '@supabase/supabase-js';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import './styles.css';
-import { formatDate } from '../utils/date';
-```
-
-### Import Sorting Groups (Automatic)
-
-ESLint automatically sorts imports into these groups:
-
-1. **Side effect imports** (rare, stay in original order)
-2. **React imports** (always first)
-3. **External packages** (npm packages, alphabetical)
-4. **Internal packages** (imports with `@/` prefix)
-5. **Parent directory imports** (imports with `../`)
-6. **Same directory imports** (imports with `./`)
-7. **Style imports** (CSS/SCSS files, always last)
-
-### Bracket Spacing (Critical)
-
-```typescript
-// ✅ Correct - No spaces inside brackets (bracketSpacing: false)
-import {useState, useEffect} from 'react';
-import {Button} from '@/components/ui/button';
-const {data, error} = await supabase.from('table').select('*');
-
-// ❌ Incorrect - Spaces inside brackets
+// ❌ Incorrect - Bracket spacing, wrong order
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-const { data, error } = await supabase.from('table').select('*');
+import { createClient } from '@supabase/supabase-js';
 ```
+
+## Import Groups (Automatic)
+
+ESLint automatically sorts imports into these groups:
+1. **React imports** (always first)
+2. **External packages** (npm packages, alphabetical)
+3. **Internal packages** (imports with `@/` prefix)
+4. **Parent directory imports** (imports with `../`)
+5. **Same directory imports** (imports with `./`)
+6. **Style imports** (CSS/SCSS files, always last)
 
 ## Best Practices
 
-- **No global React imports** - Import only what you need from React
-- **Use React.* for types** - Access React types inline (React.FC, React.MouseEventHandler)
-- **Automatic sorting** - Let ESLint handle import organization with `--fix`
-- **Consistent bracket spacing** - Follow Prettier configuration (no spaces)
-- **Alphabetical members** - Sort imported members alphabetically within imports
+- **No global React imports** - Import only what you need
+- **NEVER import React types directly** - Use `React.ReactNode`, `React.MouseEventHandler`, etc. inline
+- **Let ESLint sort** - Use `yarn lint --fix` for automatic organization
+- **No bracket spacing** - Follow Prettier configuration
+- **Alphabetical members** - Sort imported members within imports
 
-## Notes
+## Commands
 
-- Import sorting is handled automatically by ESLint with `--fix`
-- All imports within each group are sorted alphabetically
-- The grouping system ensures logical organization and prevents conflicts
+```bash
+yarn lint --fix  # Auto-fix import sorting and formatting
+```

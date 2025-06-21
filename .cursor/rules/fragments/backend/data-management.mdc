@@ -1,8 +1,11 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Database schema design and data validation practices"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "supabase/**"
 ---
+
 # Data Management
 
 ## Database Schema

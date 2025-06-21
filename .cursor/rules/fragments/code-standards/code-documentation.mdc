@@ -1,21 +1,20 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "JSDoc documentation standards and inline comment patterns for components and functions"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
 ---
+
 # Code Documentation Standards
 
-## JSDoc and Inline Documentation
+## JSDoc Requirements (Required)
 
-Comprehensive documentation ensures code maintainability and helps developers understand component APIs and functionality.
-
-## JSDoc Comment Standards (Required)
+**All exported functions, components, and types must have JSDoc comments:**
 
 ### Component Documentation
 ```typescript
 /**
- * Component props extending HTML element attributes
- * Always define props type outside component definition
+ * Button props extending HTML element attributes
  */
 type ButtonProps = React.ComponentProps<'button'> & {
   /** Render as child using composition pattern */
@@ -49,25 +48,7 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   ...props
 }) => {
-  // Component-specific logic and hooks
-  const handleInternalClick = useCallback(() => {
-    // Implementation details
-  }, []);
-
-  // Early returns for different states
-  if (asChild) {
-    return <Slot className={buttonVariants({variant, size, className})} {...props} />;
-  }
-
-  return (
-    <button
-      className={buttonVariants({variant, size, className})}
-      onClick={handleInternalClick}
-      {...props}
-    >
-      {children}
-    </button>
-  );
+  // Implementation
 };
 ```
 
@@ -84,8 +65,6 @@ type UserPreferences = {
   notifications: boolean;
   /** Default character to load on login */
   defaultCharacterId?: string;
-  /** Language preference for UI text */
-  language: 'en' | 'ja' | 'fr' | 'de';
 };
 
 /**
@@ -99,11 +78,6 @@ type ApiResponse<T> = {
   error: string | null;
   /** Whether the request was successful */
   success: boolean;
-  /** Additional metadata about the response */
-  meta?: {
-    timestamp: string;
-    requestId: string;
-  };
 };
 ```
 
@@ -125,50 +99,48 @@ type ApiResponse<T> = {
  * ```
  */
 const useUserPreferences = (): UserPreferencesReturn => {
-  // Implementation with inline comments for complex logic
-  const [preferences, setPreferences] = useState<UserPreferences>(() => {
-    // Load initial preferences from localStorage
-    const stored = localStorage.getItem('userPreferences');
-    return stored ? JSON.parse(stored) : DEFAULT_PREFERENCES;
-  });
-
-  const updatePreference = useCallback(<K extends keyof UserPreferences>(
-    key: K,
-    value: UserPreferences[K]
-  ) => {
-    setPreferences(prev => {
-      // Create new preferences object
-      const updated = {...prev, [key]: value};
-      
-      // Persist to localStorage
-      localStorage.setItem('userPreferences', JSON.stringify(updated));
-      
-      return updated;
-    });
-  }, []);
-
-  return {preferences, updatePreference};
+  // Implementation
 };
 ```
 
-## Inline Documentation (Required)
+## JSDoc Example Code Standards (Critical)
 
-### Section Comments for Complex Components
+**All JSDoc example code MUST follow the same standards as implementation code:**
+
 ```typescript
+// ✅ Correct - Props alphabetically sorted, follows code standards
 /**
- * Complex dashboard component with multiple responsibilities
- * Break down implementation with section comments
+ * @example
+ * ```tsx
+ * <Button onClick={() => save()} size="lg" variant="primary">
+ *   Save Changes
+ * </Button>
+ * ```
  */
-const ComplexDashboard: React.FC<DashboardProps> = ({userId, initialData}) => {
+
+// ❌ Incorrect - Props not alphabetically sorted
+/**
+ * @example
+ * ```tsx
+ * <Button variant="primary" onClick={() => save()} size="lg">
+ *   Save Changes
+ * </Button>
+ * ```
+ */
+```
+
+## Inline Comments
+
+**Use section comments for complex components:**
+```typescript
+const ComplexDashboard: React.FC<DashboardProps> = ({userId}) => {
   // State management section
   const [activeTab, setActiveTab] = useState<TabType>('overview');
-  const [isLoading, setIsLoading] = useState(false);
   
   // Data fetching section
-  const {data: userData, error} = useQuery({
+  const {data: userData} = useQuery({
     queryKey: ['user', userId],
     queryFn: () => fetchUserData(userId),
-    initialData,
   });
 
   // Event handlers section
@@ -176,77 +148,27 @@ const ComplexDashboard: React.FC<DashboardProps> = ({userId, initialData}) => {
     // Validate tab before switching
     if (isValidTab(tab)) {
       setActiveTab(tab);
-      
-      // Track analytics event
-      analytics.track('dashboard_tab_changed', {tab, userId});
     }
-  }, [userId]);
+  }, []);
 
-  // Render logic with clear sections
+  // Render logic
   return (
     <div className="dashboard">
       {/* Header section */}
       <DashboardHeader user={userData} />
-
-      {/* Navigation section */}
-      <TabNavigation 
-        activeTab={activeTab} 
-        onTabChange={handleTabChange}
-      />
-
+      
       {/* Main content section */}
       <div className="dashboard-content">
         {activeTab === 'overview' && <OverviewTab data={userData} />}
-        {activeTab === 'characters' && <CharactersTab userId={userId} />}
-        {activeTab === 'settings' && <SettingsTab />}
       </div>
     </div>
   );
 };
 ```
 
-### Logic Explanation Comments
-```typescript
-const useDataSync = <T>(data: T[], endpoint: string) => {
-  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'error'>('idle');
+## JSDoc Tags
 
-  const syncData = useCallback(async () => {
-    setSyncStatus('syncing');
-    
-    try {
-      // Batch updates to reduce API calls
-      const batches = chunk(data, 50); // Process in chunks of 50
-      
-      for (const batch of batches) {
-        // Process each batch sequentially to avoid rate limiting
-        await api.post(`${endpoint}/batch`, {items: batch});
-        
-        // Small delay between batches to be respectful to the server
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-      
-      setSyncStatus('idle');
-    } catch (error) {
-      // Log error details for debugging
-      console.error('Data sync failed:', {endpoint, dataCount: data.length, error});
-      setSyncStatus('error');
-    }
-  }, [data, endpoint]);
-
-  return {syncData, syncStatus};
-};
-```
-
-## Documentation Requirements
-
-### Required Documentation
-- **All exported functions** must have JSDoc comments
-- **All exported components** must have JSDoc comments with examples
-- **All exported types** must have JSDoc comments
-- **Complex logic** must have inline comments explaining the approach
-- **Section comments** for components with multiple responsibilities
-
-### JSDoc Tags to Use
+**Common JSDoc tags to use:**
 ```typescript
 /**
  * Description of the function/component/type
@@ -265,38 +187,18 @@ const useDataSync = <T>(data: T[], endpoint: string) => {
  */
 ```
 
-### Example Quality Standards
-```typescript
-// ✅ Good example: Specific, practical, copy-pasteable
-/**
- * @example
- * ```tsx
- * <Button onClick={() => save()} size="lg" variant="primary">
- *   Save Changes
- * </Button>
- * 
- * <Button asChild variant="ghost">
- *   <Link to="/settings">Settings</Link>
- * </Button>
- * ```
- */
+## Requirements
 
-// ❌ Poor example: Vague, not practical
-/**
- * @example
- * ```tsx
- * <Button>Click me</Button>
- * ```
- */
-```
+- **All exported items** must have JSDoc comments
+- **Examples must be practical** and copy-pasteable
+- **Complex logic** must have inline comments
+- **Example code must follow** all code standards
+- **Keep comments current** - update when implementation changes
 
 ## Best Practices
 
 - **Write documentation first** when designing new APIs
-- **Update documentation** whenever implementation changes
-- **Use concrete examples** that developers can copy and adapt
-- **Explain the "why"** not just the "what" in complex logic
-- **Keep comments current** - outdated comments are worse than no comments
+- **Use concrete examples** that developers can copy
+- **Explain the "why"** not just the "what"
 - **Use section comments** to break down complex components
 - **Document edge cases** and special behavior
-- **Link related functionality** with @see tags

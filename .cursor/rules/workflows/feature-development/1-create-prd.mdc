@@ -1,8 +1,8 @@
 ---
-description: 
-globs: 
-alwaysApply: false
+description: "Workflow step 1: Guide AI through creating detailed PRDs with clarifying questions"
+globs:
 ---
+
 # Rule: Generating a Product Requirements Document (PRD)
 
 ## Goal

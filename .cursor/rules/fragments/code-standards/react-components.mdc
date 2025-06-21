@@ -1,107 +1,59 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "React component patterns, prop sorting, and JSX formatting standards"
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
 ---
+
 # React Component Standards
 
-## Component Declaration and Structure
+## Component Declaration (Required)
 
-Consistent patterns for React functional components, JSX formatting, and prop management.
-
-## Component Declaration Format (Required)
-
-### React.FC Pattern
+**Always use React.FC with const arrow function**:
 ```typescript
-// ✅ Correct: Always use React.FC with const arrow function
+// ✅ Correct
 type JobTrackerProps = {
   characterId: string;
   className?: string;
   onProgressUpdate: (jobId: string, level: number) => void;
-  ref?: React.Ref<HTMLDivElement>;
 };
 
-const JobTracker: React.FC<JobTrackerProps> = ({characterId, className, onProgressUpdate, ref}) => {
+const JobTracker: React.FC<JobTrackerProps> = ({
+  characterId,
+  className,
+  onProgressUpdate,
+}) => {
   return (
-    <div className={className} ref={ref}>
-      {/* Component implementation */}
-
-      <div className="job-list">
-        {/* Jobs go here */}
-      </div>
+    <div className={className}>
+      {/* Implementation */}
     </div>
   );
 };
 
-// ❌ Incorrect: Function declaration and wrong JSX prop order
-function JobTracker({characterId, className, onProgressUpdate, ref}: JobTrackerProps) {
-  return (
-    <div ref={ref} className={className}>
-      {/* Component implementation - ref should come after className */}
-    </div>
-  );
-}
-
-// ✅ Correct: Component with no props uses React.FC<unknown>
-const LoadingSpinner: React.FC<unknown> = () => {
-  return (
-    <div className="spinner">
-      <div className="spinner-icon" />
-      <div className="loading-text">Loading...</div>
-    </div>
-  );
-};
+// ❌ Incorrect - function declaration
+function JobTracker(props: JobTrackerProps) { ... }
 ```
 
-## Implicit Return for JSX-Only Components (Required)
+## Implicit vs Explicit Return
 
-### When to Use Implicit Return
+**Use implicit return for JSX-only components**:
 ```typescript
-// ✅ Correct: Use implicit return when component only returns JSX
+// ✅ Correct - implicit return
 const CardFooter: React.FC<CardFooterProps> = ({className, ...props}) => (
   <div
-    className={cn('flex items-center px-6 [.border-t]:pt-6', className)}
-    data-slot="card-footer"
+    className={cn('flex items-center px-6', className)}
     {...props}
   />
 );
 
-// ✅ Correct: Use implicit return for simple components
-const Icon: React.FC<IconProps> = ({name, size = 16}) => (
-  <svg
-    className={`icon icon-${name}`}
-    height={size}
-    width={size}
-  >
-    <use href={`#${name}`} />
-  </svg>
-);
-
-// ❌ Incorrect: Unnecessary return statement for JSX-only components
-const CardFooter: React.FC<CardFooterProps> = ({className, ...props}) => {
-  return (
-    <div
-      className={cn('flex items-center px-6 [.border-t]:pt-6', className)}
-      data-slot="card-footer"
-      {...props}
-    />
-  );
-};
-```
-
-### When to Use Explicit Return
-```typescript
-// ✅ Correct: Use explicit return when component has logic before JSX
+// ✅ Correct - explicit return when logic present
 const ComplexComponent: React.FC<ComplexProps> = ({data, isLoading}) => {
-  // Component logic requires explicit return
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
+  if (isLoading) return <LoadingSpinner />;
+  
   const processedData = data.map(item => ({...item, processed: true}));
-
+  
   return (
-    <div className="complex-component">
+    <div>
       {processedData.map(item => (
         <div key={item.id}>{item.name}</div>
       ))}
@@ -110,159 +62,76 @@ const ComplexComponent: React.FC<ComplexProps> = ({data, isLoading}) => {
 };
 ```
 
-**When to use implicit return:**
-- Component only returns JSX (no logic, hooks, or early returns)
-- No variable declarations or computations before JSX
-- Single JSX element or fragment as the entire component body
+## Prop Sorting (Required)
 
-**When to use explicit return:**
-- Component has hooks, logic, or variable declarations
-- Component has early returns or conditional logic
-- Component body contains more than just the JSX return
+**All props must be sorted alphabetically**:
 
-## Prop Sorting Requirements (Required)
-
-### Component Parameters
+**Component parameters**:
 ```typescript
-// ✅ Correct: Props sorted alphabetically in component parameters
-const ComplexComponent: React.FC<ComplexProps> = ({
-  asChild = false,        // 'a' comes first
-  children,               // 'c' comes next
-  className,              // 'c' but className after children
-  disabled = false,       // 'd' comes next
-  onAction,               // 'o' comes next
-  size = 'md',           // 's' comes next
-  variant = 'default',   // 'v' comes next
-  ...props               // Rest props always last
-}) => {
-  // Implementation
-};
+// ✅ Correct
+const RegisterForm: React.FC<RegisterFormProps> = ({
+  className,
+  onSuccess,
+  onSwitchToLogin,
+}) => { ... };
 
-// ❌ Incorrect: Props not sorted alphabetically
-const ComplexComponent: React.FC<ComplexProps> = ({
-  variant = 'default',   // Wrong: should be last
-  className,             // Wrong: should be after children
-  asChild = false,       // Wrong: should be first
-  disabled = false,      // Wrong: should be after className
-  children,              // Wrong: should be after asChild
-  size = 'md',          // Wrong: should be before variant
-  onAction,             // Wrong: should be before size
-  ...props
-}) => {
-  // Implementation
-};
+// ❌ Incorrect - not alphabetical
+const RegisterForm: React.FC<RegisterFormProps> = ({
+  onSuccess,
+  onSwitchToLogin,
+  className,
+}) => { ... };
 ```
 
-### Type Definitions
+**JSX attributes**:
 ```typescript
-// ✅ Correct: Props sorted alphabetically in type definitions
-type ComplexProps = {
-  /** Render as child component */
-  asChild?: boolean;
-  /** Child content */
-  children?: React.ReactNode;
-  /** Additional CSS classes */
-  className?: string;
-  /** Disabled state */
-  disabled?: boolean;
-  /** Action handler */
-  onAction?: () => void;
-  /** Size variant */
-  size?: 'sm' | 'md' | 'lg';
-  /** Visual variant */
-  variant?: 'default' | 'primary' | 'secondary';
-};
+// ✅ Correct
+<button
+  className="btn-primary"
+  data-testid="submit-button"
+  disabled={false}
+  onClick={handleClick}
+  type="submit"
+>
+  Submit
+</button>
+
+// ❌ Incorrect - not alphabetical
+<button
+  onClick={handleClick}
+  type="submit"
+  disabled={false}
+  className="btn-primary"
+>
+  Submit
+</button>
 ```
 
-## JSX Prop Sorting (Required)
+## JSX Formatting
 
-### Alphabetical Prop Order
+**Element spacing**:
+- No newlines between consecutive single-line elements
+- Add newlines before/after multi-line elements
+- Group single-line elements together
+
 ```typescript
-// ✅ Correct: JSX props sorted alphabetically
-const ButtonExample: React.FC<unknown> = () => {
-  return (
-    <button
-      className="btn-primary"
-      data-testid="submit-button"
-      disabled={false}
-      onClick={handleClick}
-      type="submit"
-    >
-      Submit
-    </button>
-  );
-};
+// ✅ Correct
+const UserProfile: React.FC<UserProfileProps> = ({name, role}) => (
+  <div className="profile">
+    <h2 className="name">{name}</h2>
+    <div className="role">{role}</div>
 
-// ✅ Correct: Complex component with multiple props
-const ComplexElement: React.FC<unknown> = () => {
-  return (
-    <CustomComponent
-      aria-label="Custom element"
-      className="custom-class"
-      data-slot="custom"
-      disabled={isDisabled}
-      onClick={handleClick}
-      size="large"
-      variant="primary"
-    />
-  );
-};
-
-// ❌ Incorrect: Props not sorted alphabetically
-const IncorrectExample: React.FC<unknown> = () => {
-  return (
-    <button
-      onClick={handleClick}    // Wrong: onClick should come after disabled
-      type="submit"           // Wrong: type should come last
-      disabled={false}        // Wrong: disabled should come after className
-      className="btn-primary" // Wrong: className should come first
-    >
-      Submit
-    </button>
-  );
-};
-```
-
-## JSX Element Formatting Rules
-
-### Spacing Between Elements
-```typescript
-// ✅ Correct: Single-line siblings grouped, newlines around multi-line elements
-const UserProfile: React.FC<UserProfileProps> = ({name, role}) => {
-  return (
-    <div className="profile">
-      <h2 className="name">{name}</h2>
-      <div className="role">{role}</div>
-
-      <div className="actions">
-        <button>Edit</button>
-      </div>
+    <div className="actions">
+      <button>Edit</button>
     </div>
-  );
-};
-
-// ❌ Incorrect: Using <p> tags, inconsistent spacing
-const UserProfile: React.FC<UserProfileProps> = ({name, role}) => {
-  return (
-    <div className="profile">
-      <h2 className="name">{name}</h2>
-      <p className="role">{role}</p>
-      <div className="actions"><button>Edit</button></div>
-    </div>
-  );
-};
+  </div>
+);
 ```
-
-### JSX Newline Guidelines
-- **Both siblings single-line**: No newline needed between consecutive single-line elements
-- **Any sibling multi-line**: Add newline before and after multi-line elements
-- **Mixed content**: Group single-line elements together, separate from multi-line elements with newlines
 
 ## Best Practices
 
-- **Always use React.FC** with const arrow function declaration
-- **Sort props alphabetically** in parameters, types, and JSX attributes
-- **Use implicit return** for JSX-only components
-- **Use explicit return** when component has logic or hooks
-- **Follow JSX spacing rules** for consistent formatting
-- **Prefer `<div>` over `<p>`** for text content to maintain styling control
+- Always use React.FC with const arrow function
+- Sort all props alphabetically (parameters, types, JSX attributes)
+- Use implicit return for JSX-only components
+- Use explicit return when component has logic
+- Prefer `<div>` over `<p>` for text content

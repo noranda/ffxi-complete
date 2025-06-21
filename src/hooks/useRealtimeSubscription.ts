@@ -17,7 +17,9 @@ type RealtimePayload<T = Record<string, unknown>> = {
   errors: Error[] | null;
 };
 
-type SubscriptionCallback<T = Record<string, unknown>> = (payload: RealtimePayload<T>) => void;
+type SubscriptionCallback<T = Record<string, unknown>> = (
+  payload: RealtimePayload<T>
+) => void;
 
 type UseRealtimeSubscriptionOptions = {
   /** Database table to subscribe to */
@@ -33,7 +35,7 @@ type UseRealtimeSubscriptionOptions = {
 /**
  * Hook for managing real-time subscriptions to Supabase tables
  * Automatically handles subscription lifecycle and cleanup
- * 
+ *
  * @example
  * ```tsx
  * useRealtimeSubscription({
@@ -66,15 +68,21 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
 
     // Create unique channel name
     const channelName = `${table}_${filter ?? 'all'}_${event}`;
-    
+
     // Create subscription channel following documented pattern
     const channel = supabase.channel(channelName);
-    
+
     // Add postgres_changes listener
     // Using type assertion to bypass TypeScript overload issues
-    (channel as RealtimeChannel & {
-      on: (event: string, config: Record<string, unknown>, callback: (payload: RealtimePayload<T>) => void) => RealtimeChannel;
-    }).on(
+    (
+      channel as RealtimeChannel & {
+        on: (
+          event: string,
+          config: Record<string, unknown>,
+          callback: (payload: RealtimePayload<T>) => void
+        ) => RealtimeChannel;
+      }
+    ).on(
       'postgres_changes',
       {
         event,
@@ -88,7 +96,7 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
     );
 
     // Subscribe to the channel
-    channel.subscribe((status) => {
+    channel.subscribe(status => {
       if (status === 'SUBSCRIBED') {
         console.log(`🔄 Subscribed to ${table} changes`);
       } else if (status === 'CHANNEL_ERROR') {
@@ -102,7 +110,7 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
     return () => {
       if (channelRef.current) {
         console.log(`🔄 Unsubscribing from ${table} changes`);
-        supabase.removeChannel(channelRef.current);
+        void supabase.removeChannel(channelRef.current);
         channelRef.current = null;
       }
     };
@@ -112,7 +120,7 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
   useEffect(() => {
     return () => {
       if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
+        void supabase.removeChannel(channelRef.current);
       }
     };
   }, []);
@@ -129,8 +137,8 @@ export const useCharacterSubscription = (
   useRealtimeSubscription(
     {
       table: 'characters',
-      filter: userId ? `user_id=eq.${userId}` : undefined,
-      enabled: !!userId,
+      filter: userId != null ? `user_id=eq.${userId}` : undefined,
+      enabled: userId != null,
     },
     callback
   );
@@ -147,8 +155,9 @@ export const useCharacterProgressSubscription = (
   useRealtimeSubscription(
     {
       table: 'character_job_progress',
-      filter: characterId ? `character_id=eq.${characterId}` : undefined,
-      enabled: !!characterId,
+      filter:
+        characterId != null ? `character_id=eq.${characterId}` : undefined,
+      enabled: characterId != null,
     },
     callback
   );
@@ -156,9 +165,10 @@ export const useCharacterProgressSubscription = (
   useRealtimeSubscription(
     {
       table: 'character_skill_progress',
-      filter: characterId ? `character_id=eq.${characterId}` : undefined,
-      enabled: !!characterId,
+      filter:
+        characterId != null ? `character_id=eq.${characterId}` : undefined,
+      enabled: characterId != null,
     },
     callback
   );
-}; 
+};

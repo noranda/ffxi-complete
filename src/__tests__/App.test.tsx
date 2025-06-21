@@ -2,37 +2,54 @@ import {render, screen} from '@testing-library/react';
 import {describe, expect, it, vi} from 'vitest';
 
 import App from '../App';
+import {AuthProvider} from '../contexts/AuthContext';
 
-// Mock the useAuth hook to return a stable, non-loading state
-vi.mock('../hooks/useAuth', () => ({
-  useAuth: () => ({
-    user: null,
-    loading: false,
-    error: null,
-    signUp: vi.fn(),
-    signIn: vi.fn(),
-    signInWithProvider: vi.fn(),
-    signOut: vi.fn(),
-    resetPassword: vi.fn(),
-    updatePassword: vi.fn(),
-    clearError: vi.fn(),
-    refresh: vi.fn(),
-  }),
+// Mock the auth utilities
+vi.mock('../lib/auth', () => ({
+  getCurrentUser: vi.fn().mockResolvedValue(null),
+  signUp: vi.fn(),
+  signIn: vi.fn(),
+  signInWithOAuth: vi.fn(),
+  signOut: vi.fn(),
+  resetPassword: vi.fn(),
+  updatePassword: vi.fn(),
 }));
+
+// Mock Supabase
+vi.mock('../lib/supabase', () => ({
+  supabase: {
+    auth: {
+      getSession: vi
+        .fn()
+        .mockResolvedValue({data: {session: null}, error: null}),
+      onAuthStateChange: vi.fn(() => ({
+        data: {subscription: {unsubscribe: vi.fn()}},
+      })),
+    },
+  },
+}));
+
+// Test wrapper with AuthProvider
+const TestWrapper = ({children}: {children: React.ReactNode}) => (
+  <AuthProvider>{children}</AuthProvider>
+);
 
 describe('App', () => {
   it('renders the application', () => {
-    render(<App />);
+    render(<App />, {wrapper: TestWrapper});
 
     // Check that the app renders without crashing
     expect(document.body).toBeInTheDocument();
   });
 
-  it('displays the main heading when not loading', () => {
-    render(<App />);
+  it('displays the main heading when not loading', async () => {
+    render(<App />, {wrapper: TestWrapper});
+
+    // Wait for loading to complete and main content to appear
+    await screen.findByText('FFXI Complete');
 
     // Look for the main heading (should be visible when not loading)
     expect(screen.getByRole('heading', {level: 1})).toBeInTheDocument();
-    expect(screen.getByText('FFXI Progress Tracker')).toBeInTheDocument();
+    expect(screen.getByText('FFXI Complete')).toBeInTheDocument();
   });
 });

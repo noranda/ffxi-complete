@@ -1,53 +1,26 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Testing strategy, patterns, and coverage requirements for React components and utilities"
+globs:
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/vitest.config.ts"
 ---
+
 # Testing Strategy
 
-## Testing Philosophy
-
-Our testing approach prioritizes **confidence in core functionality** while maintaining **development velocity**. We focus on testing behavior that matters to users rather than implementation details.
-
 ## Testing Stack
-- **Test Runner**: Vitest (fast, Vite-native, TypeScript support)
-- **Testing Library**: React Testing Library (user-centric testing)
-- **Environment**: jsdom (DOM simulation for React components)
-- **Assertions**: Vitest built-in matchers + @testing-library/jest-dom
-- **Mocking**: Vitest mocks + MSW for API mocking
-- **Coverage**: Vitest built-in coverage reporting
 
-## Testing Pyramid
-
-### Unit Tests (Foundation)
-- **Pure functions** and utilities
-- **Custom hooks** in isolation  
-- **Component logic** without UI complexity
-- **Business logic** and data transformations
-- **Mock external dependencies** (Supabase, API calls)
-- **Aim for 80%+ code coverage** on utility functions
-
-### Integration Tests (Core)
-- **Component interactions** with real dependencies
-- **API integration** with mocked Supabase services
-- **User workflows** across multiple components
-- **Context providers** and state management
-- **Authentication flows** (login, logout, registration)
-- **Data persistence** and synchronization
-
-### E2E Tests (Critical Paths)
-- **Core user journeys** (character creation, progress tracking)
-- **Cross-browser compatibility** for supported browsers
-- **Mobile responsiveness** validation
-- **Performance benchmarks** for key operations
+- **Test Runner**: Vitest with `--run` flag
+- **Testing Library**: React Testing Library
+- **Environment**: jsdom for DOM simulation
+- **Mocking**: Vitest mocks + MSW for API
 
 ## Testing Patterns
 
-### Component Testing with Vitest + RTL
+### Component Testing
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { CharacterSelector } from './CharacterSelector';
 
 describe('CharacterSelector', () => {
   it('displays character names', () => {
@@ -59,7 +32,6 @@ describe('CharacterSelector', () => {
 
 ### Hook Testing
 ```typescript
-import { describe, it, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useCharacters } from './useCharacters';
 
@@ -71,65 +43,35 @@ describe('useCharacters', () => {
 });
 ```
 
-### API Mocking with MSW
-```typescript
-import { setupServer } from 'msw/node';
-import { rest } from 'msw';
-
-const server = setupServer(
-  rest.get('/api/characters', (req, res, ctx) => {
-    return res(ctx.json(mockCharacters));
-  })
-);
-```
-
 ## Test Organization
 
-### Co-located Tests
-Following our project structure guidelines:
+**Co-located tests** following project structure:
 ```
-src/
-  components/
-    CharacterSelector/
-      CharacterSelector.tsx
-      CharacterSelector.test.tsx
-      index.ts
+src/components/CharacterSelector/
+  CharacterSelector.tsx
+  CharacterSelector.test.tsx
+  index.ts
 ```
-
-### Test Categories
-- **Unit**: `*.test.tsx` - Component and function tests
-- **Integration**: `*.integration.test.tsx` - Multi-component workflows  
-- **E2E**: `tests/e2e/` - End-to-end user journeys
 
 ## Coverage Standards
 
-### Target Coverage
-- **Utilities**: 95%+ (pure functions should be thoroughly tested)
-- **Components**: 80%+ (focus on user interactions)
-- **Hooks**: 85%+ (custom logic should be well-tested)
-- **Services**: 90%+ (API and data layer reliability)
+- **Utilities**: 95%+ (pure functions)
+- **Components**: 80%+ (user interactions)
+- **Hooks**: 85%+ (custom logic)
+- **Services**: 90%+ (API reliability)
 
-### Coverage Exclusions
-- Type definitions
-- Configuration files
-- Test utilities
-- Development-only code
+## Best Practices
 
-## Testing Best Practices
+- **User-centric**: Test what users see/do, not implementation
+- **Accessible queries**: Use `getByRole`, `getByLabelText`
+- **Mock dependencies**: Supabase, external APIs
+- **Use `--run` flag**: Avoid hanging in watch mode
+- **Focus on behavior**: User workflows over component methods
 
-### User-Centric Testing
-- Test what users see and do, not implementation details
-- Use accessible queries (getByRole, getByLabelText)
-- Focus on user workflows over component methods
+## Commands
 
-### Reliable Tests
-- Avoid testing implementation details
-- Use proper async/await patterns
-- Clean up after tests (automatic with RTL)
-- Mock external dependencies consistently
-
-### Performance
-- Use Vitest's fast parallel execution
-- Mock heavy operations
-- Avoid unnecessary renders in tests
-- Use test.concurrent for independent tests
+```bash
+yarn test --run                   # Run all tests
+yarn test --run --coverage        # Run with coverage
+yarn test --run path/to/test.tsx  # Run specific test
+```

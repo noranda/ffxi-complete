@@ -1,57 +1,62 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Main code guidelines with fragment references for FFXI Complete project"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
 ---
-# FFXI Progress Tracker - Code Guidelines
+
+# FFXI Complete - Code Guidelines
+
+## 🏆 CRITICAL: READ GOLDEN RULES FIRST
+
+**BEFORE DOING ANYTHING ELSE, read [@golden-rules](mdc:golden-rules.mdc) - These define the fundamental principles that must be followed in every interaction.**
 
 ## 🎭 Persona: The FFXI Completionist
 
-You are building a tool for dedicated Final Fantasy XI players who:
-- Want to track their progress across multiple game systems
-- Appreciate clean, intuitive interfaces that don't get in the way
-- Value data accuracy and comprehensive coverage of game content
-- May have multiple characters or want to compare progress with friends
-- Are comfortable with modern web tools but prefer simplicity over complexity
+Building for dedicated FFXI players who want comprehensive progress tracking with clean, intuitive interfaces that prioritize data accuracy and simplicity over complexity.
 
 ## 📚 Rule Fragments
 
-Read the following fragments in order for complete guidelines:
+Read fragments in order for complete guidelines:
 
 ### 🎓 Foundation & Context
-1. **@foundation/learning-focused-development** - Educational approach for backend learning and teaching methodology
-2. **@foundation/development-environment** - IDE setup, tooling, and local development configuration
-3. **@foundation/architecture-principles** - Core technical architecture and technology stack principles
-4. **@foundation/project-structure** - File organization and co-located testing approach
+1. **@foundation/learning-focused-development** - Educational backend approach
+2. **@foundation/development-environment** - IDE, tools, local setup
+3. **@foundation/architecture-principles** - Core tech stack principles
+4. **@foundation/project-structure** - File organization, co-located testing
 
 ### ⚙️ Code Standards & Practices  
-5. **@code-standards/typescript-standards** - TypeScript configuration and type patterns
-6. **@code-standards/react-imports** - Import management and formatting rules
-7. **@code-standards/react-components** - Component declaration, structure, and JSX patterns
-8. **@code-standards/component-exports** - Export strategies for different component types
-9. **@code-standards/styling-patterns** - tailwind-variants and component styling approaches
-10. **@code-standards/code-documentation** - JSDoc standards and inline documentation
-11. **@code-standards/error-handling** - Error boundaries, async error handling, and user experience
-12. **@code-standards/code-formatting-linting** - ESLint/Prettier configuration and code style guidelines
+5. **@code-standards/typescript-standards** - TypeScript config, type patterns
+6. **@code-standards/react-imports** - Import management, formatting
+7. **@code-standards/react-components** - Component structure, JSX patterns
+8. **@code-standards/component-exports** - Export strategies by component type
+9. **@code-standards/shared-component-types** - Shared types.ts for reusability
+10. **@code-standards/styling-patterns** - tailwind-variants, component styling
+11. **@code-standards/code-documentation** - JSDoc standards
+12. **@code-standards/error-handling** - Error boundaries, async handling
+13. **@code-standards/code-formatting-linting** - ESLint/Prettier config
 
 ### 💾 Backend & Data Management
-13. **@backend/data-management** - Database schema design and data validation practices
-14. **@backend/supabase-patterns** - Supabase-specific patterns, best practices, and common solutions
-15. **@backend/security-considerations** - Authentication, data protection, and privacy guidelines
+14. **@backend/data-management** - Schema design, validation
+15. **@backend/supabase-patterns** - Supabase best practices
+16. **@backend/security-considerations** - Auth, data protection, privacy
 
 ### 🔍 Testing & Quality Assurance
-16. **@testing/tdd-principles** - Test-driven development methodology and minimal implementation practices
-17. **@testing/testing-strategy** - Unit, integration, and E2E testing approaches
-18. **@testing/test-organization** - Test file structure, colocated tests in __tests__ folders, and naming conventions
-19. **@testing/quality-assurance** - Code quality, accessibility, and browser support standards
+17. **@testing/tdd-principles** - TDD methodology, minimal implementation
+18. **@testing/testing-strategy** - Unit, integration, E2E approaches
+19. **@testing/test-organization** - Test structure, __tests__ folders
+20. **@testing/quality-assurance** - Code quality, accessibility standards
 
 ### 🎨 Design & User Experience
-20. **@design/ui-ux-guidelines** - Design principles, component patterns, and responsive design
+21. **@design/ui-ux-guidelines** - Design principles, responsive patterns
 
 ### 🚀 Process & Optimization
-21. **@process/git-workflow** - Branch naming, commit messages, and code review process
-22. **@process/performance-guidelines** - Frontend and database performance optimization
-23. **@process/documentation** - Code and user documentation requirements
-24. **@process/future-considerations** - Scalability, integration, and monitoring planning
-25. **@process/rule-management** - Guidelines for creating, organizing, and maintaining cursor rules
-26. **@process/status-check-reporting** - End-of-response status checks with color-coded quality indicators
+22. **@process/git-workflow** - Branch naming, commits, code review
+23. **@process/performance-guidelines** - Frontend/database optimization
+24. **@process/documentation** - Code and user docs requirements
+25. **@process/future-considerations** - Scalability, monitoring planning
+26. **@process/rule-management** - Cursor rules organization
+27. **@process/status-check-reporting** - End-of-response quality indicators
+28. **@process/code-guidelines-assessment** - Systematic evaluation methodology

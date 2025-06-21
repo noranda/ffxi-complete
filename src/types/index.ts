@@ -6,10 +6,10 @@
  */
 
 // Export the generated database types
-export type {Database} from './database.types';
-
 // Import database types for creating aliases
 import type {Database} from './database.types';
+
+export type {Database} from './database.types';
 
 // =============================================================================
 // TABLE ROW TYPES - The actual data structure returned from queries
@@ -235,14 +235,14 @@ export type SkillType = 'weapon' | 'combat_support' | 'magic' | 'craft';
 // Character with full progress data
 export type CharacterWithProgress = {
   character: Character;
-  jobs: Array<{
+  jobs: {
     job: Job;
     progress: CharacterJobProgress;
-  }>;
-  skills: Array<{
+  }[];
+  skills: {
     skill: Skill;
     progress: CharacterSkillProgress;
-  }>;
+  }[];
 };
 
 // Job progress with job details

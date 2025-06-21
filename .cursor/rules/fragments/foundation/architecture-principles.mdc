@@ -1,28 +1,31 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+description: "Core technical architecture and technology stack principles"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
 ---
+
 # Architecture Principles
 
 ## Frontend (Vite + React 19 + TypeScript)
-- **Component Structure**: Use functional components with hooks
-- **Type Safety**: Leverage TypeScript for all components, props, and data structures
-- **State Management**: Use React Context for global state, local state for component-specific data
-- **Performance**: React 19 provides automatic memoization - no need for manual React.memo, useMemo, or useCallback
-- **Accessibility**: Follow WCAG 2.1 AA standards, use semantic HTML, proper ARIA labels
-- **Modern Patterns**: Leverage React 19's new features like use() hook and improved concurrent features
+- **Component Structure**: Functional components with hooks
+- **Type Safety**: TypeScript for all components, props, and data structures
+- **State Management**: React Context for global state, local state for component-specific data
+- **Performance**: React 19 automatic memoization - no manual React.memo, useMemo, useCallback
+- **Accessibility**: WCAG 2.1 AA standards, semantic HTML, proper ARIA labels
+- **Modern Patterns**: React 19 features like use() hook and concurrent features
 
 ## Styling (TailwindCSS v4 + shadcn + Radix)
-- **Design System**: Use shadcn/ui components as the foundation
-- **Customization**: Extend with TailwindCSS classes, maintain consistent spacing/colors
-- **Responsive**: Mobile-first approach, ensure usability on all screen sizes
+- **Design System**: shadcn/ui components as foundation
+- **Customization**: Extend with TailwindCSS, maintain consistent spacing/colors
+- **Responsive**: Mobile-first approach, all screen sizes
 - **Dark Mode**: Support both light and dark themes
-- **Consistency**: Use design tokens for colors, spacing, typography
+- **Consistency**: Design tokens for colors, spacing, typography
 
 ## Backend (Supabase)
-- **Database Design**: Normalize data appropriately, use foreign keys for relationships
-- **Row Level Security**: Implement RLS policies for user data isolation
-- **API Design**: Use Supabase client for data operations, implement proper error handling
-- **Real-time**: Leverage Supabase real-time subscriptions for live updates
-- **Migrations**: Use Supabase migrations for schema changes
+- **Database Design**: Normalize appropriately, use foreign keys for relationships
+- **Row Level Security**: RLS policies for user data isolation
+- **API Design**: Supabase client for data operations, proper error handling
+- **Real-time**: Supabase real-time subscriptions for live updates
+- **Migrations**: Supabase migrations for schema changes
+

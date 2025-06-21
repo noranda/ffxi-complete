@@ -1,8 +1,8 @@
 ---
-description: 
-globs: 
-alwaysApply: false
+description: "Workflow step 3: Task implementation with quality checks and code guidelines verification"
+globs:
 ---
+
 # Task List Management
 
 Guidelines for managing task lists in markdown files to track progress on completing a PRD
