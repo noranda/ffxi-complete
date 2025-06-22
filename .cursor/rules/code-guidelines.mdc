@@ -28,35 +28,30 @@ Read fragments in order for complete guidelines:
 4. **@foundation/project-structure** - File organization, co-located testing
 
 ### ⚙️ Code Standards & Practices  
-5. **@code-standards/typescript-standards** - TypeScript config, type patterns
-6. **@code-standards/react-imports** - Import management, formatting
-7. **@code-standards/react-components** - Component structure, JSX patterns
-8. **@code-standards/component-exports** - Export strategies by component type
-9. **@code-standards/shared-component-types** - Shared types.ts for reusability
-10. **@code-standards/styling-patterns** - tailwind-variants, component styling
-11. **@code-standards/code-documentation** - JSDoc standards
-12. **@code-standards/error-handling** - Error boundaries, async handling
-13. **@code-standards/code-formatting-linting** - ESLint/Prettier config
+5. **@code-standards/typescript-patterns** - TypeScript config, type patterns, shared component types
+6. **@code-standards/component-patterns** - Export strategies, styling with tailwind-variants
+7. **@code-standards/code-documentation** - JSDoc standards, inline commenting
+8. **@code-standards/code-quality** - Error handling, testing, performance, code review standards
 
 ### 💾 Backend & Data Management
-14. **@backend/data-management** - Schema design, validation
-15. **@backend/supabase-patterns** - Supabase best practices
-16. **@backend/security-considerations** - Auth, data protection, privacy
+9. **@backend/data-management** - Schema design, validation
+10. **@backend/supabase-patterns** - Supabase best practices
+11. **@backend/security-considerations** - Auth, data protection, privacy
 
 ### 🔍 Testing & Quality Assurance
-17. **@testing/tdd-principles** - TDD methodology, minimal implementation
-18. **@testing/testing-strategy** - Unit, integration, E2E approaches
-19. **@testing/test-organization** - Test structure, __tests__ folders
-20. **@testing/quality-assurance** - Code quality, accessibility standards
+12. **@testing/tdd-principles** - TDD methodology, minimal implementation
+13. **@testing/testing-strategy** - Unit, integration, E2E approaches
+14. **@testing/test-organization** - Test structure, __tests__ folders
+15. **@testing/quality-assurance** - Code quality, accessibility standards
 
 ### 🎨 Design & User Experience
-21. **@design/ui-ux-guidelines** - Design principles, responsive patterns
+16. **@design/ui-ux-guidelines** - Design principles, responsive patterns
 
 ### 🚀 Process & Optimization
-22. **@process/git-workflow** - Branch naming, commits, code review
-23. **@process/performance-guidelines** - Frontend/database optimization
-24. **@process/documentation** - Code and user docs requirements
-25. **@process/future-considerations** - Scalability, monitoring planning
-26. **@process/rule-management** - Cursor rules organization
-27. **@process/status-check-reporting** - End-of-response quality indicators
-28. **@process/code-guidelines-assessment** - Systematic evaluation methodology
+17. **@process/git-workflow** - Branch naming, commits, code review
+18. **@process/performance-guidelines** - Frontend/database optimization
+19. **@process/documentation** - Code and user docs requirements
+20. **@process/future-considerations** - Scalability, monitoring planning
+21. **@process/rule-management** - Cursor rules organization
+22. **@process/status-check-reporting** - End-of-response quality indicators
+23. **@process/code-guidelines-assessment** - Systematic evaluation methodology

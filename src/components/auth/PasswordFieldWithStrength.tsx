@@ -33,7 +33,15 @@ type PasswordFieldWithStrengthProps = {
  * - Visual strength indicator with color coding
  * - Accessibility support with proper ARIA labels
  * - Requirements display for incomplete passwords
- *
+ * @param root0
+ * @param root0.disabled
+ * @param root0.error
+ * @param root0.id
+ * @param root0.label
+ * @param root0.name
+ * @param root0.placeholder
+ * @param root0.touched
+ * @param root0.value
  * @example
  * ```tsx
  * <PasswordFieldWithStrength
@@ -66,7 +74,7 @@ export const PasswordFieldWithStrength: React.FC<
 
   return (
     <div className="space-y-2">
-      <label htmlFor={id ?? name} className="text-sm font-medium">
+      <label className="text-sm font-medium" htmlFor={id ?? name}>
         {label}
       </label>
 
@@ -91,20 +99,20 @@ export const PasswordFieldWithStrength: React.FC<
       </Field>
 
       {hasError && (
-        <div id={`${name}-error`} className="text-sm text-destructive">
+        <div className="text-destructive text-sm" id={`${name}-error`}>
           {error ?? 'An error occurred'}
         </div>
       )}
 
       {showPasswordStrength && !hasError && (
-        <div id={`${name}-strength`} className="text-xs text-muted-foreground">
+        <div className="text-muted-foreground text-xs" id={`${name}-strength`}>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <div className="text-sm">Password strength:</div>
+
               <div className="flex gap-1">
                 {Array.from({length: 4}, (_, i) => (
                   <div
-                    key={i}
                     className={`h-1 w-4 rounded ${
                       i < passwordValidation.strength
                         ? passwordValidation.strength === 1
@@ -116,6 +124,7 @@ export const PasswordFieldWithStrength: React.FC<
                               : 'bg-green-500'
                         : 'bg-gray-200'
                     }`}
+                    key={i}
                   />
                 ))}
               </div>

@@ -193,9 +193,11 @@ describe('Card Components', () => {
             <CardTitle>Test Card</CardTitle>
             <CardDescription>This is a test card description</CardDescription>
           </CardHeader>
+
           <CardContent>
             <div>Card body content goes here</div>
           </CardContent>
+
           <CardFooter>
             <div>Footer actions</div>
           </CardFooter>
@@ -218,6 +220,7 @@ describe('Card Components', () => {
         <Card data-testid="structured-card">
           <CardHeader data-testid="header">
             <CardTitle data-testid="title">Title</CardTitle>
+
             <CardDescription data-testid="description">
               Description
             </CardDescription>

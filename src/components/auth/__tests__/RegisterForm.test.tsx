@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 import type {AuthContextType} from '@/contexts/AuthContext';
+
 import {AuthContext} from '@/contexts/AuthContext';
 
 import {RegisterForm} from '../RegisterForm';
@@ -11,31 +12,30 @@ import {RegisterForm} from '../RegisterForm';
 const createMockAuthContext = (
   overrides: Partial<AuthContextType> = {}
 ): AuthContextType => ({
-  user: null,
-  loading: false,
+  clearError: vi.fn(),
   error: null,
   isAuthenticated: false,
-  signUp: vi.fn(),
+  loading: false,
+  refresh: vi.fn(),
+  resetPassword: vi.fn(),
   signIn: vi.fn(),
   signInWithProvider: vi.fn(),
   signOut: vi.fn(),
-  resetPassword: vi.fn(),
+  signUp: vi.fn(),
   updatePassword: vi.fn(),
-  clearError: vi.fn(),
-  refresh: vi.fn(),
+  user: null,
   ...overrides,
 });
 
 // Test wrapper component
 const TestWrapper: React.FC<{
-  children: React.ReactNode;
   authContext?: Partial<AuthContextType>;
-}> = ({children, authContext = {}}) => (
+  children: React.ReactNode;
+}> = ({authContext = {}, children}) => (
   <AuthContext.Provider value={createMockAuthContext(authContext)}>
     {children}
   </AuthContext.Provider>
 );
-
 describe('RegisterForm', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -234,7 +234,7 @@ describe('RegisterForm', () => {
       const user = userEvent.setup();
       const mockSignUp = vi
         .fn()
-        .mockResolvedValue({success: true, data: {}, error: null});
+        .mockResolvedValue({data: {}, error: null, success: true});
       const onSuccess = vi.fn();
 
       render(
@@ -265,7 +265,7 @@ describe('RegisterForm', () => {
       const user = userEvent.setup();
       const mockSignUp = vi
         .fn()
-        .mockResolvedValue({success: true, data: {}, error: null});
+        .mockResolvedValue({data: {}, error: null, success: true});
       const onSuccess = vi.fn();
 
       render(
@@ -297,9 +297,9 @@ describe('RegisterForm', () => {
     it('handles signup failure', async () => {
       const user = userEvent.setup();
       const mockSignUp = vi.fn().mockResolvedValue({
-        success: false,
         data: null,
         error: 'Email already exists',
+        success: false,
       });
 
       render(
@@ -357,7 +357,7 @@ describe('RegisterForm', () => {
       const user = userEvent.setup();
       const mockSignInWithProvider = vi
         .fn()
-        .mockResolvedValue({success: true, error: null});
+        .mockResolvedValue({error: null, success: true});
       const onSuccess = vi.fn();
 
       render(
@@ -377,7 +377,7 @@ describe('RegisterForm', () => {
       const user = userEvent.setup();
       const mockSignInWithProvider = vi
         .fn()
-        .mockResolvedValue({success: true, error: null});
+        .mockResolvedValue({error: null, success: true});
 
       render(
         <TestWrapper authContext={{signInWithProvider: mockSignInWithProvider}}>
@@ -434,7 +434,7 @@ describe('RegisterForm', () => {
 
       render(
         <TestWrapper
-          authContext={{error: 'Previous error', clearError: mockClearError}}
+          authContext={{clearError: mockClearError, error: 'Previous error'}}
         >
           <RegisterForm />
         </TestWrapper>

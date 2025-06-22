@@ -15,6 +15,7 @@ describe('Drawer Component', () => {
               <Drawer.Description>This is a test drawer</Drawer.Description>
             </Drawer.Header>
             <div>Drawer body content</div>
+
             <Drawer.Footer>
               <button>Close</button>
             </Drawer.Footer>
@@ -55,6 +56,7 @@ describe('Drawer Component', () => {
           <Drawer.Trigger data-testid="drawer-trigger">
             Open Drawer
           </Drawer.Trigger>
+
           <Drawer.Content data-testid="drawer-content">
             <Drawer.Header>
               <Drawer.Title>Test Drawer</Drawer.Title>
@@ -81,6 +83,7 @@ describe('Drawer Component', () => {
           <Drawer.Trigger className="custom-trigger" data-testid="trigger">
             Open
           </Drawer.Trigger>
+
           <Drawer.Content>
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
@@ -97,6 +100,7 @@ describe('Drawer Component', () => {
       render(
         <Drawer>
           <Drawer.Trigger data-testid="trigger">Open</Drawer.Trigger>
+
           <Drawer.Content>
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
@@ -290,6 +294,7 @@ describe('Drawer Component', () => {
           <Drawer.Content>
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
+
               <Drawer.Description data-testid="drawer-description">
                 Description
               </Drawer.Description>
@@ -308,6 +313,7 @@ describe('Drawer Component', () => {
           <Drawer.Content>
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
+
               <Drawer.Description
                 className="custom-description"
                 data-testid="drawer-description"
@@ -330,6 +336,7 @@ describe('Drawer Component', () => {
           <Drawer.Content>
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
+
               <Drawer.Description data-testid="drawer-description">
                 Description
               </Drawer.Description>
@@ -371,6 +378,7 @@ describe('Drawer Component', () => {
               <Drawer.Title>Title</Drawer.Title>
               <Drawer.Description>Description</Drawer.Description>
             </Drawer.Header>
+
             <Drawer.Footer
               className="custom-footer"
               data-testid="drawer-footer"
@@ -413,6 +421,7 @@ describe('Drawer Component', () => {
               <Drawer.Title>Test Drawer</Drawer.Title>
               <Drawer.Description>This is a test drawer</Drawer.Description>
             </Drawer.Header>
+
             <Drawer.Footer>
               <Drawer.Close data-testid="drawer-close">Close</Drawer.Close>
             </Drawer.Footer>
@@ -434,6 +443,7 @@ describe('Drawer Component', () => {
               <Drawer.Title>Title</Drawer.Title>
               <Drawer.Description>Description</Drawer.Description>
             </Drawer.Header>
+
             <Drawer.Footer>
               <Drawer.Close className="custom-close" data-testid="drawer-close">
                 Close
@@ -454,6 +464,7 @@ describe('Drawer Component', () => {
               <Drawer.Title>Title</Drawer.Title>
               <Drawer.Description>Description</Drawer.Description>
             </Drawer.Header>
+
             <Drawer.Footer>
               <Drawer.Close data-testid="drawer-close">Close</Drawer.Close>
             </Drawer.Footer>
@@ -476,9 +487,11 @@ describe('Drawer Component', () => {
       const {rerender} = render(
         <Drawer onOpenChange={handleOpenChange} open={false}>
           <Drawer.Trigger data-testid="drawer-trigger">Open</Drawer.Trigger>
+
           <Drawer.Content data-testid="drawer-content">
             <Drawer.Header>
               <Drawer.Title>Controlled Drawer</Drawer.Title>
+
               <Drawer.Description>
                 This is a controlled drawer
               </Drawer.Description>
@@ -498,9 +511,11 @@ describe('Drawer Component', () => {
       rerender(
         <Drawer onOpenChange={handleOpenChange} open={true}>
           <Drawer.Trigger data-testid="drawer-trigger">Open</Drawer.Trigger>
+
           <Drawer.Content data-testid="drawer-content">
             <Drawer.Header>
               <Drawer.Title>Controlled Drawer</Drawer.Title>
+
               <Drawer.Description>
                 This is a controlled drawer
               </Drawer.Description>
@@ -520,13 +535,16 @@ describe('Drawer Component', () => {
           <Drawer.Content data-testid="complete-drawer">
             <Drawer.Header>
               <Drawer.Title>Complete Drawer</Drawer.Title>
+
               <Drawer.Description>
                 This drawer has all components
               </Drawer.Description>
             </Drawer.Header>
+
             <div className="p-4">
-              <p>Main drawer content goes here</p>
+              <div>Main drawer content goes here</div>
             </div>
+
             <Drawer.Footer>
               <Drawer.Close>Cancel</Drawer.Close>
               <button>Confirm</button>
@@ -553,11 +571,13 @@ describe('Drawer Component', () => {
           <Drawer.Content data-testid="drawer">
             <Drawer.Header data-testid="header">
               <Drawer.Title data-testid="title">Title</Drawer.Title>
+
               <Drawer.Description data-testid="description">
                 Description
               </Drawer.Description>
             </Drawer.Header>
             <div data-testid="body">Body</div>
+
             <Drawer.Footer data-testid="footer">
               <Drawer.Close data-testid="close">Close</Drawer.Close>
             </Drawer.Footer>

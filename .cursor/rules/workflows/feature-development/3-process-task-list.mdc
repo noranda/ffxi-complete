@@ -9,37 +9,45 @@ Guidelines for managing task lists in markdown files to track progress on comple
 
 ## Task Implementation
 - **One sub-task at a time:** Do **NOT** start the next sub-task until you ask the user for permission and they say "yes" or "y"
-- **Quality checks after each sub-task:** After completing any sub-task, ALWAYS run:
-  1. `yarn lint:fix` - Auto-fix ESLint errors and check for remaining issues
-  2. `yarn prettier --write .` - Format all code according to Prettier config
-  3. `yarn test` (if tests exist) - Run existing tests
-  4. `yarn build` (if appropriate) - Verify build still works
-  5. **Code Guidelines Verification** - Check that all code changes follow our established standards:
-     - **React Import Standards:** NO global React imports (`import * as React` or `import React`), only specific imports (`import {useState}`)
-     - **React Components:** Use `const ComponentName: React.FC<PropsType>` pattern (NOT function declarations)
-     - **Type Definitions:** Define props types OUTSIDE component definition, export alongside components
-     - **Styling:** Use `tailwind-variants` (tv) NOT `class-variance-authority` (cva) for component variants
-     - **Comments:** All exported components, functions, and types must have JSDoc comments with examples
-     - **Import Formatting:** Use `{item}` not `{ item }` (bracketSpacing: false)
-     - **Props:** Alphabetically sorted in component parameters AND in JSX attributes
-     - **JSX:** Newlines between sibling elements, prefer <div> for text content
-     - **Types:** Use types over interfaces for object shapes
-     - **Code Style:** Single quotes for strings, semicolons after statements
-- **Code Guidelines Review:** Before completing any sub-task:
-  1. Review all modified files against code-standards.mdc and code-formatting-linting.mdc
-  2. Verify React.FC usage, import formatting, prop sorting, and type definitions
-  3. Fix any violations immediately
-- **Acceptable temporary issues:** Lint/test failures are acceptable ONLY if:
-  - You explicitly know they will be resolved by the end of the current parent task
-  - You document the known issues and resolution plan
+- **MANDATORY Completion Protocol for ANY Task:**
+  1. **Complete the implementation work**
+  2. **Run Status Checks** (following status-check-reporting.mdc format):
+     - `yarn lint` - Check for ESLint errors
+     - `yarn test --run` - Run all tests without watch mode
+     - `yarn type-check` - TypeScript compiler check
+     - `yarn prettier --check .` - Format verification
+  3. **Code Guidelines Assessment** (following code-guidelines-assessment.mdc methodology):
+     - **ONLY for files added or edited during this task**
+     - Use `git status --porcelain` to identify changed files
+     - **MANDATORY: Check ALL 4 code-standards fragments against EVERY line in EVERY changed file:**
+       - typescript-patterns.mdc
+       - component-patterns.mdc
+       - code-documentation.mdc
+       - code-quality.mdc
+     - **NO SHORTCUTS ALLOWED**: Every rule in every fragment must be checked against every applicable line
+     - **NO SAMPLING**: Must examine entire file content, not representative sections
+     - **NO SKIPPING**: Cannot skip any rules or parts of rules - complete assessment required
+     - Document complete assessment with specific line evidence for each fragment
+     - Fix ANY violations immediately before proceeding
+  4. **Status Report** - Print comprehensive status showing:
+     - Status checks results (🟢/🟠/🔴 for lint, tests, types, format)
+     - Code guidelines assessment results for changed files
+     - Confirmation that everything is ready for task completion
+  5. **ONLY THEN** mark task as completed by changing `[ ]` to `[x]`
+  6. **If all subtasks** underneath a parent task are now `[x]`, also mark the **parent task** as completed
+  7. **Pause and wait** for user's go-ahead before starting next task
+
+- **Zero Tolerance Policy:** 
+  - **🔴 Red status:** MUST fix immediately before proceeding to next step
+  - **🟠 Orange status:** MUST fix unless explicitly documented as acceptable sub-task
+  - **Code violations:** ANY non-adherence to ANY rule in ANY code-standards fragment must be fixed before task completion
+  - **Complete coverage:** ALL 4 code-standards fragments must be assessed against ALL lines in ALL changed files
+  - **No exceptions:** Cannot proceed to next task until ALL checks are green and ALL guidelines verified with complete evidence
+
 - **TDD emphasis:** When implementing features (not setup tasks), follow Test-Driven Development:
   - Write tests FIRST before implementation
   - Implement minimal code to make tests pass
   - Refactor while keeping tests green
-- **Completion protocol:**  
-  1. When you finish a **sub-task**, immediately mark it as completed by changing `[ ]` to `[x]`.  
-  2. If **all** subtasks underneath a parent task are now `[x]`, also mark the **parent task** as completed.  
-- Stop after each sub-task and wait for the user's go-ahead.
 
 ## Task List Maintenance
 
@@ -55,20 +63,35 @@ Guidelines for managing task lists in markdown files to track progress on comple
 
 When working with task lists, the AI must:
 
-1. Regularly update the task list file after finishing any significant work.
-2. Follow the completion protocol:
-   - Mark each finished **sub-task** `[x]`.
-   - Mark the **parent task** `[x]` once **all** its subtasks are `[x]`.
-3. Add newly discovered tasks.
-4. Keep "Relevant Files" accurate and up to date.
-5. Before starting work, check which sub-task is next.
-6. After implementing a sub-task, run quality checks (`yarn lint:fix`, `yarn prettier --write .`, `yarn test`, `yarn build`), verify code guidelines compliance, update the file, and then pause for user approval.
-7. **MANDATORY Code Guidelines Check:** Every code change must be verified against:
-   - **React imports:** No global React imports, use specific function imports only
-   - **React component patterns:** React.FC usage, external type definitions
-   - **Styling libraries:** tailwind-variants (tv) instead of class-variance-authority (cva)
-   - **Documentation:** JSDoc comments for all exported items with examples
-   - **Import/export formatting:** No bracket spacing, alphabetical sorting
-   - **Type definitions:** Prefer types over interfaces for object shapes
-   - **JSX formatting:** Alphabetical prop sorting in component parameters AND JSX attributes, newlines between siblings, <div> for text
-   - **General TypeScript standards:** Single quotes, semicolons, strict typing
+1. **Before starting:** Check which sub-task is next
+2. **During work:** Regularly update the task list file after finishing any significant work
+3. **After implementation:** Follow the MANDATORY Completion Protocol:
+   - Run all status checks (`yarn lint`, `yarn test --run`, `yarn type-check`, `yarn prettier --check .`)
+   - Identify changed files using `git status --porcelain`
+   - **EXHAUSTIVE Code Guidelines Assessment:** Check ALL 4 code-standards fragments against EVERY line in EVERY changed file:
+     - typescript-patterns.mdc: Every type definition, shared component types, utility types
+     - component-patterns.mdc: Every export pattern, styling with tailwind-variants
+     - code-documentation.mdc: Every exported item JSDoc, inline commenting
+     - code-quality.mdc: Every error pattern, testing considerations, performance guidelines
+   - **COMPLETE EVIDENCE REQUIRED:** Document specific line numbers and findings for each fragment
+   - Fix ANY violations immediately before proceeding
+   - Print comprehensive status report with complete evidence for all 4 fragments
+   - ONLY mark task as completed (`[x]`) after ALL checks pass and ALL 4 fragments verified with complete evidence
+4. **Task completion:** Mark parent task `[x]` once ALL subtasks are `[x]`
+5. **File maintenance:** Keep "Relevant Files" section accurate and up to date
+6. **New tasks:** Add newly discovered tasks as they emerge
+7. **User approval:** Pause after each task completion and wait for user's go-ahead
+
+## Critical Requirements
+
+- **NO SHORTCUTS:** Every task completion MUST follow the full protocol with ALL 4 fragments
+- **NO SAMPLING:** Code guidelines assessment must examine EVERY line in EVERY file, not representative sections
+- **NO SKIPPING:** Cannot skip ANY rules or ANY parts of rules in ANY fragment
+- **NO ASSUMPTIONS:** Manual verification required before tool validation for EVERY fragment
+- **NO EXCEPTIONS:** Zero tolerance for red or orange status without explicit documentation
+- **COMPLETE COVERAGE:** ALL 4 code-standards fragments MUST be checked against ALL lines in ALL changed files
+- **EVIDENCE-BASED:** All assessments must include specific line numbers and evidence for EVERY fragment
+- **SYSTEMATIC:** Use the fragment-by-fragment assessment template for ALL 4 code standards
+- **EXHAUSTIVE DOCUMENTATION:** Must document findings for every fragment, even if compliant
+
+**ABSOLUTE REQUIREMENT: Every line in every changed file must be checked against every applicable rule in all 4 code-standards fragments. No task can be marked complete without complete verification of all fragments.**

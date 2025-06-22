@@ -1,11 +1,6 @@
 /**
- * Registration page component
- *
- * Features:
- * - Centered registration form with responsive layout
- * - Navigation callbacks for routing (to be connected to router in Phase 4)
- * - Redirect handling via callback props
- * - Full viewport height layout with proper centering
+ * Registration page component with form integration and navigation
+ * Provides user registration functionality with redirect handling
  */
 
 import {RegisterForm} from '@/components/auth/RegisterForm';
@@ -26,14 +21,6 @@ type RegisterProps = {
  *
  * Provides a full-page layout for user registration with navigation callbacks.
  * In Phase 4, this will be connected to the router for automatic navigation.
- *
- * @example
- * ```tsx
- * <Register
- *   onRegistrationSuccess={() => window.location.href = '/dashboard'}
- *   onSwitchToLogin={() => window.location.href = '/login'}
- * />
- * ```
  */
 export const Register: React.FC<RegisterProps> = ({
   onRegistrationSuccess,
@@ -48,7 +35,9 @@ export const Register: React.FC<RegisterProps> = ({
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+    <div
+      className={`bg-background flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8`}
+    >
       <div className="w-full max-w-md">
         <RegisterForm
           onSuccess={onRegistrationSuccess}

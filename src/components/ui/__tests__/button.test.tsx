@@ -113,7 +113,7 @@ describe('Button', () => {
 
   it('applies button styles to child element when asChild is true', () => {
     render(
-      <Button asChild variant="destructive" size="lg">
+      <Button asChild size="lg" variant="destructive">
         <a href="/test">Link Button</a>
       </Button>
     );

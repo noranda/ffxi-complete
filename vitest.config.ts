@@ -3,19 +3,13 @@ import {defineConfig} from 'vitest/config';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
   test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    globals: true,
-    include: [
-      'src/**/__tests__/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-    ],
-    exclude: ['node_modules', 'dist', '.git', '.cache'],
-    css: true,
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/',
         'src/test/',
@@ -23,11 +17,17 @@ export default defineConfig({
         '**/*.config.*',
         '**/coverage/**',
       ],
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
     },
-  },
-  resolve: {
-    alias: {
-      '@': '/src',
-    },
+    css: true,
+    environment: 'jsdom',
+    exclude: ['node_modules', 'dist', '.git', '.cache'],
+    globals: true,
+    include: [
+      'src/**/__tests__/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+    ],
+    setupFiles: ['./src/test/setup.ts'],
   },
 });

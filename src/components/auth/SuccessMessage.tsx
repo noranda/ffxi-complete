@@ -18,7 +18,10 @@ type SuccessMessageProps = {
  * - Customizable title and message content
  * - Conditional display based on show prop
  * - Accessible notification structure
- *
+ * @param root0
+ * @param root0.message
+ * @param root0.show
+ * @param root0.title
  * @example
  * ```tsx
  * <SuccessMessage
@@ -38,9 +41,11 @@ export const SuccessMessage: React.FC<SuccessMessageProps> = ({
   }
 
   return (
-    <div className="rounded-md bg-green-50 border border-green-200 p-4 text-green-800">
+    <div
+      className={`rounded-md border border-green-200 bg-green-50 p-4 text-green-800`}
+    >
       <div className="font-medium">{title}</div>
-      <div className="text-sm mt-1">{message}</div>
+      <div className="mt-1 text-sm">{message}</div>
     </div>
   );
 };

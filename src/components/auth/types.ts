@@ -6,23 +6,14 @@
  */
 
 /**
- * Common form validation errors structure
- * Used across login, register, password reset forms
- */
-export type FormErrors = {
-  confirmPassword?: string;
-  email?: string;
-  general?: string;
-  password?: string;
-};
-
-/**
  * Authentication callback function types
  * Standardized callbacks for auth component interactions
  */
 export type AuthCallbacks = {
   /** Callback when user cancels the current action */
   onCancel?: () => void;
+  /** Callback when user forgot their password */
+  onForgotPassword?: () => void;
   /** Callback when authentication is successful */
   onSuccess?: () => void;
   /** Callback when user wants to switch to login */
@@ -31,6 +22,16 @@ export type AuthCallbacks = {
   onSwitchToPasswordReset?: () => void;
   /** Callback when user wants to switch to register */
   onSwitchToRegister?: () => void;
+};
+
+/**
+ * Auth form validation state
+ */
+export type AuthFormState = {
+  errors: FormErrors;
+  isSubmitting: boolean;
+  submitSuccess: boolean;
+  touched: Record<string, boolean>;
 };
 
 /**
@@ -47,12 +48,14 @@ export type BaseAuthFormProps = {
 };
 
 /**
- * Registration form specific data
+ * Common form validation errors structure
+ * Used across login, register, password reset forms
  */
-export type RegisterFormData = {
-  confirmPassword: string;
-  email: string;
-  password: string;
+export type FormErrors = {
+  confirmPassword?: string;
+  email?: string;
+  general?: string;
+  password?: string;
 };
 
 /**
@@ -63,6 +66,11 @@ export type LoginFormData = {
   password: string;
   rememberMe?: boolean;
 };
+
+/**
+ * OAuth provider types
+ */
+export type OAuthProvider = 'apple' | 'discord' | 'google';
 
 /**
  * Password reset form data
@@ -81,16 +89,10 @@ export type PasswordUpdateFormData = {
 };
 
 /**
- * OAuth provider types
+ * Registration form specific data
  */
-export type OAuthProvider = 'discord' | 'google' | 'apple';
-
-/**
- * Auth form validation state
- */
-export type AuthFormState = {
-  errors: FormErrors;
-  isSubmitting: boolean;
-  submitSuccess: boolean;
-  touched: Record<string, boolean>;
+export type RegisterFormData = {
+  confirmPassword: string;
+  email: string;
+  password: string;
 };

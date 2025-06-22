@@ -6,10 +6,12 @@
  * in a single place to ensure consistency and prevent multiple auth listeners.
  */
 
-import {createContext, useContext, useEffect, useState} from 'react';
 import type {User} from '@supabase/supabase-js';
 
+import {createContext, useContext, useEffect, useState} from 'react';
+
 import type {AuthProvider as AuthProviderType, AuthResult} from '@/lib/auth';
+
 import {
   getCurrentUser,
   resetPassword,
@@ -28,25 +30,20 @@ import {supabase} from '@/lib/supabase';
  * throughout the application via the AuthContext.
  */
 export type AuthContextType = {
-  // Authentication state
-  user: User | null;
-  loading: boolean;
-  error: string | null;
+  clearError: () => void;
+  error: null | string;
   isAuthenticated: boolean;
-
-  // Authentication methods
-  signUp: (email: string, password: string) => Promise<AuthResult>;
+  loading: boolean;
+  refresh: () => Promise<void>;
+  resetPassword: (email: string) => Promise<Omit<AuthResult, 'data'>>;
   signIn: (email: string, password: string) => Promise<AuthResult>;
   signInWithProvider: (
     provider: AuthProviderType
   ) => Promise<Omit<AuthResult, 'data'>>;
   signOut: () => Promise<Omit<AuthResult, 'data'>>;
-  resetPassword: (email: string) => Promise<Omit<AuthResult, 'data'>>;
+  signUp: (email: string, password: string) => Promise<AuthResult>;
   updatePassword: (newPassword: string) => Promise<Omit<AuthResult, 'data'>>;
-
-  // Utility methods
-  clearError: () => void;
-  refresh: () => Promise<void>;
+  user: null | User;
 };
 
 /**
@@ -79,22 +76,12 @@ type AuthProviderProps = {
  * - Centralized loading and error state management
  * - Single Supabase auth listener for the entire app
  * - Session persistence and refresh handling
- *
- * @param children - Child components that will have access to auth context
- *
- * @example
- * ```tsx
- * // In App.tsx or main.tsx
- * <AuthProvider>
- *   <App />
- * </AuthProvider>
- * ```
  */
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   // Core authentication state
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<null | User>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<null | string>(null);
 
   // Derived state
   const isAuthenticated = !!user;
@@ -103,7 +90,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   useEffect(() => {
     let isMounted = true;
 
-    // Initialize auth state from current session
+    /**
+     * Initializes authentication state from current Supabase session
+     */
     const initializeAuth = async () => {
       try {
         const currentUser = await getCurrentUser();
@@ -142,6 +131,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
       // Handle specific auth events for logging and potential side effects
       switch (event) {
+        case 'PASSWORD_RECOVERY':
+          console.log('🔑 Password recovery initiated');
+          break;
         case 'SIGNED_IN':
           console.log('✅ User signed in successfully');
           break;
@@ -153,9 +145,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
           break;
         case 'USER_UPDATED':
           console.log('👤 User profile updated');
-          break;
-        case 'PASSWORD_RECOVERY':
-          console.log('🔑 Password recovery initiated');
           break;
       }
     });
@@ -169,6 +158,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
   // Authentication method implementations with consistent error handling
 
+  /**
+   * Handles user registration with email and password including loading and error state management
+   */
   const handleSignUp = async (
     email: string,
     password: string
@@ -189,6 +181,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     }
   };
 
+  /**
+   * Handles user sign-in with email and password authentication including state management
+   */
   const handleSignIn = async (
     email: string,
     password: string
@@ -209,6 +204,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     }
   };
 
+  /**
+   * Handles OAuth authentication with external providers including redirect handling
+   */
   const handleSignInWithProvider = async (
     provider: AuthProviderType
   ): Promise<Omit<AuthResult, 'data'>> => {
@@ -230,6 +228,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     }
   };
 
+  /**
+   * Handles user sign-out and clears authentication state
+   */
   const handleSignOut = async (): Promise<Omit<AuthResult, 'data'>> => {
     setLoading(true);
     setError(null);
@@ -247,6 +248,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     }
   };
 
+  /**
+   * Handles password reset request for user email addresses
+   */
   const handleResetPassword = async (
     email: string
   ): Promise<Omit<AuthResult, 'data'>> => {
@@ -261,6 +265,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     return result;
   };
 
+  /**
+   * Handles password update for authenticated users
+   */
   const handleUpdatePassword = async (
     newPassword: string
   ): Promise<Omit<AuthResult, 'data'>> => {
@@ -277,10 +284,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
   // Utility methods
 
+  /**
+   * Clears any authentication error state
+   */
   const clearError = (): void => {
     setError(null);
   };
 
+  /**
+   * Refreshes the current authentication state from Supabase
+   */
   const refresh = async (): Promise<void> => {
     setLoading(true);
     setError(null);
@@ -298,23 +311,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
   // Context value
   const contextValue: AuthContextType = {
-    // State
-    user,
-    loading,
+    clearError,
     error,
     isAuthenticated,
-
-    // Methods
-    signUp: handleSignUp,
+    loading,
+    refresh,
+    resetPassword: handleResetPassword,
     signIn: handleSignIn,
     signInWithProvider: handleSignInWithProvider,
     signOut: handleSignOut,
-    resetPassword: handleResetPassword,
+    signUp: handleSignUp,
     updatePassword: handleUpdatePassword,
-
-    // Utilities
-    clearError,
-    refresh,
+    user,
   };
 
   return (
@@ -327,20 +335,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
  *
  * Provides access to authentication state and methods from the AuthContext.
  * Must be used within an AuthProvider component tree.
- *
- * @returns Authentication context value with state and methods
- * @throws Error if used outside of AuthProvider
- *
- * @example
- * ```tsx
- * const MyComponent = () => {
- *   const {user, loading, signIn, signOut, error} = useAuth();
- *
- *   if (loading) return <div>Loading...</div>;
- *   if (user) return <div>Welcome, {user.email}</div>;
- *   return <LoginForm onSubmit={signIn} />;
- * };
- * ```
  */
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
@@ -358,22 +352,6 @@ export const useAuth = (): AuthContextType => {
  * Convenience hook that returns only the authentication status
  * from the auth context. Useful when you only need to check
  * if a user is logged in.
- *
- * @returns True if user is authenticated, false otherwise
- * @throws Error if used outside of AuthProvider
- *
- * @example
- * ```tsx
- * const ProtectedComponent = () => {
- *   const isAuthenticated = useIsAuthenticated();
- *
- *   if (!isAuthenticated) {
- *     return <Navigate to="/login" replace />;
- *   }
- *
- *   return <Dashboard />;
- * };
- * ```
  */
 export const useIsAuthenticated = (): boolean => {
   const {isAuthenticated} = useAuth();

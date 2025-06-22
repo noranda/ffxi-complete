@@ -10,16 +10,16 @@
 // =============================================================================
 
 export const FFXI_RACES = {
-  HUME: 'hume',
   ELVAAN: 'elvaan',
-  TARUTARU: 'tarutaru',
-  MITHRA: 'mithra',
   GALKA: 'galka',
+  HUME: 'hume',
+  MITHRA: 'mithra',
+  TARUTARU: 'tarutaru',
 } as const;
 
 export const FFXI_GENDERS = {
-  MALE: 'male',
   FEMALE: 'female',
+  MALE: 'male',
 } as const;
 
 /**
@@ -27,14 +27,14 @@ export const FFXI_GENDERS = {
  * Some races are gender-locked (Mithra = female only, Galka = male only)
  */
 export const RACE_GENDER_COMBINATIONS = [
-  {race: FFXI_RACES.HUME, gender: FFXI_GENDERS.MALE},
-  {race: FFXI_RACES.HUME, gender: FFXI_GENDERS.FEMALE},
-  {race: FFXI_RACES.ELVAAN, gender: FFXI_GENDERS.MALE},
-  {race: FFXI_RACES.ELVAAN, gender: FFXI_GENDERS.FEMALE},
-  {race: FFXI_RACES.TARUTARU, gender: FFXI_GENDERS.MALE},
-  {race: FFXI_RACES.TARUTARU, gender: FFXI_GENDERS.FEMALE},
-  {race: FFXI_RACES.MITHRA, gender: FFXI_GENDERS.FEMALE}, // Female only
-  {race: FFXI_RACES.GALKA, gender: FFXI_GENDERS.MALE}, // Male only
+  {gender: FFXI_GENDERS.MALE, race: FFXI_RACES.HUME},
+  {gender: FFXI_GENDERS.FEMALE, race: FFXI_RACES.HUME},
+  {gender: FFXI_GENDERS.MALE, race: FFXI_RACES.ELVAAN},
+  {gender: FFXI_GENDERS.FEMALE, race: FFXI_RACES.ELVAAN},
+  {gender: FFXI_GENDERS.MALE, race: FFXI_RACES.TARUTARU},
+  {gender: FFXI_GENDERS.FEMALE, race: FFXI_RACES.TARUTARU},
+  {gender: FFXI_GENDERS.FEMALE, race: FFXI_RACES.MITHRA}, // Female only
+  {gender: FFXI_GENDERS.MALE, race: FFXI_RACES.GALKA}, // Male only
 ] as const;
 
 // =============================================================================
@@ -89,15 +89,15 @@ export const FFXI_WORLDS = [
  * Portrait file naming and organization settings
  */
 export const PORTRAIT_CONFIG = {
-  /** File format for optimized web portraits */
-  FORMAT: 'webp',
-  /** Base filename pattern: portrait-{race}-{gender}-face{face}-hair{hair}.webp */
-  FILENAME_PATTERN: 'portrait-{race}-{gender}-face{face}-hair{hair}.webp',
   /** Portrait dimensions for consistent display */
   DIMENSIONS: {
-    WIDTH: 200,
     HEIGHT: 149,
+    WIDTH: 200,
   },
+  /** Base filename pattern: portrait-{race}-{gender}-face{face}-hair{hair}.webp */
+  FILENAME_PATTERN: 'portrait-{race}-{gender}-face{face}-hair{hair}.webp',
+  /** File format for optimized web portraits */
+  FORMAT: 'webp',
 } as const;
 
 // =============================================================================
@@ -109,25 +109,25 @@ export const PORTRAIT_CONFIG = {
  * Used in the character_progress table for organizing different types of progression
  */
 export const PROGRESS_CATEGORIES = {
-  JOBS: 'jobs',
-  SKILLS: 'skills',
-  TRUSTS: 'trusts',
-  MOUNTS: 'mounts',
-  SPELLS: 'spells',
-  QUESTS: 'quests',
-  MISSIONS: 'missions',
-  ITEMS: 'items',
   FAME: 'fame',
+  ITEMS: 'items',
+  JOBS: 'jobs',
+  MISSIONS: 'missions',
+  MOUNTS: 'mounts',
+  QUESTS: 'quests',
+  SKILLS: 'skills',
+  SPELLS: 'spells',
+  TRUSTS: 'trusts',
 } as const;
 
 // =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 
-export type FFXIRace = (typeof FFXI_RACES)[keyof typeof FFXI_RACES];
-export type FFXIGender = (typeof FFXI_GENDERS)[keyof typeof FFXI_GENDERS];
-export type FFXIWorld = (typeof FFXI_WORLDS)[number];
 export type FaceOption = (typeof FACE_OPTIONS)[number];
+export type FFXIGender = (typeof FFXI_GENDERS)[keyof typeof FFXI_GENDERS];
+export type FFXIRace = (typeof FFXI_RACES)[keyof typeof FFXI_RACES];
+export type FFXIWorld = (typeof FFXI_WORLDS)[number];
 export type HairStyle = (typeof HAIR_STYLES)[number];
 export type ProgressCategory =
   (typeof PROGRESS_CATEGORIES)[keyof typeof PROGRESS_CATEGORIES];

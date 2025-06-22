@@ -7,11 +7,11 @@ import {AuthProvider} from '../contexts/AuthContext';
 // Mock the auth utilities
 vi.mock('../lib/auth', () => ({
   getCurrentUser: vi.fn().mockResolvedValue(null),
-  signUp: vi.fn(),
+  resetPassword: vi.fn(),
   signIn: vi.fn(),
   signInWithOAuth: vi.fn(),
   signOut: vi.fn(),
-  resetPassword: vi.fn(),
+  signUp: vi.fn(),
   updatePassword: vi.fn(),
 }));
 
@@ -30,10 +30,9 @@ vi.mock('../lib/supabase', () => ({
 }));
 
 // Test wrapper with AuthProvider
-const TestWrapper = ({children}: {children: React.ReactNode}) => (
+const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => (
   <AuthProvider>{children}</AuthProvider>
 );
-
 describe('App', () => {
   it('renders the application', () => {
     render(<App />, {wrapper: TestWrapper});

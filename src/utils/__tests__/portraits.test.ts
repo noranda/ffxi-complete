@@ -23,10 +23,10 @@ import {
 describe('Portrait Utilities', () => {
   // Sample portrait data for testing
   const samplePortrait: PortraitId = {
-    race: 'hume',
-    gender: 'male',
     face: 1,
+    gender: 'male',
     hair: 'A',
+    race: 'hume',
   };
 
   describe('Filename Generation', () => {
@@ -37,22 +37,22 @@ describe('Portrait Utilities', () => {
 
     it('should generate different filenames for different portraits', () => {
       const portrait1 = generatePortraitFilename({
-        race: 'hume',
-        gender: 'male',
         face: 1,
+        gender: 'male',
         hair: 'A',
+        race: 'hume',
       });
       const portrait2 = generatePortraitFilename({
-        race: 'hume',
-        gender: 'male',
         face: 1,
+        gender: 'male',
         hair: 'B',
+        race: 'hume',
       });
       const portrait3 = generatePortraitFilename({
-        race: 'elvaan',
-        gender: 'female',
         face: 5,
+        gender: 'female',
         hair: 'B',
+        race: 'elvaan',
       });
 
       expect(portrait1).toBe('portrait-hume-male-face1-hairA.webp');
@@ -129,8 +129,8 @@ describe('Portrait Utilities', () => {
 
     it('should filter portraits by race and gender', () => {
       const humePortraits = generateAllPortraits({
-        race: 'hume',
         gender: 'male',
+        race: 'hume',
       });
 
       // 1 race/gender combo × 8 faces × 2 hair styles = 16 portraits
@@ -208,20 +208,20 @@ describe('Portrait Utilities', () => {
         'portrait-hume-male-face1-hairA.webp'
       );
       expect(parsed).toEqual({
-        race: 'hume',
-        gender: 'male',
         face: 1,
+        gender: 'male',
         hair: 'A',
+        race: 'hume',
       });
 
       const parsed2 = parsePortraitFilename(
         'portrait-elvaan-female-face8-hairB.webp'
       );
       expect(parsed2).toEqual({
-        race: 'elvaan',
-        gender: 'female',
         face: 8,
+        gender: 'female',
         hair: 'B',
+        race: 'elvaan',
       });
     });
 

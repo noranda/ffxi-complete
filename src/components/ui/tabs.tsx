@@ -3,9 +3,9 @@ import * as TabsPrimitive from '@radix-ui/react-tabs';
 import {cn} from '@/lib/utils';
 
 /**
- * Tabs root component props extending Radix Tabs.Root
+ * Tabs content component props extending Radix Tabs.Content
  */
-type TabsProps = React.ComponentProps<typeof TabsPrimitive.Root>;
+type TabsContentProps = React.ComponentProps<typeof TabsPrimitive.Content>;
 
 /**
  * Tabs list component props extending Radix Tabs.List
@@ -13,19 +13,20 @@ type TabsProps = React.ComponentProps<typeof TabsPrimitive.Root>;
 type TabsListProps = React.ComponentProps<typeof TabsPrimitive.List>;
 
 /**
+ * Tabs root component props extending Radix Tabs.Root
+ */
+type TabsProps = React.ComponentProps<typeof TabsPrimitive.Root>;
+
+/**
  * Tabs trigger component props extending Radix Tabs.Trigger
  */
 type TabsTriggerProps = React.ComponentProps<typeof TabsPrimitive.Trigger>;
 
 /**
- * Tabs content component props extending Radix Tabs.Content
- */
-type TabsContentProps = React.ComponentProps<typeof TabsPrimitive.Content>;
-
-/**
  * Tabs root container component built on Radix UI
  * Provides accessible tab navigation with keyboard support
- *
+ * @param root0
+ * @param root0.className
  * @example
  * ```tsx
  * <Tabs defaultValue="tab1">
@@ -46,41 +47,44 @@ const TabsRoot: React.FC<TabsProps> = ({className, ...props}) => (
     {...props}
   />
 );
-
 /**
  * Tabs list container for tab triggers
  * Provides a styled background for the tab navigation
+ * @param root0
+ * @param root0.className
  */
 const TabsList: React.FC<TabsListProps> = ({className, ...props}) => (
   <TabsPrimitive.List
     className={cn(
-      'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
+      `bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]`,
       className
     )}
     data-slot="tabs-list"
     {...props}
   />
 );
-
 /**
  * Individual tab trigger button
  * Shows active state styling and handles tab switching
+ * @param root0
+ * @param root0.className
  */
 const TabsTrigger: React.FC<TabsTriggerProps> = ({className, ...props}) => (
   <TabsPrimitive.Trigger
     className={cn(
       // Base styles with active state handling
-      "data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+      `text-foreground data-[state=active]:bg-background dark:data-[state=active]:text-foreground dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 dark:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4`,
       className
     )}
     data-slot="tabs-trigger"
     {...props}
   />
 );
-
 /**
  * Tab content panel
  * Contains the content associated with each tab
+ * @param root0
+ * @param root0.className
  */
 const TabsContent: React.FC<TabsContentProps> = ({className, ...props}) => (
   <TabsPrimitive.Content
@@ -89,7 +93,6 @@ const TabsContent: React.FC<TabsContentProps> = ({className, ...props}) => (
     {...props}
   />
 );
-
 /**
  * Compound Tabs component with sub-components as properties
  * Provides accessible tab navigation with shared state management
@@ -105,9 +108,9 @@ const Tabs = Object.assign(TabsRoot, {
  * Access as TabsTypes.Props, TabsTypes.ContentProps, etc.
  */
 type TabsTypes = {
-  Props: TabsProps;
   ContentProps: TabsContentProps;
   ListProps: TabsListProps;
+  Props: TabsProps;
   TriggerProps: TabsTriggerProps;
 };
 

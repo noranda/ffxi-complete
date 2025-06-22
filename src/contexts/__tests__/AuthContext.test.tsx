@@ -2,6 +2,7 @@ import {act, renderHook, waitFor} from '@testing-library/react';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import type {AuthResult} from '@/lib/auth';
+
 import {
   getCurrentUser,
   resetPassword,
@@ -18,11 +19,11 @@ import {AuthProvider, useAuth, useIsAuthenticated} from '../AuthContext';
 // Mock the auth functions
 vi.mock('@/lib/auth', () => ({
   getCurrentUser: vi.fn(),
-  signUp: vi.fn(),
+  resetPassword: vi.fn(),
   signIn: vi.fn(),
   signInWithOAuth: vi.fn(),
   signOut: vi.fn(),
-  resetPassword: vi.fn(),
+  signUp: vi.fn(),
   updatePassword: vi.fn(),
 }));
 
@@ -33,8 +34,8 @@ vi.mock('@/lib/supabase', () => ({
       onAuthStateChange: vi.fn(() => ({
         data: {
           subscription: {
-            id: 'test-subscription-id',
             callback: vi.fn(),
+            id: 'test-subscription-id',
             unsubscribe: vi.fn(),
           },
         },
@@ -44,27 +45,26 @@ vi.mock('@/lib/supabase', () => ({
 }));
 
 const mockUser = {
-  id: 'test-user-id',
-  email: 'test@example.com',
-  created_at: '2023-01-01T00:00:00Z',
   app_metadata: {},
-  user_metadata: {},
   aud: 'authenticated',
+  created_at: '2023-01-01T00:00:00Z',
+  email: 'test@example.com',
+  id: 'test-user-id',
   role: 'authenticated',
+  user_metadata: {},
 } as const;
 
 // Test wrapper component
-const TestWrapper = ({children}: {children: React.ReactNode}) => (
+const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => (
   <AuthProvider>{children}</AuthProvider>
 );
-
 describe('AuthContext', () => {
   const mockUnsubscribe = vi.fn();
   const mockOnAuthStateChange = vi.fn().mockReturnValue({
     data: {
       subscription: {
-        id: 'test-subscription-id',
         callback: vi.fn(),
+        id: 'test-subscription-id',
         unsubscribe: mockUnsubscribe,
       },
     },
@@ -130,7 +130,7 @@ describe('AuthContext', () => {
     it('should handle auth state changes', async () => {
       let authStateCallback: (
         event: string,
-        session: {user: typeof mockUser} | null
+        session: null | {user: typeof mockUser}
       ) => void;
 
       const mockImplementation = vi.fn().mockImplementation(callback => {
@@ -138,8 +138,8 @@ describe('AuthContext', () => {
         return {
           data: {
             subscription: {
-              id: 'test-subscription-id',
               callback: vi.fn(),
+              id: 'test-subscription-id',
               unsubscribe: mockUnsubscribe,
             },
           },
@@ -191,9 +191,9 @@ describe('AuthContext', () => {
     describe('authentication methods', () => {
       it('should handle sign up', async () => {
         const mockResult: AuthResult = {
-          success: true,
           data: mockUser,
           error: null,
+          success: true,
         };
         vi.mocked(signUp).mockResolvedValue(mockResult);
 
@@ -217,9 +217,9 @@ describe('AuthContext', () => {
 
       it('should handle sign up errors', async () => {
         const mockResult: AuthResult = {
-          success: false,
-          error: 'Sign up failed',
           data: null,
+          error: 'Sign up failed',
+          success: false,
         };
         vi.mocked(signUp).mockResolvedValue(mockResult);
 
@@ -238,9 +238,9 @@ describe('AuthContext', () => {
 
       it('should handle sign in', async () => {
         const mockResult: AuthResult = {
-          success: true,
           data: mockUser,
           error: null,
+          success: true,
         };
         vi.mocked(signIn).mockResolvedValue(mockResult);
 
@@ -264,8 +264,8 @@ describe('AuthContext', () => {
 
       it('should handle OAuth sign in', async () => {
         const mockResult: Omit<AuthResult, 'data'> = {
-          success: true,
           error: null,
+          success: true,
         };
         vi.mocked(signInWithOAuth).mockResolvedValue(mockResult);
 
@@ -286,8 +286,8 @@ describe('AuthContext', () => {
 
       it('should handle sign out', async () => {
         const mockResult: Omit<AuthResult, 'data'> = {
-          success: true,
           error: null,
+          success: true,
         };
         vi.mocked(signOut).mockResolvedValue(mockResult);
 
@@ -308,8 +308,8 @@ describe('AuthContext', () => {
 
       it('should handle password reset', async () => {
         const mockResult: Omit<AuthResult, 'data'> = {
-          success: true,
           error: null,
+          success: true,
         };
         vi.mocked(resetPassword).mockResolvedValue(mockResult);
 
@@ -330,8 +330,8 @@ describe('AuthContext', () => {
 
       it('should handle password update', async () => {
         const mockResult: Omit<AuthResult, 'data'> = {
-          success: true,
           error: null,
+          success: true,
         };
         vi.mocked(updatePassword).mockResolvedValue(mockResult);
 
@@ -355,9 +355,9 @@ describe('AuthContext', () => {
       it('should clear error', async () => {
         // First set an error
         const mockResult: AuthResult = {
-          success: false,
-          error: 'Test error',
           data: null,
+          error: 'Test error',
+          success: false,
         };
         vi.mocked(signIn).mockResolvedValue(mockResult);
 

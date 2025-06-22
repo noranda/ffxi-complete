@@ -1,11 +1,14 @@
 /** @type {import('prettier').Config} */
 export default {
+  arrowParens: 'avoid',
+  bracketSpacing: false,
+  endOfLine: 'lf',
+  // Tailwind CSS class sorting
+  plugins: ['prettier-plugin-tailwindcss'],
+  printWidth: 80,
   semi: true,
   singleQuote: true,
   tabWidth: 2,
+  tailwindFunctions: ['tv', 'cva', 'cn', 'clsx'],
   trailingComma: 'es5',
-  printWidth: 80,
-  bracketSpacing: false,
-  arrowParens: 'avoid',
-  endOfLine: 'lf',
 };

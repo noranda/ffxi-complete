@@ -3,57 +3,45 @@
  * Provides automatic subscription management with cleanup
  */
 
+import {type RealtimeChannel} from '@supabase/supabase-js';
 import {useEffect, useRef} from 'react';
-import {RealtimeChannel} from '@supabase/supabase-js';
 
 import {supabase} from '@/lib/supabase';
 
-type SubscriptionEvent = 'INSERT' | 'UPDATE' | 'DELETE' | '*';
-
 type RealtimePayload<T = Record<string, unknown>> = {
-  eventType: SubscriptionEvent;
-  new: T | null;
-  old: T | null;
   errors: Error[] | null;
+  eventType: SubscriptionEvent;
+  new: null | T;
+  old: null | T;
 };
 
 type SubscriptionCallback<T = Record<string, unknown>> = (
   payload: RealtimePayload<T>
 ) => void;
 
+type SubscriptionEvent = '*' | 'DELETE' | 'INSERT' | 'UPDATE';
+
 type UseRealtimeSubscriptionOptions = {
-  /** Database table to subscribe to */
-  table: string;
+  /** Whether the subscription is enabled */
+  enabled?: boolean;
   /** Event types to listen for (default: '*' for all) */
   event?: SubscriptionEvent;
   /** Optional filter for the subscription */
   filter?: string;
-  /** Whether the subscription is enabled */
-  enabled?: boolean;
+  /** Database table to subscribe to */
+  table: string;
 };
 
 /**
  * Hook for managing real-time subscriptions to Supabase tables
  * Automatically handles subscription lifecycle and cleanup
- *
- * @example
- * ```tsx
- * useRealtimeSubscription({
- *   table: 'characters',
- *   filter: `user_id=eq.${userId}`,
- *   enabled: !!userId
- * }, (payload) => {
- *   console.log('Character updated:', payload.new);
- *   // Invalidate queries or update state
- * });
- * ```
  */
 export const useRealtimeSubscription = <T = Record<string, unknown>>(
   options: UseRealtimeSubscriptionOptions,
   callback: SubscriptionCallback<T>
 ) => {
-  const {table, event = '*', filter, enabled = true} = options;
-  const channelRef = useRef<RealtimeChannel | null>(null);
+  const {enabled = true, event = '*', filter, table} = options;
+  const channelRef = useRef<null | RealtimeChannel>(null);
   const callbackRef = useRef(callback);
 
   // Keep callback reference current
@@ -86,9 +74,9 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
       'postgres_changes',
       {
         event,
+        filter,
         schema: 'public',
         table,
-        filter,
       },
       (payload: RealtimePayload<T>) => {
         callbackRef.current(payload);
@@ -117,13 +105,14 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
   }, [table, event, filter, enabled]);
 
   // Cleanup on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (channelRef.current) {
         void supabase.removeChannel(channelRef.current);
       }
-    };
-  }, []);
+    },
+    []
+  );
 };
 
 /**
@@ -131,14 +120,14 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
  * Convenience wrapper around useRealtimeSubscription
  */
 export const useCharacterSubscription = (
-  userId: string | null,
+  userId: null | string,
   callback: SubscriptionCallback
 ) => {
   useRealtimeSubscription(
     {
-      table: 'characters',
-      filter: userId != null ? `user_id=eq.${userId}` : undefined,
       enabled: userId != null,
+      filter: userId != null ? `user_id=eq.${userId}` : undefined,
+      table: 'characters',
     },
     callback
   );
@@ -149,25 +138,25 @@ export const useCharacterSubscription = (
  * Monitors job progress, skill progress, etc.
  */
 export const useCharacterProgressSubscription = (
-  characterId: string | null,
+  characterId: null | string,
   callback: SubscriptionCallback
 ) => {
   useRealtimeSubscription(
     {
-      table: 'character_job_progress',
+      enabled: characterId != null,
       filter:
         characterId != null ? `character_id=eq.${characterId}` : undefined,
-      enabled: characterId != null,
+      table: 'character_job_progress',
     },
     callback
   );
 
   useRealtimeSubscription(
     {
-      table: 'character_skill_progress',
+      enabled: characterId != null,
       filter:
         characterId != null ? `character_id=eq.${characterId}` : undefined,
-      enabled: characterId != null,
+      table: 'character_skill_progress',
     },
     callback
   );

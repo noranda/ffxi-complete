@@ -1,204 +1,170 @@
 ---
-description: "JSDoc documentation standards and inline comment patterns for components and functions"
+description: "Function and component documentation standards, inline commenting, and documentation maintenance"
 globs:
   - "**/*.ts"
   - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
 ---
 
 # Code Documentation Standards
 
-## JSDoc Requirements (Required)
+## Automated Patterns
 
-**All exported functions, components, and types must have JSDoc comments:**
+The following are **fully automated** by ESLint:
+- ✅ JSDoc comment presence on all exported functions, components, and methods
+- ✅ Comment block formatting and consistency
+- ✅ Example code formatting following project linting standards
 
-### Component Documentation
+## Function Documentation Requirements
+
+**All functions must have concise descriptions** explaining their purpose:
+- What the function does
+- When it should be used
+- Any important behavior or side effects
+
+**Focus on practical value** over restating obvious information:
+- ✅ "Validates user input and sanitizes special characters"
+- ❌ "Function that takes input parameter and returns output"
+
+## Complex Logic Commenting
+
+**Complex business logic must have inline comments throughout** to aid future understanding:
+
+### Algorithm Explanations
 ```typescript
-/**
- * Button props extending HTML element attributes
- */
-type ButtonProps = React.ComponentProps<'button'> & {
-  /** Render as child using composition pattern */
-  asChild?: boolean;
-  /** Button size variant */
-  size?: 'sm' | 'md' | 'lg';
-  /** Button visual style variant */
-  variant?: 'primary' | 'secondary' | 'destructive';
-};
-
-/**
- * Versatile button component with multiple styling variants
- * Built on HTML button with design system integration
- * 
- * @example
- * ```tsx
- * <Button onClick={handleClick} size="lg" variant="primary">
- *   Save Changes
- * </Button>
- * 
- * <Button asChild>
- *   <Link to="/dashboard">Go to Dashboard</Link>
- * </Button>
- * ```
- */
-const Button: React.FC<ButtonProps> = ({
-  asChild = false,
-  children,
-  className,
-  size = 'md',
-  variant = 'primary',
-  ...props
-}) => {
-  // Implementation
-};
-```
-
-### Type Documentation
-```typescript
-/**
- * User preference configuration object
- * Handles application-wide user settings and personalization
- */
-type UserPreferences = {
-  /** User's preferred theme setting */
-  theme: 'light' | 'dark' | 'system';
-  /** Whether to show completion notifications */
-  notifications: boolean;
-  /** Default character to load on login */
-  defaultCharacterId?: string;
-};
-
-/**
- * API response wrapper for consistent error handling
- * Used across all API endpoints for standardized responses
- */
-type ApiResponse<T> = {
-  /** Response data if successful */
-  data: T;
-  /** Error message if request failed */
-  error: string | null;
-  /** Whether the request was successful */
-  success: boolean;
-};
-```
-
-### Hook Documentation
-```typescript
-/**
- * Custom hook for managing user preferences
- * Handles persistence to localStorage and provides reactive updates
- * 
- * @returns Object with current preferences and update function
- * 
- * @example
- * ```tsx
- * const {preferences, updatePreference} = useUserPreferences();
- * 
- * const handleThemeChange = (theme: Theme) => {
- *   updatePreference('theme', theme);
- * };
- * ```
- */
-const useUserPreferences = (): UserPreferencesReturn => {
-  // Implementation
-};
-```
-
-## JSDoc Example Code Standards (Critical)
-
-**All JSDoc example code MUST follow the same standards as implementation code:**
-
-```typescript
-// ✅ Correct - Props alphabetically sorted, follows code standards
-/**
- * @example
- * ```tsx
- * <Button onClick={() => save()} size="lg" variant="primary">
- *   Save Changes
- * </Button>
- * ```
- */
-
-// ❌ Incorrect - Props not alphabetically sorted
-/**
- * @example
- * ```tsx
- * <Button variant="primary" onClick={() => save()} size="lg">
- *   Save Changes
- * </Button>
- * ```
- */
-```
-
-## Inline Comments
-
-**Use section comments for complex components:**
-```typescript
-const ComplexDashboard: React.FC<DashboardProps> = ({userId}) => {
-  // State management section
-  const [activeTab, setActiveTab] = useState<TabType>('overview');
+const calculateShippingCost = (weight: number, distance: number) => {
+  // Base rate calculation using industry standard zones
+  const baseRate = weight * 0.5;
   
-  // Data fetching section
-  const {data: userData} = useQuery({
-    queryKey: ['user', userId],
-    queryFn: () => fetchUserData(userId),
-  });
-
-  // Event handlers section
-  const handleTabChange = useCallback((tab: TabType) => {
-    // Validate tab before switching
-    if (isValidTab(tab)) {
-      setActiveTab(tab);
-    }
-  }, []);
-
-  // Render logic
-  return (
-    <div className="dashboard">
-      {/* Header section */}
-      <DashboardHeader user={userData} />
-      
-      {/* Main content section */}
-      <div className="dashboard-content">
-        {activeTab === 'overview' && <OverviewTab data={userData} />}
-      </div>
-    </div>
-  );
+  // Distance multiplier: >100 miles gets freight rates
+  const distanceMultiplier = distance > 100 ? 1.8 : 1.2;
+  
+  // Apply fuel surcharge (updated quarterly)
+  const fuelSurcharge = baseRate * 0.15;
+  
+  return (baseRate * distanceMultiplier) + fuelSurcharge;
 };
 ```
 
-## JSDoc Tags
-
-**Common JSDoc tags to use:**
+### Non-obvious Conditional Logic
 ```typescript
-/**
- * Description of the function/component/type
- * 
- * @param paramName - Description of parameter
- * @returns Description of return value
- * @throws Description of when errors are thrown
- * @example
- * ```tsx
- * // Usage example here
- * ```
- * 
- * @see RelatedComponent - Links to related functionality
- * @since v1.2.0 - When this was added
- * @deprecated Use NewComponent instead
- */
+const shouldShowAdvancedFeatures = (user: User) => {
+  // Premium users or beta testers get advanced features
+  // Beta program expires after 90 days of inactivity
+  return user.subscription === 'premium' || 
+         (user.betaTester && user.lastActivity > thirtyDaysAgo);
+};
 ```
 
-## Requirements
+### Complex State Transformations
+```typescript
+const mergeUserPreferences = (current: Preferences, updates: Partial<Preferences>) => {
+  // Deep merge required for nested theme settings
+  // Preserve user customizations even when defaults change
+  const merged = {
+    ...current,
+    ...updates,
+    theme: {
+      ...current.theme,
+      ...updates.theme,
+      // Always preserve user's custom color if set
+      customColors: updates.theme?.customColors || current.theme?.customColors,
+    },
+  };
+  
+  return merged;
+};
+```
 
-- **All exported items** must have JSDoc comments
-- **Examples must be practical** and copy-pasteable
-- **Complex logic** must have inline comments
-- **Example code must follow** all code standards
-- **Keep comments current** - update when implementation changes
+## ESLint Disable Guidelines
 
-## Best Practices
+**ESLint comment disables should only be used in special cases:**
 
-- **Write documentation first** when designing new APIs
-- **Use concrete examples** that developers can copy
-- **Explain the "why"** not just the "what"
-- **Use section comments** to break down complex components
-- **Document edge cases** and special behavior
+### Acceptable Use Cases
+- External library integration requiring non-standard patterns
+- Generated code or third-party imports
+- Temporary workarounds with TODO comments and tracking issues
+- Performance-critical code where rules conflict with optimization
+
+### Required Format for Disables
+```typescript
+// eslint-disable-next-line jsdoc/require-jsdoc -- Generated function from API schema
+const generatedHandler = createApiHandler();
+
+// eslint-disable-next-line jsdoc/require-jsdoc -- TODO: Refactor legacy code (Issue #123)
+function legacyUtilFunction() {
+  // Complex legacy logic here...
+}
+```
+
+### Unacceptable Use Cases
+- Avoiding documentation requirements on business logic
+- "Temporary" fixes that become permanent
+- Personal preference over established patterns
+- Bulk disabling without specific justification
+
+## Section Organization Comments
+
+**Use section comments** to organize complex files:
+```typescript
+// ============================================================
+// State Management
+// ============================================================
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState<string | null>(null);
+
+// ============================================================
+// Data Fetching
+// ============================================================
+const fetchUserData = useCallback(async () => {
+  // Implementation...
+}, []);
+
+// ============================================================
+// Event Handlers  
+// ============================================================
+const handleSubmit = useCallback(() => {
+  // Implementation...
+}, []);
+
+// ============================================================
+// Render Logic
+// ============================================================
+return (
+  <div>
+    {/* Component JSX */}
+  </div>
+);
+```
+
+## Documentation Maintenance
+
+### Keep Comments Synchronized
+
+**Mandatory comment review on code changes:**
+- **Every code modification requires comment review** - When updating any function, method, or complex logic, actively review all related comments for accuracy
+- **Update outdated descriptions** - If function behavior, parameters, or return values change, update JSDoc comments immediately
+- **Remove stale inline comments** - Delete comments that no longer apply to the current implementation
+- **Add new comments for added complexity** - If refactoring introduces new complex logic, add appropriate inline comments
+- **Validate examples in JSDoc** - Ensure code examples in documentation still work with the updated implementation
+
+### Document Assumptions and Constraints
+
+**Include important context:**
+- External API limitations
+- Browser compatibility requirements  
+- Performance considerations
+- Security implications
+- Business rules and domain knowledge
+
+### Comment Review Checklist
+
+**During code reviews, verify:**
+- JSDoc descriptions accurately reflect function behavior
+- Inline comments explain non-obvious logic
+- Examples in documentation are current and correct
+- Complex algorithms have sufficient explanation
+- Assumptions and constraints are documented
+- ESLint disables have proper justification
+

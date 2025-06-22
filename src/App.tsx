@@ -22,20 +22,25 @@ import {Input} from '@/components/ui/input';
 import {useAuth} from '@/hooks';
 import {supabase} from '@/lib/supabase';
 
+/**
+ * Root application component with authentication testing and Supabase connection status
+ */
 const App: React.FC<unknown> = () => {
-  const {user, loading, signUp, signIn, signInWithProvider, signOut} =
+  const {loading, signIn, signInWithProvider, signOut, signUp, user} =
     useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [connectionStatus, setConnectionStatus] = useState<
-    'testing' | 'connected' | 'error'
+    'connected' | 'error' | 'testing'
   >('testing');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [showRegisterForm, setShowRegisterForm] = useState(false);
 
   useEffect(() => {
-    // Test Supabase connection on component mount
+    /**
+     * Tests Supabase connection by attempting to retrieve current session
+     */
     const testConnection = async () => {
       try {
         // Try to access Supabase (this will work even without tables)
@@ -58,32 +63,41 @@ const App: React.FC<unknown> = () => {
     void testConnection();
   }, []);
 
+  /**
+   * Returns the appropriate CSS color class based on connection status
+   */
   const getStatusColor = () => {
     switch (connectionStatus) {
-      case 'testing':
-        return 'text-yellow-500';
       case 'connected':
         return 'text-green-500';
       case 'error':
         return 'text-red-500';
+      case 'testing':
+        return 'text-yellow-500';
       default:
         return 'text-gray-500';
     }
   };
 
+  /**
+   * Returns user-friendly status text with icons based on connection state
+   */
   const getStatusText = () => {
     switch (connectionStatus) {
-      case 'testing':
-        return 'Testing connection...';
       case 'connected':
         return 'Connected to Supabase ✅';
       case 'error':
         return 'Connection failed ❌';
+      case 'testing':
+        return 'Testing connection...';
       default:
         return 'Unknown status';
     }
   };
 
+  /**
+   * Handles user registration with email and password including error handling
+   */
   const handleSignUp = useCallback(async () => {
     try {
       setMessage('Signing up...');
@@ -100,6 +114,9 @@ const App: React.FC<unknown> = () => {
     }
   }, [email, password, signUp]);
 
+  /**
+   * Handles user sign-in with email and password authentication
+   */
   const handleSignIn = async () => {
     try {
       setMessage('Signing in...');
@@ -116,6 +133,9 @@ const App: React.FC<unknown> = () => {
     }
   };
 
+  /**
+   * Handles OAuth authentication for Discord and Google providers
+   */
   const handleOAuthSignIn = async (provider: 'discord' | 'google') => {
     try {
       setMessage(`Signing in with ${provider}...`);
@@ -132,6 +152,9 @@ const App: React.FC<unknown> = () => {
     }
   };
 
+  /**
+   * Handles user sign-out and clears session state
+   */
   const handleSignOut = async () => {
     try {
       setMessage('Signing out...');
@@ -150,7 +173,9 @@ const App: React.FC<unknown> = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div
+        className={`bg-background flex min-h-screen items-center justify-center`}
+      >
         <Card className="w-96">
           <CardContent className="p-6">
             <div className="text-center">Loading...</div>
@@ -161,24 +186,27 @@ const App: React.FC<unknown> = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-background text-foreground min-h-screen">
       <div className="container mx-auto p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4">FFXI Complete</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-8 text-center">
+          <h1 className="mb-4 text-4xl font-bold">FFXI Complete</h1>
+
+          <div className="text-muted-foreground">
             Track your Final Fantasy XI character progress across jobs, skills,
             and collections
-          </p>
+          </div>
         </div>
 
-        <div className="max-w-2xl mx-auto space-y-8">
+        <div className="mx-auto max-w-2xl space-y-8">
           <Card>
             <CardHeader>
               <CardTitle>Backend Connection Status</CardTitle>
+
               <CardDescription>
                 Testing connection to Supabase backend
               </CardDescription>
             </CardHeader>
+
             <CardContent>
               <div className="space-y-4">
                 <div className={`font-medium ${getStatusColor()}`}>
@@ -186,23 +214,30 @@ const App: React.FC<unknown> = () => {
                 </div>
 
                 {connectionStatus === 'error' && (
-                  <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-                    <p className="text-sm text-destructive">
+                  <div
+                    className={`bg-destructive/10 border-destructive/20 rounded-lg border p-4`}
+                  >
+                    <div className="text-destructive text-sm">
                       <strong>Error:</strong> {errorMessage}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-2">
+                    </div>
+
+                    <div className="text-muted-foreground mt-2 text-sm">
                       Please check your .env.local file and ensure you have the
                       correct Supabase URL and anon key.
-                    </p>
+                    </div>
                   </div>
                 )}
 
                 {connectionStatus === 'connected' && (
-                  <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                    <p className="text-sm text-green-700 dark:text-green-300">
+                  <div
+                    className={`rounded-lg border border-green-500/20 bg-green-500/10 p-4`}
+                  >
+                    <div
+                      className={`text-sm text-green-700 dark:text-green-300`}
+                    >
                       🎉 Great! Your Supabase backend is connected and ready.
                       Next step: Set up the database schema.
-                    </p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -212,6 +247,7 @@ const App: React.FC<unknown> = () => {
           <Card>
             <CardHeader>
               <CardTitle>FFXI Complete - Auth Test</CardTitle>
+
               <CardDescription>
                 {user
                   ? `Welcome, ${user.email}!`
@@ -221,29 +257,30 @@ const App: React.FC<unknown> = () => {
 
             <CardContent className="space-y-4">
               {/* Toggle between test interface and RegisterForm */}
-              <div className="flex gap-2 mb-4">
+              <div className="mb-4 flex gap-2">
                 <Button
-                  variant={!showRegisterForm ? 'default' : 'outline'}
                   onClick={() => {
                     setShowRegisterForm(false);
                   }}
                   size="sm"
+                  variant={!showRegisterForm ? 'default' : 'outline'}
                 >
                   Test Interface
                 </Button>
+
                 <Button
-                  variant={showRegisterForm ? 'default' : 'outline'}
                   onClick={() => {
                     setShowRegisterForm(true);
                   }}
                   size="sm"
+                  variant={showRegisterForm ? 'default' : 'outline'}
                 >
                   Register Form
                 </Button>
               </div>
 
               {showRegisterForm ? (
-                <div className="max-w-md mx-auto">
+                <div className="mx-auto max-w-md">
                   <RegisterForm
                     onSuccess={() => {
                       setMessage(
@@ -263,20 +300,21 @@ const App: React.FC<unknown> = () => {
                 <>
                   <div className="space-y-2">
                     <Input
-                      placeholder="Email"
-                      type="email"
-                      value={email}
                       onChange={e => {
                         setEmail(e.target.value);
                       }}
+                      placeholder="Email"
+                      type="email"
+                      value={email}
                     />
+
                     <Input
-                      placeholder="Password"
-                      type="password"
-                      value={password}
                       onChange={e => {
                         setPassword(e.target.value);
                       }}
+                      placeholder="Password"
+                      type="password"
+                      value={password}
                     />
                   </div>
 
@@ -289,6 +327,7 @@ const App: React.FC<unknown> = () => {
                     >
                       Sign Up
                     </Button>
+
                     <Button
                       className="w-full"
                       onClick={() => {
@@ -310,6 +349,7 @@ const App: React.FC<unknown> = () => {
                     >
                       Sign in with Discord
                     </Button>
+
                     <Button
                       className="w-full"
                       onClick={() => {
@@ -323,20 +363,23 @@ const App: React.FC<unknown> = () => {
                 </>
               ) : (
                 <div className="space-y-4">
-                  <div className="text-center space-y-2">
-                    <div className="text-sm text-muted-foreground">
+                  <div className="space-y-2 text-center">
+                    <div className="text-muted-foreground text-sm">
                       User ID: {user?.id}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+
+                    <div className="text-muted-foreground text-sm">
                       Email: {user?.email}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+
+                    <div className="text-muted-foreground text-sm">
                       Created:{' '}
                       {user?.created_at
                         ? new Date(user.created_at).toLocaleDateString()
                         : 'Unknown'}
                     </div>
                   </div>
+
                   <Button
                     className="w-full"
                     onClick={() => {
@@ -350,7 +393,7 @@ const App: React.FC<unknown> = () => {
               )}
 
               {message && (
-                <div className="p-3 bg-muted rounded-md text-sm">{message}</div>
+                <div className="bg-muted rounded-md p-3 text-sm">{message}</div>
               )}
             </CardContent>
           </Card>
@@ -358,23 +401,28 @@ const App: React.FC<unknown> = () => {
           <Card>
             <CardHeader>
               <CardTitle>Coming Soon</CardTitle>
+
               <CardDescription>
                 Features we'll build in the next phases
               </CardDescription>
             </CardHeader>
+
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className={`grid grid-cols-1 gap-4 md:grid-cols-2`}>
                 <div className="space-y-2">
                   <h3 className="font-semibold">Phase 2: Database</h3>
-                  <ul className="text-sm text-muted-foreground space-y-1">
+
+                  <ul className="text-muted-foreground space-y-1 text-sm">
                     <li>• User authentication</li>
                     <li>• Character management</li>
                     <li>• Database schema</li>
                   </ul>
                 </div>
+
                 <div className="space-y-2">
                   <h3 className="font-semibold">Phase 3: Tracking</h3>
-                  <ul className="text-sm text-muted-foreground space-y-1">
+
+                  <ul className="text-muted-foreground space-y-1 text-sm">
                     <li>• Job progress</li>
                     <li>• Skills tracking</li>
                     <li>• Collections system</li>

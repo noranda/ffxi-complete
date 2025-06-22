@@ -8,7 +8,7 @@ describe('Tabs Component', () => {
   describe('Basic Rendering', () => {
     it('renders tabs with default value', () => {
       render(
-        <Tabs defaultValue="tab1" data-testid="tabs">
+        <Tabs data-testid="tabs" defaultValue="tab1">
           <Tabs.List>
             <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
             <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
@@ -42,7 +42,7 @@ describe('Tabs Component', () => {
 
     it('includes data-slot attribute on root', () => {
       render(
-        <Tabs defaultValue="tab1" data-testid="tabs">
+        <Tabs data-testid="tabs" defaultValue="tab1">
           <Tabs.List>
             <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
           </Tabs.List>
@@ -192,6 +192,7 @@ describe('Tabs Component', () => {
             <Tabs.Trigger data-testid="active-tab" value="tab1">
               Active Tab
             </Tabs.Trigger>
+
             <Tabs.Trigger data-testid="inactive-tab" value="tab2">
               Inactive Tab
             </Tabs.Trigger>
@@ -253,6 +254,7 @@ describe('Tabs Component', () => {
           <Tabs.List>
             <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
           </Tabs.List>
+
           <Tabs.Content data-testid="tab-content" value="tab1">
             Content
           </Tabs.Content>
@@ -269,6 +271,7 @@ describe('Tabs Component', () => {
           <Tabs.List>
             <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
           </Tabs.List>
+
           <Tabs.Content
             className="custom-content"
             data-testid="tab-content"
@@ -289,9 +292,11 @@ describe('Tabs Component', () => {
             <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
             <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
           </Tabs.List>
+
           <Tabs.Content data-testid="active-content" value="tab1">
             Active Content
           </Tabs.Content>
+
           <Tabs.Content data-testid="inactive-content" value="tab2">
             Inactive Content
           </Tabs.Content>
@@ -308,6 +313,7 @@ describe('Tabs Component', () => {
           <Tabs.List>
             <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
           </Tabs.List>
+
           <Tabs.Content data-testid="tab-content" value="tab1">
             Content
           </Tabs.Content>

@@ -9,5 +9,6 @@
  * - character/ - Character-specific pages including public views
  */
 
-// Placeholder - pages will be exported here as they are created
-export {};
+export {Login} from './Login';
+export {Register} from './Register';
+export {RegisterDemo} from './RegisterDemo';

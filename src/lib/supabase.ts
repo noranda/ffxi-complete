@@ -55,10 +55,10 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     // Enable automatic session refresh
     autoRefreshToken: true,
-    // Persist session in localStorage
-    persistSession: true,
     // Detect session from URL (for OAuth flows)
     detectSessionInUrl: true,
+    // Persist session in localStorage
+    persistSession: true,
   },
 });
 

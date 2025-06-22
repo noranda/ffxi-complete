@@ -8,31 +8,26 @@ import {cn} from '@/lib/utils';
  * Provides consistent styling for different button states and sizes
  */
 const buttonVariants = tv({
-  base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-  variants: {
-    variant: {
-      default:
-        'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
-      destructive:
-        'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-      outline:
-        'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-      secondary:
-        'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
-      ghost:
-        'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-      link: 'text-primary underline-offset-4 hover:underline',
-    },
-    size: {
-      default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-      sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
-      lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-      icon: 'size-9',
-    },
-  },
+  base: `focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 aria-invalid:border-destructive dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4`,
   defaultVariants: {
-    variant: 'default',
     size: 'default',
+    variant: 'default',
+  },
+  variants: {
+    size: {
+      default: `h-9 px-4 py-2 has-[>svg]:px-3`,
+      icon: 'size-9',
+      lg: `h-10 rounded-md px-6 has-[>svg]:px-4`,
+      sm: `h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5`,
+    },
+    variant: {
+      default: `bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs`,
+      destructive: `bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 text-white shadow-xs`,
+      ghost: `hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50`,
+      link: `text-primary underline-offset-4 hover:underline`,
+      outline: `bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs`,
+      secondary: `bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-xs`,
+    },
   },
 });
 
@@ -49,7 +44,11 @@ type ButtonProps = React.ComponentProps<'button'> &
 /**
  * Versatile button component with multiple variants and sizes
  * Supports composition pattern through asChild prop using Radix Slot
- *
+ * @param root0
+ * @param root0.asChild
+ * @param root0.className
+ * @param root0.size
+ * @param root0.variant
  * @example
  * ```tsx
  * <Button size="lg" variant="primary">
@@ -73,7 +72,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <Comp
-      className={cn(buttonVariants({variant, size, className}))}
+      className={cn(buttonVariants({className, size, variant}))}
       data-slot="button"
       {...props}
     />

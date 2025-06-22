@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom/vitest';
-
 import {cleanup} from '@testing-library/react';
 import {afterEach, beforeAll, vi} from 'vitest';
 
@@ -12,26 +11,26 @@ afterEach(() => {
 beforeAll(() => {
   // Mock window.matchMedia for Drawer component (vaul library)
   Object.defineProperty(window, 'matchMedia', {
-    writable: true,
     value: vi.fn().mockImplementation(
       (query: string): MediaQueryList => ({
+        addEventListener: vi.fn(),
+        addListener: vi.fn(), // deprecated
+        dispatchEvent: vi.fn(),
         matches: false,
         media: query,
         onchange: null,
-        addListener: vi.fn(), // deprecated
-        removeListener: vi.fn(), // deprecated
-        addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
+        removeListener: vi.fn(), // deprecated
       })
     ),
+    writable: true,
   });
 
   // Mock ResizeObserver for Drawer component
   global.ResizeObserver = vi.fn().mockImplementation(() => ({
+    disconnect: vi.fn(),
     observe: vi.fn(),
     unobserve: vi.fn(),
-    disconnect: vi.fn(),
   }));
 
   // Mock DOMRect for getBoundingClientRect
@@ -40,16 +39,16 @@ beforeAll(() => {
     height: 0,
     left: 0,
     right: 0,
+    toJSON: vi.fn(),
     top: 0,
     width: 0,
     x: 0,
     y: 0,
-    toJSON: vi.fn(),
   };
 
   Object.defineProperty(global, 'DOMRect', {
-    writable: true,
     value: vi.fn().mockImplementation(() => mockDOMRectInstance),
+    writable: true,
   });
 
   // Add the fromRect static method
@@ -63,11 +62,11 @@ beforeAll(() => {
     height: 0,
     left: 0,
     right: 0,
+    toJSON: vi.fn(),
     top: 0,
     width: 0,
     x: 0,
     y: 0,
-    toJSON: vi.fn(),
   }));
 
   // Mock setPointerCapture and releasePointerCapture for vaul library
@@ -77,9 +76,9 @@ beforeAll(() => {
   // Mock CSS transform properties for vaul library
   Object.defineProperty(Element.prototype, 'style', {
     value: {
+      mozTransform: '',
       transform: '',
       webkitTransform: '',
-      mozTransform: '',
     },
     writable: true,
   });

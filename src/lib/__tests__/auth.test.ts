@@ -6,6 +6,7 @@ import type {
   Session,
   UserResponse,
 } from '@supabase/supabase-js';
+
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 import type {User} from '@/types';
@@ -44,26 +45,26 @@ const mockAuth = vi.mocked(supabase.auth);
 
 // Type-safe mock creators
 const createMockUser = (overrides: Partial<User> = {}): User => ({
-  id: '123',
-  email: 'test@example.com',
-  aud: 'authenticated',
-  role: 'authenticated',
   app_metadata: {},
-  user_metadata: {},
-  identities: [],
-  created_at: '2023-01-01T00:00:00Z',
-  updated_at: '2023-01-01T00:00:00Z',
+  aud: 'authenticated',
   confirmed_at: '2023-01-01T00:00:00Z',
+  created_at: '2023-01-01T00:00:00Z',
+  email: 'test@example.com',
+  id: '123',
+  identities: [],
   last_sign_in_at: '2023-01-01T00:00:00Z',
+  role: 'authenticated',
+  updated_at: '2023-01-01T00:00:00Z',
+  user_metadata: {},
   ...overrides,
 });
 
 // Type-safe mock session creator
 const createMockSession = (user: User): Session => ({
   access_token: 'mock-access-token',
-  refresh_token: 'mock-refresh-token',
-  expires_in: 3600,
   expires_at: Date.now() + 3600000,
+  expires_in: 3600,
+  refresh_token: 'mock-refresh-token',
   token_type: 'bearer',
   user,
 });
@@ -86,7 +87,7 @@ describe('Authentication Utilities', () => {
     it('should return user data on successful signup', async () => {
       const mockUser = createMockUser();
       const mockResponse: AuthResponse = {
-        data: {user: mockUser, session: null},
+        data: {session: null, user: mockUser},
         error: null,
       };
       mockAuth.signUp.mockResolvedValue(mockResponse);
@@ -104,7 +105,7 @@ describe('Authentication Utilities', () => {
 
     it('should return error message on signup failure', async () => {
       const mockResponse: AuthResponse = {
-        data: {user: null, session: null},
+        data: {session: null, user: null},
         error: createMockAuthError('User already registered') as AuthError,
       };
       mockAuth.signUp.mockResolvedValue(mockResponse);
@@ -134,7 +135,7 @@ describe('Authentication Utilities', () => {
       const mockUser = createMockUser();
       const mockSession = createMockSession(mockUser);
       const mockResponse: AuthTokenResponsePassword = {
-        data: {user: mockUser, session: mockSession},
+        data: {session: mockSession, user: mockUser},
         error: null,
       };
       mockAuth.signInWithPassword.mockResolvedValue(mockResponse);
@@ -152,7 +153,7 @@ describe('Authentication Utilities', () => {
 
     it('should return error message on login failure', async () => {
       const mockResponse: AuthTokenResponsePassword = {
-        data: {user: null, session: null},
+        data: {session: null, user: null},
         error: createMockAuthError('Invalid login credentials') as AuthError,
       };
       mockAuth.signInWithPassword.mockResolvedValue(mockResponse);
@@ -180,10 +181,10 @@ describe('Authentication Utilities', () => {
       expect(result.success).toBe(true);
       expect(result.error).toBeNull();
       expect(mockAuth.signInWithOAuth).toHaveBeenCalledWith({
-        provider: 'discord',
         options: {
           redirectTo: 'http://localhost:3000/auth/callback',
         },
+        provider: 'discord',
       });
     });
 

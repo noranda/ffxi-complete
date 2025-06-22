@@ -1,0 +1,225 @@
+---
+description: "Component export patterns, styling with tailwind-variants, and component organization"
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+---
+
+# Component Patterns
+
+## Automated Patterns
+
+The following are **fully automated** by ESLint and Prettier:
+- ✅ Export formatting and line length decisions
+- ✅ Alphabetical sorting of exports within statements
+- ✅ Combining value and type exports in single statements
+- ✅ Class sorting, duplicate removal, and whitespace cleanup
+
+## Export Patterns
+
+### Compound Components (Shared State/Logic)
+
+**For components with shared state** (Tabs, Drawer using Radix/Vaul):
+```typescript
+// ✅ Correct - Export only root with sub-components as properties
+const Tabs = Object.assign(TabsRoot, {
+  Content: TabsContent,
+  List: TabsList,
+  Trigger: TabsTrigger,
+});
+
+export {Tabs, type TabsTypes};
+
+// Usage provides clean dot notation access:
+<Tabs defaultValue="tab1">
+  <Tabs.List>
+    <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="tab1">Content 1</Tabs.Content>
+</Tabs>
+```
+
+### Composable Components (Styling/Layout Only)
+
+**For components with only styling coordination** (Card):
+```typescript
+// ✅ Correct - Export all components individually
+export {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
+
+// Usage allows flexible composition:
+<Card>
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+  </CardHeader>
+  <CardContent>Content</CardContent>
+</Card>
+```
+
+### Single Components
+
+**For standalone components** (Button, Input):
+```typescript
+// ✅ Correct - Normal export with types
+export {Button, type ButtonProps};
+```
+
+## Export Pattern Selection
+
+**Choose based on component relationship:**
+
+- **Compound**: Components share state/logic (Radix/Vaul libraries, context providers)
+- **Composable**: Components only coordinate styling/layout (design system primitives)
+- **Single**: Standalone functionality (buttons, inputs, utilities)
+
+## Component Index Files
+
+**Export components and types from index:**
+```typescript
+// src/components/auth/index.ts
+export {LoginForm} from './LoginForm';
+export {RegisterForm} from './RegisterForm';
+
+// Export component types for external use
+export type {
+  AuthCallbacks,
+  BaseAuthFormProps,
+  LoginFormProps,
+} from './types';
+```
+
+## Styling with tailwind-variants
+
+### Component Styling Setup
+
+**Use tailwind-variants for component styling:**
+
+```typescript
+import {tv, type VariantProps} from 'tailwind-variants';
+
+const buttonVariants = tv({
+  base: "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:opacity-50",
+  variants: {
+    variant: {
+      default: "bg-primary text-primary-foreground hover:bg-primary/90",
+      destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+      outline: "border border-input bg-background hover:bg-accent",
+      secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+      ghost: "hover:bg-accent hover:text-accent-foreground",
+    },
+    size: {
+      default: "h-10 px-4 py-2",
+      sm: "h-9 rounded-md px-3",
+      lg: "h-11 rounded-md px-8",
+      icon: "h-10 w-10",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+});
+
+// ❌ Don't use class-variance-authority
+import {cva} from 'class-variance-authority'; // Avoid this
+```
+
+### Design System Integration
+
+**Use consistent naming across components:**
+```typescript
+// ✅ Consistent variant names across all components
+const variants = {
+  variant: {
+    default: "...",
+    primary: "...",
+    secondary: "...",
+    destructive: "...",
+  },
+  size: {
+    sm: "...",
+    md: "...",
+    lg: "...",
+  },
+};
+```
+
+**Use design system color tokens:**
+```typescript
+// ✅ Correct - Use design tokens
+const alertVariants = tv({
+  variants: {
+    variant: {
+      default: "bg-background text-foreground border-border",
+      destructive: "bg-destructive/10 text-destructive border-destructive/20",
+      warning: "bg-warning/10 text-warning border-warning/20",
+    },
+  },
+});
+
+// ❌ Incorrect - Hardcoded colors
+const alertVariants = tv({
+  variants: {
+    variant: {
+      destructive: "bg-red-50 text-red-900 border-red-200", // Avoid this
+    },
+  },
+});
+```
+
+### Component Implementation
+
+**Extract variant props for TypeScript integration:**
+```typescript
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({className, variant, size, asChild = false, ...props}, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        className={cn(buttonVariants({variant, size, className}))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = "Button";
+```
+
+## Component Organization
+
+### Folder Structure for Related Components
+
+```
+src/components/auth/
+├── index.ts              # Barrel exports
+├── types.ts              # Shared types (when needed)
+├── LoginForm.tsx         # Individual components
+├── RegisterForm.tsx
+├── OAuthButtons.tsx
+└── __tests__/            # Co-located tests
+    ├── LoginForm.test.tsx
+    └── RegisterForm.test.tsx
+```
+
+### File Naming Conventions
+
+- **Components**: PascalCase (`LoginForm.tsx`)
+- **Types**: camelCase with `.ts` extension (`types.ts`)
+- **Tests**: Same as component with `.test.tsx` (`LoginForm.test.tsx`)
+- **Index**: Always `index.ts` for barrel exports
+
+## Best Practices
+
+- **Use tailwind-variants** instead of class-variance-authority
+- **Organize variants logically** (visual, size, state)
+- **Set default variants** for consistent behavior
+- **Follow design system** color tokens and naming
+- **Use compound variants** for complex style interactions
+- **Choose export patterns** based on component relationships
+- **Create index files** for clean imports
+- **Keep styling consistent** across component families

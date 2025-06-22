@@ -29,9 +29,9 @@ git status --porcelain
 ```
 
 ### Step 2: Fragment Applicability
-**Consider all 28 fragments for each file:**
+**Consider all fragments for each file:**
 - Foundation: learning-focused-development, development-environment, architecture-principles, project-structure
-- Code Standards: typescript-standards, react-imports, react-components, component-exports, shared-component-types, styling-patterns, code-documentation, error-handling, code-formatting-linting
+- Code Standards: typescript-patterns, component-patterns, code-documentation, code-quality
 - Backend: data-management, supabase-patterns, security-considerations
 - Testing: tdd-principles, testing-strategy, test-organization, quality-assurance
 - Design: ui-ux-guidelines
@@ -65,15 +65,11 @@ git status --porcelain
 
 ### Fragment-Specific Manual Checks
 
-**JSX Formatting** (code-formatting-linting):
-- Multi-line JSX elements must have newlines before/after
-- Single-line elements can be grouped
-- Check conditional JSX expressions for proper newlines
-
-**Prop Sorting** (react-components):
-- Component parameters alphabetically sorted
-- JSX attributes alphabetically sorted
-- Type properties alphabetically sorted
+**Component Patterns** (automated by ESLint):
+- React.FC patterns enforced by custom ESLint rules
+- Component parameter sorting automated by custom ESLint rules
+- JSX prop sorting automated by eslint-plugin-react
+- Arrow return styles automated by built-in arrow-body-style rule
 
 **JSDoc Examples** (code-documentation):
 - JSDoc example code must follow ALL code standards

@@ -1,0 +1,184 @@
+---
+description: "TypeScript patterns, type definitions, and shared component type organization"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.mts"
+  - "**/*.cts"
+---
+
+# TypeScript Patterns
+
+## Automated Standards
+
+The following TypeScript standards are **fully automated** by ESLint:
+- ✅ Type vs Interface: `@typescript-eslint/consistent-type-definitions` enforces `type` over `interface`
+- ✅ Property Sorting: `@typescript-eslint/member-ordering` enforces alphabetical property sorting
+- ✅ Array Types: `@typescript-eslint/array-type` enforces consistent array syntax
+- ✅ Property sorting within types, union/intersection type ordering, and export organization
+
+## Type Definitions
+
+### Fixed Sets vs Flexible Options
+
+**Use enums for fixed sets:**
+```typescript
+enum JobType {
+  BLM = 'BLM',
+  MNK = 'MNK',
+  WAR = 'WAR',
+  WHM = 'WHM',
+}
+```
+
+**Union types for flexibility:**
+```typescript
+type ProgressStatus = 'completed' | 'in_progress' | 'not_started';
+type Theme = 'dark' | 'light' | 'system';
+```
+
+### Utility Types
+
+**Build reusable type utilities:**
+```typescript
+type ApiResponse<T> = {
+  data: T;
+  error: string | null;
+  success: boolean;
+};
+
+// Use built-in utility types
+type PartialCharacter = Partial<Character>;
+type RequiredId = Pick<Character, 'id'>;
+type CharacterUpdate = Omit<Character, 'createdAt' | 'id'>;
+```
+
+## Shared Component Types
+
+### When to Create Shared Types Files
+
+**Create `types.ts` in component folders when:**
+- Multiple components share similar type patterns
+- Common data structures are used across components
+- Standardized interfaces would improve consistency
+- Type reusability would reduce code duplication
+
+### Component Folders That Should Have Shared Types
+```
+src/components/
+├── auth/
+│   ├── types.ts           ✅ Auth form types, callbacks, validation
+│   ├── LoginForm.tsx
+│   └── RegisterForm.tsx
+├── character/
+│   ├── types.ts           ✅ Character data types, form props
+│   ├── CharacterForm.tsx
+│   └── CharacterSelector.tsx
+├── collections/
+│   ├── types.ts           ✅ Progress types, collection items
+│   ├── CollectionTab.tsx
+│   └── ProgressIndicator.tsx
+└── ui/
+    ├── button.tsx         ❌ Single-purpose components, no shared types
+    └── input.tsx
+```
+
+## Shared Types Structure
+
+**Organize by category:**
+```typescript
+// src/components/auth/types.ts
+
+// 1. Form Data Types
+export type LoginFormData = {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+};
+
+// 2. Common Error Types
+export type FormErrors = {
+  email?: string;
+  general?: string;
+  password?: string;
+};
+
+// 3. Callback Function Types
+export type AuthCallbacks = {
+  onCancel?: () => void;
+  onSuccess?: () => void;
+  onSwitchToLogin?: () => void;
+};
+
+// 4. Base Props Types
+export type BaseAuthFormProps = {
+  className?: string;
+  disabled?: boolean;
+  loading?: boolean;
+};
+
+// 5. Domain-Specific Types
+export type OAuthProvider = 'discord' | 'google';
+```
+
+## Component Integration
+
+**Using shared types in components:**
+```typescript
+// ✅ Correct - Import and extend shared types
+import type {AuthCallbacks, BaseAuthFormProps, FormErrors} from './types';
+
+type LoginFormProps = BaseAuthFormProps & 
+  Pick<AuthCallbacks, 'onSuccess' | 'onSwitchToRegister'>;
+
+const LoginForm: React.FC<LoginFormProps> = ({className, onSuccess}) => {
+  const [errors, setErrors] = useState<FormErrors>({});
+  // Component implementation
+};
+```
+
+## Type Exports
+
+**Export shared types from component index:**
+```typescript
+// src/components/auth/index.ts
+export {LoginForm} from './LoginForm';
+export {RegisterForm} from './RegisterForm';
+
+// Export shared types for external use
+export type {
+  AuthCallbacks,
+  BaseAuthFormProps,
+  FormErrors,
+  LoginFormData,
+  OAuthProvider,
+} from './types';
+```
+
+## Type Documentation
+
+**JSDoc for shared types:**
+```typescript
+/**
+ * Common form validation errors structure
+ * Used across login, register, password reset forms
+ */
+export type FormErrors = {
+  /** Email validation error message */
+  email?: string;
+  /** General form error message */
+  general?: string;
+  /** Password validation error message */
+  password?: string;
+};
+```
+
+## Best Practices
+
+- **Use strict TypeScript configuration** - Enable all strict mode options
+- **Define types outside component definitions** - Keep types reusable and testable
+- **Use utility types for transformations** - Leverage Partial, Pick, Omit, etc.
+- **Create shared types** for related components
+- **Organize by category** (data, errors, callbacks, props, domain)
+- **Use composition** - Build complex types from simple ones
+- **Keep types focused** - One responsibility per type

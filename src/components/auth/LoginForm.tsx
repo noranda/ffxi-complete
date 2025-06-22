@@ -1,5 +1,5 @@
 /**
- * Registration form with email validation, password strength checking, and OAuth support
+ * Login form with email/password authentication and OAuth support
  */
 
 import {Field, type FieldProps, Form, Formik} from 'formik';
@@ -16,60 +16,40 @@ import {
 } from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
 import {useAuth} from '@/contexts/AuthContext';
-import {isValidEmail, validatePassword} from '@/lib/auth';
+import {isValidEmail} from '@/lib/auth';
 
-import type {AuthCallbacks, BaseAuthFormProps, RegisterFormData} from './types';
+import type {AuthCallbacks, BaseAuthFormProps, LoginFormData} from './types';
 
 import {OAuthButtons} from './OAuthButtons';
-import {PasswordFieldWithStrength} from './PasswordFieldWithStrength';
-import {SuccessMessage} from './SuccessMessage';
 
 /**
- * Registration form props
+ * Login form props
  * Extends shared auth component patterns for consistency
  */
-type RegisterFormProps = BaseAuthFormProps &
-  Pick<AuthCallbacks, 'onSuccess' | 'onSwitchToLogin'>;
+type LoginFormProps = BaseAuthFormProps &
+  Pick<AuthCallbacks, 'onForgotPassword' | 'onSuccess' | 'onSwitchToRegister'>;
 
 /**
- * Yup validation schema for registration form
- * Validates email format, password strength, and password confirmation matching
+ * Yup validation schema for login form
+ * Validates email format and password presence
  */
-const registrationSchema = Yup.object({
-  confirmPassword: Yup.string()
-    .required('Please confirm your password')
-    .oneOf([Yup.ref('password')], 'Passwords do not match'),
+const loginSchema = Yup.object({
   email: Yup.string()
     .required('Email is required')
     .test('is-valid-email', 'Please enter a valid email address', value =>
       value ? isValidEmail(value) : false
     ),
-  password: Yup.string()
-    .required('Password is required')
-    .test('password-strength', function (value) {
-      if (!value) return this.createError({message: 'Password is required'});
-
-      const validation = validatePassword(value);
-      if (!validation.isValid) {
-        return this.createError({
-          message: `Password must have: ${validation.requirements.join(', ')}`,
-        });
-      }
-      return true;
-    }),
+  password: Yup.string().required('Password is required'),
 });
 
 /**
- * Registration form component with comprehensive validation and error handling
- * @param root0
- * @param root0.className
- * @param root0.onSuccess
- * @param root0.onSwitchToLogin
+ * Login form component with comprehensive error handling and OAuth support
  */
-export const RegisterForm: React.FC<RegisterFormProps> = ({
+export const LoginForm: React.FC<LoginFormProps> = ({
   className,
+  onForgotPassword,
   onSuccess,
-  onSwitchToLogin,
+  onSwitchToRegister,
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -78,20 +58,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     clearError,
     error: authError,
     loading: authLoading,
+    signIn,
     signInWithProvider,
-    signUp,
   } = useAuth();
 
   /**
-   * Handles OAuth provider sign up for Discord and Google
-   * Clears existing errors and attempts sign up with the specified provider
-   * @param provider - The OAuth provider to use for sign up
-   * @example
-   * ```typescript
-   * await handleOAuthSignUp('discord');
-   * ```
+   * Handles OAuth provider sign in for Discord and Google
+   * Clears existing errors and attempts sign in with the specified provider
    */
-  const handleOAuthSignUp = async (provider: 'discord' | 'google') => {
+  const handleOAuthSignIn = async (provider: 'discord' | 'google') => {
     try {
       clearError();
       const result = await signInWithProvider(provider);
@@ -100,7 +75,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         onSuccess?.();
       }
     } catch (err) {
-      console.error(`${provider} sign up error:`, err);
+      console.error(`${provider} sign in error:`, err);
     }
   };
 
@@ -108,8 +83,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
    * Handles Discord OAuth button click with error logging
    */
   const handleDiscordClick = () => {
-    handleOAuthSignUp('discord').catch(err => {
-      console.error('Discord signup error:', err);
+    handleOAuthSignIn('discord').catch(err => {
+      console.error('Discord signin error:', err);
     });
   };
 
@@ -117,44 +92,37 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
    * Handles Google OAuth button click with error logging
    */
   const handleGoogleClick = () => {
-    handleOAuthSignUp('google').catch(err => {
-      console.error('Google signup error:', err);
+    handleOAuthSignIn('google').catch(err => {
+      console.error('Google signin error:', err);
     });
   };
 
   /**
-   * Switches to login form when user clicks sign in link
+   * Triggers forgot password callback when user clicks forgot password link
    */
-  const handleSwitchToLogin = () => {
-    if (onSwitchToLogin) {
-      onSwitchToLogin();
-    }
+  const handleForgotPasswordClick = () => {
+    onForgotPassword?.();
+  };
+
+  /**
+   * Switches to registration form when user clicks create account link
+   */
+  const handleSwitchToRegister = () => {
+    onSwitchToRegister?.();
   };
 
   // Initial form values
-  const initialValues: RegisterFormData = {
-    confirmPassword: '',
+  const initialValues: LoginFormData = {
     email: '',
     password: '',
   };
 
   /**
-   * Handles form submission for user registration
-   * Validates form data, calls sign up API, and manages form state during submission
-   * @param values - The form values containing email, password, and confirmPassword
-   * @param formikBag - Formik helper functions for error handling and state management
-   * @param formikBag.setFieldError
-   * @param formikBag.setSubmitting
-   * @example
-   * ```typescript
-   * await handleSubmit(
-   *   {email: 'user@example.com', password: 'password123', confirmPassword: 'password123'},
-   *   {setFieldError, setSubmitting}
-   * );
-   * ```
+   * Handles form submission for user login
+   * Validates form data, calls sign in API, and manages form state during submission
    */
   const handleSubmit = async (
-    values: RegisterFormData,
+    values: LoginFormData,
     {
       setFieldError,
       setSubmitting,
@@ -167,18 +135,18 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     clearError();
 
     try {
-      const result = await signUp(values.email, values.password);
+      const result = await signIn(values.email, values.password);
 
       if (result.success) {
         setSubmitSuccess(true);
         onSuccess?.();
       } else {
-        setFieldError('confirmPassword', result.error ?? 'Registration failed');
+        setFieldError('password', result.error ?? 'Login failed');
       }
     } catch (err) {
-      console.error('Registration error:', err);
+      console.error('Login error:', err);
       setFieldError(
-        'confirmPassword',
+        'password',
         'An unexpected error occurred. Please try again.'
       );
     } finally {
@@ -189,26 +157,28 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   return (
     <Card className={className}>
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+        <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
 
         <CardDescription>
-          Enter your information to create a new FFXI Complete account
+          Sign in to your FFXI Complete account to continue
         </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <SuccessMessage
-          message="Please check your email to confirm your account before signing in."
-          show={submitSuccess}
-          title="Registration successful!"
-        />
+        {submitSuccess && (
+          <div className="rounded-md border border-green-200 bg-green-50 p-3">
+            <div className="text-sm text-green-800">
+              Successfully signed in! Redirecting...
+            </div>
+          </div>
+        )}
 
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          validationSchema={registrationSchema}
+          validationSchema={loginSchema}
         >
-          {({errors, isSubmitting, touched, values}) => (
+          {({errors, isSubmitting, touched}) => (
             <Form className="space-y-4">
               {/* Email Field */}
               <div className="space-y-2">
@@ -249,54 +219,51 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
                 )}
               </div>
 
-              <PasswordFieldWithStrength
-                disabled={isSubmitting || authLoading}
-                error={errors.password}
-                name="password"
-                touched={touched.password}
-                value={values.password || ''}
-              />
-
-              {/* Confirm Password Field */}
+              {/* Password Field */}
               <div className="space-y-2">
-                <label
-                  className="text-sm font-medium"
-                  htmlFor="confirmPassword"
-                >
-                  Confirm Password
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium" htmlFor="password">
+                    Password
+                  </label>
+                  {onForgotPassword && (
+                    <button
+                      className={`text-primary text-sm underline-offset-4 hover:underline`}
+                      disabled={authLoading}
+                      onClick={handleForgotPasswordClick}
+                      type="button"
+                    >
+                      Forgot password?
+                    </button>
+                  )}
+                </div>
 
-                <Field name="confirmPassword">
+                <Field name="password">
                   {({field}: FieldProps) => (
                     <Input
                       {...field}
                       aria-describedby={
-                        touched.confirmPassword === true &&
-                        errors.confirmPassword !== undefined
-                          ? 'confirm-password-error'
+                        touched.password === true &&
+                        errors.password !== undefined
+                          ? 'password-error'
                           : undefined
                       }
                       aria-invalid={
-                        touched.confirmPassword === true &&
-                        errors.confirmPassword !== undefined
+                        touched.password === true &&
+                        errors.password !== undefined
                       }
                       disabled={isSubmitting || authLoading}
-                      id="confirmPassword"
-                      placeholder="Confirm your password"
+                      id="password"
+                      placeholder="Enter your password"
                       type="password"
                     />
                   )}
                 </Field>
 
-                {touched.confirmPassword === true &&
-                  errors.confirmPassword !== undefined && (
-                    <div
-                      className="text-destructive text-sm"
-                      id="confirm-password-error"
-                    >
-                      {errors.confirmPassword}
-                    </div>
-                  )}
+                {touched.password === true && errors.password !== undefined && (
+                  <div className="text-destructive text-sm" id="password-error">
+                    {errors.password}
+                  </div>
+                )}
               </div>
 
               {/* General Errors */}
@@ -314,9 +281,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
                 disabled={isSubmitting || authLoading || submitSuccess}
                 type="submit"
               >
-                {isSubmitting || authLoading
-                  ? 'Creating Account...'
-                  : 'Create Account'}
+                {isSubmitting || authLoading ? 'Signing In...' : 'Sign In'}
               </Button>
             </Form>
           )}
@@ -328,20 +293,20 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           onGoogleClick={handleGoogleClick}
         />
 
-        {/* Switch to Login */}
-        {onSwitchToLogin && (
+        {/* Switch to Register */}
+        {onSwitchToRegister && (
           <div className="text-center text-sm">
             <span className="text-muted-foreground">
-              Already have an account?{' '}
+              Don't have an account?{' '}
             </span>
 
             <button
               className={`text-primary underline-offset-4 hover:underline`}
               disabled={authLoading}
-              onClick={handleSwitchToLogin}
+              onClick={handleSwitchToRegister}
               type="button"
             >
-              Sign in here
+              Create one here
             </button>
           </div>
         )}
