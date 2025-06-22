@@ -53,9 +53,36 @@ export default [
           ],
         },
       ],
+      // Prefer string literals over unnecessary expressions in JSX attributes
+      'react/jsx-curly-brace-presence': [
+        'error',
+        {
+          children: 'never',
+          propElementValues: 'always',
+          props: 'never',
+        },
+      ],
       // JSX formatting rules to catch spacing issues automatically
-      'react/jsx-newline': ['error', {allowMultilines: true, prevent: false}],
-      'react/jsx-one-expression-per-line': ['error', {allow: 'single-child'}],
+      'react/jsx-curly-newline': [
+        'error',
+        {
+          multiline: 'consistent',
+          singleline: 'consistent',
+        },
+      ],
+      'react/jsx-newline': [
+        'error',
+        {
+          allowMultilines: true,
+          prevent: false,
+        },
+      ],
+      'react/jsx-one-expression-per-line': [
+        'error',
+        {
+          allow: 'single-child',
+        },
+      ],
       // Alphabetical prop sorting (disabled in favor of perfectionist/sort-jsx-props)
       'react/jsx-sort-props': 'off',
       // React import automation
@@ -189,13 +216,25 @@ export default [
     },
   },
 
-  // Test files - disable strict rules
+  // Test files - disable strict rules, enforce explicit imports for test functions
   {
     files: [
       '**/__tests__/**/*.{ts,tsx}',
       '**/*.{test,spec}.{ts,tsx}',
       'src/test/**/*.{ts,tsx}',
     ],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        // Add Node.js globals for test setup files
+        global: 'readonly',
+        process: 'readonly',
+        // React is needed for JSX transform and types
+        React: 'readonly',
+        // Explicitly DO NOT include vitest globals to force explicit imports
+        // describe, it, expect, beforeEach, etc. must be imported
+      },
+    },
     rules: {
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -208,6 +247,8 @@ export default [
       '@typescript-eslint/strict-boolean-expressions': 'off',
       '@typescript-eslint/unbound-method': 'off',
       'import/first': 'off',
+      // Ensure test functions must be explicitly imported
+      'no-undef': 'error',
     },
   },
 
@@ -271,6 +312,10 @@ export default [
     plugins: {
       'ffxi-custom': {
         rules: {
+          'jsx-expression-spacing':
+            customRulesConfig.plugins['ffxi-custom'].rules[
+              'jsx-expression-spacing'
+            ],
           'jsx-multiline-spacing':
             customRulesConfig.plugins['ffxi-custom'].rules[
               'jsx-multiline-spacing'
@@ -283,6 +328,7 @@ export default [
       },
     },
     rules: {
+      'ffxi-custom/jsx-expression-spacing': 'error',
       'ffxi-custom/jsx-multiline-spacing': 'error',
       'ffxi-custom/prefer-div-over-p': 'error',
       'ffxi-custom/react-fc-pattern': 'error',

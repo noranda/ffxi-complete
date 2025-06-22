@@ -18,6 +18,11 @@ globs:
 🟢/🟠/🔴 **Tests**: [Status description]  
 🟢/🟠/🔴 **Types**: [Status description]  
 🟢/🟠/🔴 **Format**: [Status description]  
+🟢/🟠/🔴 **Markdown**: [Status description]  
+
+### Issues Found (if any):
+- [Specific warning/error details]
+- [File paths and line numbers when applicable]
 ```
 
 ## Color Coding
@@ -33,30 +38,58 @@ yarn lint          # ESLint + strict TypeScript
 yarn test --run    # Run tests without watch mode
 yarn type-check    # TypeScript compiler check
 yarn prettier --check .  # Format check
+yarn lint:md       # Markdown linting for .md and .mdc files
 ```
 
 ## Zero Tolerance Policy
 
 **NEVER proceed with 🟠 or 🔴 status** - fix immediately before continuing:
+
 - 🔴 Red: MUST fix before any other work
 - 🟠 Orange: MUST fix unless it's a documented sub-task
 
 ## Status Examples
 
 **All Green:**
-```
+
+```text
 🟢 **Lint**: No issues found  
 🟢 **Tests**: All 224 tests passing  
 🟢 **Types**: No type errors found  
 🟢 **Format**: All files properly formatted  
+🟢 **Markdown**: All files follow style guidelines  
 ```
 
 **Issues Found:**
-```
+
+```text
 🔴 **Lint**: 5 errors found - must be fixed  
 🔴 **Tests**: 3 tests failing  
 🟢 **Types**: No type errors found  
 🟢 **Format**: All files properly formatted  
+🟠 **Markdown**: 2 style warnings found  
+
+### Issues Found:
+- ESLint: Missing semicolon at src/components/Button.tsx:45
+- ESLint: Unused variable 'data' at src/utils/helper.ts:12
+- Tests: Login form validation test failing in src/components/__tests__/LoginForm.test.tsx
+- Tests: API connection timeout in src/lib/__tests__/auth.test.ts:89
+- Markdown: Line too long at .cursor/rules/example.mdc:45
+- Markdown: Missing blank line after heading at README.md:67
+```
+
+**Mixed Status (some warnings):**
+
+```text
+🟢 **Lint**: No issues found  
+🟠 **Tests**: 234/236 tests passing (2 warnings)  
+🟢 **Types**: No type errors found  
+🟢 **Format**: All files properly formatted  
+🟢 **Markdown**: All files follow style guidelines  
+
+### Issues Found:
+- Tests: React act() warning in src/contexts/__tests__/AuthContext.test.tsx:109
+- Tests: Console error message in src/components/__tests__/LoginForm.test.tsx:45
 ```
 
 ## When Required
@@ -65,5 +98,14 @@ yarn prettier --check .  # Format check
 - At end of EVERY code-related response
 - When completing tasks or features
 - When user requests verification
+
+## Warning/Error Reporting
+
+**Always include detailed issue information when status is 🟠 or 🔴:**
+
+- Show specific error messages and file locations
+- Include line numbers when available
+- Group by tool (ESLint, Tests, TypeScript, Prettier)
+- Omit "Issues Found" section only when ALL status checks are 🟢
 
 **Goal: Every task completion should show ALL GREEN status.**

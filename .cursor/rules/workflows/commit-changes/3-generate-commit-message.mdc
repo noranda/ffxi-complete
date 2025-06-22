@@ -7,7 +7,8 @@ globs:
 
 ## Goal
 
-Create a well-structured commit message that follows the project's git-workflow conventions based on the code analysis from step 2. Present the message to the user for approval before proceeding to commit.
+Create a well-structured commit message that follows the project's git-workflow conventions based on the
+code analysis from step 2. Present the message to the user for approval before proceeding to commit.
 
 ## Required Context/Inputs
 
@@ -19,7 +20,7 @@ Create a well-structured commit message that follows the project's git-workflow 
 
 1. **Apply Conventional Commits Format**: Use `<type>[optional scope]: <description>` pattern
 2. **Determine Commit Type**: Based on step 2 analysis (feat, fix, refactor, docs, test, chore, style)
-3. **Craft Subject Line**: 
+3. **Craft Subject Line**:
    - 50 characters or less
    - Imperative mood ("Add feature" not "Added feature")
    - No ending period
@@ -36,18 +37,21 @@ Create a well-structured commit message that follows the project's git-workflow 
 ## Commit Message Guidelines
 
 ### Subject Line Requirements
+
 - **Imperative mood**: "Add", "Fix", "Update", "Remove"
 - **Lowercase after colon**: "feat: add user authentication"
 - **No period**: Don't end with punctuation
 - **Descriptive**: Clear what was accomplished
 
 ### Body Requirements (for complex changes)
+
 - **Explain the what and why**: Not the how
 - **Quantify impact**: File counts, line changes, performance improvements
 - **Group related changes**: Organize by functional area
 - **Use bullet points**: For multiple distinct changes
 
 ### Type Selection Criteria
+
 - **feat**: New features, components, capabilities
 - **fix**: Bug corrections, error handling
 - **refactor**: Code restructuring without behavior changes
@@ -78,31 +82,37 @@ Create a well-structured commit message that follows the project's git-workflow 
 
 Present the commit message in this format:
 
-```
+```text
 ## Proposed Commit Message
 
-```
+```text
+
 [commit message here exactly as it will appear]
+
 ```
 
 ### Reasoning
+
 - **Type**: [chosen type] because [explanation]
 - **Scope**: [scope if used] because [explanation]
 - **Structure**: [single line vs multi-line] because [explanation]
 
 ### Review Checklist
+
 - ✅ Follows conventional commits format
 - ✅ Subject line ≤ 50 characters
 - ✅ Uses imperative mood
 - ✅ Body wrapped at 72 characters (if present)
 - ✅ Accurately describes changes
 
-**Do you approve this commit message? (yes/no/revise)**
-```
+### Approval Request
+
+Do you approve this commit message? (yes/no/revise)
 
 ## Revision Handling
 
 If user requests changes:
+
 - Listen to specific feedback
 - Revise the message accordingly
 - Re-present for approval

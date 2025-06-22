@@ -12,6 +12,7 @@ globs:
 ## Automated Standards
 
 The following TypeScript standards are **fully automated** by ESLint:
+
 - ✅ Type vs Interface: `@typescript-eslint/consistent-type-definitions` enforces `type` over `interface`
 - ✅ Property Sorting: `@typescript-eslint/member-ordering` enforces alphabetical property sorting
 - ✅ Array Types: `@typescript-eslint/array-type` enforces consistent array syntax
@@ -22,6 +23,7 @@ The following TypeScript standards are **fully automated** by ESLint:
 ### Fixed Sets vs Flexible Options
 
 **Use enums for fixed sets:**
+
 ```typescript
 enum JobType {
   BLM = 'BLM',
@@ -32,6 +34,7 @@ enum JobType {
 ```
 
 **Union types for flexibility:**
+
 ```typescript
 type ProgressStatus = 'completed' | 'in_progress' | 'not_started';
 type Theme = 'dark' | 'light' | 'system';
@@ -40,6 +43,7 @@ type Theme = 'dark' | 'light' | 'system';
 ### Utility Types
 
 **Build reusable type utilities:**
+
 ```typescript
 type ApiResponse<T> = {
   data: T;
@@ -58,13 +62,15 @@ type CharacterUpdate = Omit<Character, 'createdAt' | 'id'>;
 ### When to Create Shared Types Files
 
 **Create `types.ts` in component folders when:**
+
 - Multiple components share similar type patterns
 - Common data structures are used across components
 - Standardized interfaces would improve consistency
 - Type reusability would reduce code duplication
 
 ### Component Folders That Should Have Shared Types
-```
+
+```text
 src/components/
 ├── auth/
 │   ├── types.ts           ✅ Auth form types, callbacks, validation
@@ -86,6 +92,7 @@ src/components/
 ## Shared Types Structure
 
 **Organize by category:**
+
 ```typescript
 // src/components/auth/types.ts
 
@@ -124,6 +131,7 @@ export type OAuthProvider = 'discord' | 'google';
 ## Component Integration
 
 **Using shared types in components:**
+
 ```typescript
 // ✅ Correct - Import and extend shared types
 import type {AuthCallbacks, BaseAuthFormProps, FormErrors} from './types';
@@ -140,6 +148,7 @@ const LoginForm: React.FC<LoginFormProps> = ({className, onSuccess}) => {
 ## Type Exports
 
 **Export shared types from component index:**
+
 ```typescript
 // src/components/auth/index.ts
 export {LoginForm} from './LoginForm';
@@ -158,6 +167,7 @@ export type {
 ## Type Documentation
 
 **JSDoc for shared types:**
+
 ```typescript
 /**
  * Common form validation errors structure

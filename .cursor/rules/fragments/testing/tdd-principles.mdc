@@ -10,6 +10,7 @@ globs:
 ## Red-Green-Refactor Cycle
 
 ### 1. Red Phase - Write Failing Test
+
 ```typescript
 // Write the test first - it should fail
 describe('JobProgress', () => {
@@ -21,6 +22,7 @@ describe('JobProgress', () => {
 ```
 
 ### 2. Green Phase - Minimal Implementation
+
 ```typescript
 // Write the LEAST code to make the test pass
 const JobProgress = ({job, level}: {job: string; level: number}) => {
@@ -29,6 +31,7 @@ const JobProgress = ({job, level}: {job: string; level: number}) => {
 ```
 
 ### 3. Refactor Phase - Clean Up
+
 ```typescript
 // Only refactor after test passes - improve without changing behavior
 const JobProgress = ({job, level}: {job: string; level: number}) => {
@@ -44,12 +47,14 @@ const JobProgress = ({job, level}: {job: string; level: number}) => {
 ## TDD Principles
 
 ### Minimal Implementation Rule
+
 - **Write absolute minimum code** to make test pass
 - **No premature optimization** - only add what test requires
 - **Hardcode values initially** if it gets test passing faster
 - **Refactor only after** test is green
 
 ### Progressive Enhancement
+
 ```typescript
 // Start with simplest case
 it('should return 0 for same level', () => {
@@ -129,12 +134,14 @@ const useJobProgress = (jobId: string) => {
 ## TDD Workflow
 
 ### Daily Process
+
 1. **Write failing test** for next feature/requirement
 2. **Write minimal code** to make test pass
 3. **Refactor** if needed (only after test is green)
 4. **Repeat** for next requirement
 
 ### Test Organization
+
 ```typescript
 // Group related tests logically
 describe('JobProgress Component', () => {

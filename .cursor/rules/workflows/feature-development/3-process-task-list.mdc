@@ -8,7 +8,9 @@ globs:
 Guidelines for managing task lists in markdown files to track progress on completing a PRD
 
 ## Task Implementation
-- **One sub-task at a time:** Do **NOT** start the next sub-task until you ask the user for permission and they say "yes" or "y"
+
+- **One sub-task at a time:** Do **NOT** start the next sub-task until you ask the user for permission and
+  they say "yes" or "y"
 - **MANDATORY Completion Protocol for ANY Task:**
   1. **Complete the implementation work**
   2. **Run Status Checks** (following status-check-reporting.mdc format):
@@ -37,7 +39,7 @@ Guidelines for managing task lists in markdown files to track progress on comple
   6. **If all subtasks** underneath a parent task are now `[x]`, also mark the **parent task** as completed
   7. **Pause and wait** for user's go-ahead before starting next task
 
-- **Zero Tolerance Policy:** 
+- **Zero Tolerance Policy:**
   - **🔴 Red status:** MUST fix immediately before proceeding to next step
   - **🟠 Orange status:** MUST fix unless explicitly documented as acceptable sub-task
   - **Code violations:** ANY non-adherence to ANY rule in ANY code-standards fragment must be fixed before task completion
@@ -68,7 +70,8 @@ When working with task lists, the AI must:
 3. **After implementation:** Follow the MANDATORY Completion Protocol:
    - Run all status checks (`yarn lint`, `yarn test --run`, `yarn type-check`, `yarn prettier --check .`)
    - Identify changed files using `git status --porcelain`
-   - **EXHAUSTIVE Code Guidelines Assessment:** Check ALL 4 code-standards fragments against EVERY line in EVERY changed file:
+   - **EXHAUSTIVE Code Guidelines Assessment:** Check ALL 4 code-standards fragments against EVERY line in
+     EVERY changed file:
      - typescript-patterns.mdc: Every type definition, shared component types, utility types
      - component-patterns.mdc: Every export pattern, styling with tailwind-variants
      - code-documentation.mdc: Every exported item JSDoc, inline commenting
@@ -76,7 +79,8 @@ When working with task lists, the AI must:
    - **COMPLETE EVIDENCE REQUIRED:** Document specific line numbers and findings for each fragment
    - Fix ANY violations immediately before proceeding
    - Print comprehensive status report with complete evidence for all 4 fragments
-   - ONLY mark task as completed (`[x]`) after ALL checks pass and ALL 4 fragments verified with complete evidence
+   - ONLY mark task as completed (`[x]`) after ALL checks pass and ALL 4 fragments verified with complete
+     evidence
 4. **Task completion:** Mark parent task `[x]` once ALL subtasks are `[x]`
 5. **File maintenance:** Keep "Relevant Files" section accurate and up to date
 6. **New tasks:** Add newly discovered tasks as they emerge
@@ -94,4 +98,5 @@ When working with task lists, the AI must:
 - **SYSTEMATIC:** Use the fragment-by-fragment assessment template for ALL 4 code standards
 - **EXHAUSTIVE DOCUMENTATION:** Must document findings for every fragment, even if compliant
 
-**ABSOLUTE REQUIREMENT: Every line in every changed file must be checked against every applicable rule in all 4 code-standards fragments. No task can be marked complete without complete verification of all fragments.**
+**ABSOLUTE REQUIREMENT: Every line in every changed file must be checked against every applicable rule in
+all 4 code-standards fragments. No task can be marked complete without complete verification of all fragments.**

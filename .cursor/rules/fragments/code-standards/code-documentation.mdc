@@ -12,6 +12,7 @@ globs:
 ## Automated Patterns
 
 The following are **fully automated** by ESLint:
+
 - ✅ JSDoc comment presence on all exported functions, components, and methods
 - ✅ Comment block formatting and consistency
 - ✅ Example code formatting following project linting standards
@@ -19,11 +20,13 @@ The following are **fully automated** by ESLint:
 ## Function Documentation Requirements
 
 **All functions must have concise descriptions** explaining their purpose:
+
 - What the function does
 - When it should be used
 - Any important behavior or side effects
 
 **Focus on practical value** over restating obvious information:
+
 - ✅ "Validates user input and sanitizes special characters"
 - ❌ "Function that takes input parameter and returns output"
 
@@ -32,6 +35,7 @@ The following are **fully automated** by ESLint:
 **Complex business logic must have inline comments throughout** to aid future understanding:
 
 ### Algorithm Explanations
+
 ```typescript
 const calculateShippingCost = (weight: number, distance: number) => {
   // Base rate calculation using industry standard zones
@@ -48,6 +52,7 @@ const calculateShippingCost = (weight: number, distance: number) => {
 ```
 
 ### Non-obvious Conditional Logic
+
 ```typescript
 const shouldShowAdvancedFeatures = (user: User) => {
   // Premium users or beta testers get advanced features
@@ -58,6 +63,7 @@ const shouldShowAdvancedFeatures = (user: User) => {
 ```
 
 ### Complex State Transformations
+
 ```typescript
 const mergeUserPreferences = (current: Preferences, updates: Partial<Preferences>) => {
   // Deep merge required for nested theme settings
@@ -82,12 +88,14 @@ const mergeUserPreferences = (current: Preferences, updates: Partial<Preferences
 **ESLint comment disables should only be used in special cases:**
 
 ### Acceptable Use Cases
+
 - External library integration requiring non-standard patterns
 - Generated code or third-party imports
 - Temporary workarounds with TODO comments and tracking issues
 - Performance-critical code where rules conflict with optimization
 
 ### Required Format for Disables
+
 ```typescript
 // eslint-disable-next-line jsdoc/require-jsdoc -- Generated function from API schema
 const generatedHandler = createApiHandler();
@@ -99,6 +107,7 @@ function legacyUtilFunction() {
 ```
 
 ### Unacceptable Use Cases
+
 - Avoiding documentation requirements on business logic
 - "Temporary" fixes that become permanent
 - Personal preference over established patterns
@@ -107,6 +116,7 @@ function legacyUtilFunction() {
 ## Section Organization Comments
 
 **Use section comments** to organize complex files:
+
 ```typescript
 // ============================================================
 // State Management
@@ -143,7 +153,9 @@ return (
 ### Keep Comments Synchronized
 
 **Mandatory comment review on code changes:**
-- **Every code modification requires comment review** - When updating any function, method, or complex logic, actively review all related comments for accuracy
+
+- **Every code modification requires comment review** - When updating any function, method, or complex logic,
+  actively review all related comments for accuracy
 - **Update outdated descriptions** - If function behavior, parameters, or return values change, update JSDoc comments immediately
 - **Remove stale inline comments** - Delete comments that no longer apply to the current implementation
 - **Add new comments for added complexity** - If refactoring introduces new complex logic, add appropriate inline comments
@@ -152,6 +164,7 @@ return (
 ### Document Assumptions and Constraints
 
 **Include important context:**
+
 - External API limitations
 - Browser compatibility requirements  
 - Performance considerations
@@ -161,10 +174,10 @@ return (
 ### Comment Review Checklist
 
 **During code reviews, verify:**
+
 - JSDoc descriptions accurately reflect function behavior
 - Inline comments explain non-obvious logic
 - Examples in documentation are current and correct
 - Complex algorithms have sufficient explanation
 - Assumptions and constraints are documented
 - ESLint disables have proper justification
-

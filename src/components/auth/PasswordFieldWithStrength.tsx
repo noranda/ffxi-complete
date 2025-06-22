@@ -129,6 +129,7 @@ export const PasswordFieldWithStrength: React.FC<
                 ))}
               </div>
             </div>
+
             {passwordValidation.requirements.length > 0 && (
               <div className="text-muted-foreground">
                 Still needed: {passwordValidation.requirements.join(', ')}

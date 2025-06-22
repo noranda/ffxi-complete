@@ -7,7 +7,8 @@ globs:
 
 ## Goal
 
-Execute the git commit using the approved commit message from step 3. Add all changes to staging and commit them locally without pushing to remote.
+Execute the git commit using the approved commit message from step 3. Add all changes to staging and
+commit them locally without pushing to remote.
 
 ## Required Context/Inputs
 
@@ -27,6 +28,7 @@ Execute the git commit using the approved commit message from step 3. Add all ch
 ## Pre-Commit Verification
 
 Before executing the commit:
+
 - ✅ User has explicitly approved the commit message
 - ✅ All files intended for commit are properly staged
 - ✅ No unintended files are being committed
@@ -69,7 +71,7 @@ git log --oneline -1
 
 After successful commit, provide this summary:
 
-```
+```text
 ## Commit Workflow Complete ✅
 
 ### Commit Details
@@ -93,6 +95,7 @@ After successful commit, provide this summary:
 ## Error Handling
 
 If commit fails:
+
 - Display the exact git error message
 - Suggest common solutions (merge conflicts, permissions, etc.)
 - Do NOT attempt to auto-fix - let user resolve issues

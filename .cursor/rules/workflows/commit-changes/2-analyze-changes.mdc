@@ -7,7 +7,8 @@ globs:
 
 ## Goal
 
-Examine all code changes since the last commit to understand the scope, impact, and nature of modifications. This analysis will inform the commit message generation in step 3.
+Examine all code changes since the last commit to understand the scope, impact, and nature of modifications.
+This analysis will inform the commit message generation in step 3.
 
 ## Required Context/Inputs
 
@@ -34,6 +35,7 @@ Examine all code changes since the last commit to understand the scope, impact, 
 ## Analysis Categories
 
 ### File Type Classification
+
 - **Source Code**: `src/**/*.{ts,tsx}` - Application logic and components
 - **Tests**: `**/*.test.{ts,tsx}` - Test files and test utilities
 - **Configuration**: Config files (eslint, prettier, vite, etc.)
@@ -42,6 +44,7 @@ Examine all code changes since the last commit to understand the scope, impact, 
 - **Rules/Workflows**: Cursor rules and workflow files
 
 ### Change Type Detection
+
 - **feat**: New functionality, components, or capabilities
 - **fix**: Bug corrections, error handling improvements
 - **refactor**: Code restructuring without behavior changes
@@ -73,7 +76,8 @@ Examine all code changes since the last commit to understand the scope, impact, 
 ## Analysis Format
 
 Present findings in this structure:
-```
+
+```text
 ### Change Summary
 - X files modified, Y files added, Z files deleted
 - +A lines added, -B lines removed

@@ -14,12 +14,15 @@ globs:
 ## Assessment Protocol (Required)
 
 ### Step 1: File Inventory
+
 **Use git status to identify ALL changed files:**
+
 ```bash
 git status --porcelain
 ```
 
 **Document complete inventory:**
+
 ```markdown
 ## CHANGED FILES INVENTORY
 - Files Created: [list with line counts]
@@ -29,15 +32,19 @@ git status --porcelain
 ```
 
 ### Step 2: Fragment Applicability
+
 **Consider all fragments for each file:**
+
 - Foundation: learning-focused-development, development-environment, architecture-principles, project-structure
 - Code Standards: typescript-patterns, component-patterns, code-documentation, code-quality
 - Backend: data-management, supabase-patterns, security-considerations
 - Testing: tdd-principles, testing-strategy, test-organization, quality-assurance
 - Design: ui-ux-guidelines
-- Process: git-workflow, performance-guidelines, documentation, future-considerations, rule-management, status-check-reporting, code-guidelines-assessment
+- Process: git-workflow, performance-guidelines, documentation, future-considerations, rule-management,
+  status-check-reporting, code-guidelines-assessment
 
 ### Step 3: Evidence-Based Assessment Template
+
 **For EACH applicable fragment, use this mandatory template:**
 
 ```markdown
@@ -53,10 +60,12 @@ git status --porcelain
 ## Critical Requirements
 
 ### Zero Tolerance for Sampling
+
 ❌ **PROHIBITED**: "Examined lines 220-260", "Checked representative sections", "Sampled JSX elements"  
 ✅ **REQUIRED**: "Examined entire file line-by-line", "Complete file scan", "Full file review"
 
 ### Manual First, Tools Second
+
 1. **Read exact requirement** from fragment
 2. **Scan ENTIRE file** for that pattern
 3. **Document every instance** with line numbers
@@ -66,25 +75,29 @@ git status --porcelain
 ### Fragment-Specific Manual Checks
 
 **Component Patterns** (automated by ESLint):
+
 - React.FC patterns enforced by custom ESLint rules
 - Component parameter sorting automated by custom ESLint rules
 - JSX prop sorting automated by eslint-plugin-react
 - Arrow return styles automated by built-in arrow-body-style rule
 
 **JSDoc Examples** (code-documentation):
+
 - JSDoc example code must follow ALL code standards
 - Props in examples must be alphabetically sorted
 - Examples must be practical and copy-pasteable
 
 ## Assessment Validity
 
-### INVALID Assessment:
+### INVALID Assessment
+
 ❌ Any applicable fragment lacks complete evidence log  
 ❌ Tool results used without manual verification  
 ❌ Claims made without specific line evidence  
 ❌ Sampling used instead of complete examination
 
-### VALID Assessment:
+### VALID Assessment
+
 ✅ All applicable fragments have complete evidence logs  
 ✅ Manual verification performed before tool validation  
 ✅ All claims supported by specific evidence  

@@ -7,7 +7,8 @@ globs:
 
 ## Goal
 
-Execute all project quality checks and verify that the codebase is in a healthy state before proceeding with commit creation. All checks must pass green before moving to the next step.
+Execute all project quality checks and verify that the codebase is in a healthy state before proceeding
+with commit creation. All checks must pass green before moving to the next step.
 
 ## Required Context/Inputs
 
@@ -19,24 +20,27 @@ Execute all project quality checks and verify that the codebase is in a healthy 
 2. **Run Tests**: Execute `yarn test --run` to run all tests (using --run flag to avoid watch mode)
 3. **Run Type Check**: Execute `yarn type-check` to verify TypeScript compilation
 4. **Run Format Check**: Execute `yarn prettier --check .` to verify code formatting
+5. **Run Markdown Lint**: Execute `yarn lint:md` to check markdown file formatting
 
 ## Quality Gate Requirements
 
-All four checks must pass with exit code 0:
+All five checks must pass with exit code 0:
+
 - ✅ **Lint Status**: No ESLint errors
 - ✅ **Test Status**: All tests passing
 - ✅ **Type Status**: No TypeScript compilation errors  
 - ✅ **Format Status**: All files properly formatted
+- ✅ **Markdown Status**: All markdown files follow style guidelines
 
 ## Expected Outputs
 
-- Status report showing results of all four quality checks
+- Status report showing results of all five quality checks
 - Clear indication if any checks failed (blocking progression)
 - Green light to proceed to step 2 if all checks pass
 
 ## Instructions for AI
 
-1. Run all four status check commands in parallel for efficiency
+1. Run all five status check commands in parallel for efficiency
 2. Report results using the standard status-check-reporting format with emoji indicators
 3. If ANY check fails, stop the workflow and report the issues - do not proceed
 4. Only if ALL checks pass, confirm readiness to proceed to step 2
@@ -45,6 +49,7 @@ All four checks must pass with exit code 0:
 ## Failure Handling
 
 If any status check fails:
+
 - Report the specific failures clearly
 - Suggest fixes if obvious (lint auto-fix, format auto-fix)
 - Do NOT proceed to step 2 until all issues are resolved

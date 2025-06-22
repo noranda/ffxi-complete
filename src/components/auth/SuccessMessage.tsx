@@ -41,9 +41,7 @@ export const SuccessMessage: React.FC<SuccessMessageProps> = ({
   }
 
   return (
-    <div
-      className={`rounded-md border border-green-200 bg-green-50 p-4 text-green-800`}
-    >
+    <div className="rounded-md border border-green-200 bg-green-50 p-4 text-green-800">
       <div className="font-medium">{title}</div>
       <div className="mt-1 text-sm">{message}</div>
     </div>

@@ -10,6 +10,7 @@ globs:
 ## 🛡️ Protected Assets
 
 ### FFXI Character Portraits
+
 **Location**: `src/assets/portraits/` (128 manually sorted portraits)  
 **Protection Level**: CRITICAL - NEVER MODIFY WITHOUT EXPLICIT PERMISSION
 
@@ -18,31 +19,36 @@ globs:
 ### CRITICAL PROTECTION PROTOCOLS
 
 **NEVER** perform these operations on protected assets without explicit user permission:
+
 - Move, rename, relocate, delete, or modify files
 - Change directory structure
 - Run scripts affecting these files
 - Perform bulk operations on these directories
 
-### Required Actions Before Protected Asset Operations:
+### Required Actions Before Protected Asset Operations
+
 1. **Ask Permission First** - Always request explicit permission
 2. **Explain Impact** - Clearly describe what will happen
 3. **Offer Backups** - Suggest creating additional backups
 4. **Wait for Approval** - Never proceed without clear confirmation
 
-### Emergency Recovery Information:
+### Emergency Recovery Information
+
 - **Manual Work**: Hours of manual classification and sorting
 - **Irreplaceable**: Cannot be easily regenerated
 - **Business Critical**: Essential for character creation functionality
 
 ## 🔒 Extension Guidelines
 
-### Adding New Protected Assets:
+### Adding New Protected Assets
+
 1. Add to "Protected Assets" section above
 2. Specify protection level (CRITICAL, HIGH, MEDIUM)
 3. Define specific protection requirements
 4. Update AI agent instructions if needed
 
-### Protection Levels:
+### Protection Levels
+
 - **CRITICAL**: Never modify without explicit permission
 - **HIGH**: Require permission and backup before modification  
 - **MEDIUM**: Warn before modification, suggest backups

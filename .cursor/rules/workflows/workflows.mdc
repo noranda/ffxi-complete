@@ -7,7 +7,8 @@ globs:
 
 ## How Workflows Work
 
-Workflows are sequential processes that guide the AI assistant through complex multi-step tasks. Each workflow consists of numbered rule files that must be executed in order.
+Workflows are sequential processes that guide the AI assistant through complex multi-step tasks. Each workflow
+consists of numbered rule files that must be executed in order.
 
 ### Workflow Execution Rules
 
@@ -31,11 +32,12 @@ When a user says something like "run the [workflow-name] workflow":
 ### Available Workflows
 
 - **feature-development**: 3-step process for creating PRDs, generating tasks, and managing implementation
-- **commit-changes**: 4-step process for running status checks, analyzing changes, generating commit messages, and executing commits
+- **commit-changes**: 4-step process for running status checks, analyzing changes, generating commit messages,
+  and executing commits
 
 ## Example Usage
 
-```
+```text
 User: "Run the feature-development workflow"
 AI: "I'll run the feature-development workflow. This will guide us through creating a PRD, generating tasks, and managing implementation. 
 
@@ -55,6 +57,7 @@ AI: [executes step 2]
 ## Workflow Structure
 
 Each workflow folder should contain:
+
 - Numbered rule files (1-xxx.mdc, 2-xxx.mdc, etc.)
 - Each file should specify:
   - Goal of the step

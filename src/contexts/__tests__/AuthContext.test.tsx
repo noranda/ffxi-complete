@@ -83,12 +83,17 @@ describe('AuthContext', () => {
   });
 
   describe('AuthProvider', () => {
-    it('should initialize with loading state', () => {
+    it('should initialize with loading state', async () => {
       const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
       expect(result.current.loading).toBe(true);
       expect(result.current.user).toBe(null);
       expect(result.current.isAuthenticated).toBe(false);
+
+      // Wait for the initial auth check to complete to avoid act warnings
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
     });
 
     it('should load current user on initialization', async () => {
@@ -119,12 +124,17 @@ describe('AuthContext', () => {
       expect(result.current.isAuthenticated).toBe(false);
     });
 
-    it('should set up auth state change listener', () => {
+    it('should set up auth state change listener', async () => {
       renderHook(() => useAuth(), {wrapper: TestWrapper});
 
       expect(supabase.auth.onAuthStateChange).toHaveBeenCalledWith(
         expect.any(Function)
       );
+
+      // Wait for initial loading to complete to avoid act warnings
+      await waitFor(() => {
+        expect(mockOnAuthStateChange).toHaveBeenCalled();
+      });
     });
 
     it('should handle auth state changes', async () => {
@@ -166,8 +176,13 @@ describe('AuthContext', () => {
       expect(result.current.isAuthenticated).toBe(true);
     });
 
-    it('should clean up subscription on unmount', () => {
+    it('should clean up subscription on unmount', async () => {
       const {unmount} = renderHook(() => useAuth(), {wrapper: TestWrapper});
+
+      // Wait for initial auth check to complete
+      await waitFor(() => {
+        expect(mockOnAuthStateChange).toHaveBeenCalled();
+      });
 
       unmount();
 
@@ -431,6 +446,7 @@ describe('AuthContext', () => {
         wrapper: TestWrapper,
       });
 
+      // Wait for auth initialization to complete
       await waitFor(() => {
         expect(result.current).toBe(false);
       });
@@ -443,6 +459,7 @@ describe('AuthContext', () => {
         wrapper: TestWrapper,
       });
 
+      // Wait for auth initialization to complete
       await waitFor(() => {
         expect(result.current).toBe(true);
       });

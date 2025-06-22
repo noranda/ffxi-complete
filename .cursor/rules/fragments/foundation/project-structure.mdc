@@ -9,7 +9,8 @@ globs:
 # Project Structure
 
 ## File Organization
-```
+
+```text
 src/
 ├── components/         # Reusable UI components
 │   ├── ui/             # shadcn/ui components
@@ -35,6 +36,7 @@ src/
 ```
 
 ## Key Principles
+
 - **Co-located tests**: Place test files next to source files
 - **Domain organization**: Group related functionality together
 - **Clear separation**: UI components, business logic, and data access layers

@@ -173,9 +173,7 @@ const App: React.FC<unknown> = () => {
 
   if (loading) {
     return (
-      <div
-        className={`bg-background flex min-h-screen items-center justify-center`}
-      >
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <Card className="w-96">
           <CardContent className="p-6">
             <div className="text-center">Loading...</div>
@@ -214,11 +212,11 @@ const App: React.FC<unknown> = () => {
                 </div>
 
                 {connectionStatus === 'error' && (
-                  <div
-                    className={`bg-destructive/10 border-destructive/20 rounded-lg border p-4`}
-                  >
+                  <div className="bg-destructive/10 border-destructive/20 rounded-lg border p-4">
                     <div className="text-destructive text-sm">
-                      <strong>Error:</strong> {errorMessage}
+                      <strong>Error:</strong>
+
+                      {errorMessage}
                     </div>
 
                     <div className="text-muted-foreground mt-2 text-sm">
@@ -229,12 +227,8 @@ const App: React.FC<unknown> = () => {
                 )}
 
                 {connectionStatus === 'connected' && (
-                  <div
-                    className={`rounded-lg border border-green-500/20 bg-green-500/10 p-4`}
-                  >
-                    <div
-                      className={`text-sm text-green-700 dark:text-green-300`}
-                    >
+                  <div className="rounded-lg border border-green-500/20 bg-green-500/10 p-4">
+                    <div className="text-sm text-green-700 dark:text-green-300">
                       🎉 Great! Your Supabase backend is connected and ready.
                       Next step: Set up the database schema.
                     </div>
@@ -408,7 +402,7 @@ const App: React.FC<unknown> = () => {
             </CardHeader>
 
             <CardContent>
-              <div className={`grid grid-cols-1 gap-4 md:grid-cols-2`}>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <h3 className="font-semibold">Phase 2: Database</h3>
 

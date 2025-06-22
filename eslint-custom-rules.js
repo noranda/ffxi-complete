@@ -170,6 +170,115 @@ const reactFcPattern = {
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
+const jsxExpressionSpacing = {
+  create(context) {
+    const sourceCode = context.sourceCode;
+
+    /**
+     * Checks if two JSX children need a newline between them
+     * @param {import('eslint').Rule.Node} current - Current JSX child node
+     * @param {import('eslint').Rule.Node} next - Next JSX child node
+     * @returns {boolean} True if they need spacing
+     */
+    function needsSpacing(current, next) {
+      // Check if current is JSX element and next is JSX expression container
+      if (
+        current.type === 'JSXElement' &&
+        next.type === 'JSXExpressionContainer'
+      ) {
+        return true;
+      }
+      // Check if current is JSX expression container and next is JSX element
+      if (
+        current.type === 'JSXExpressionContainer' &&
+        next.type === 'JSXElement'
+      ) {
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Checks JSX element for proper spacing between elements and expressions
+     * @param {import('eslint').Rule.Node} node - The JSX element to check
+     * @returns {void}
+     */
+    function checkJSXElement(node) {
+      if (!node.children || node.children.length < 2) return;
+
+      // Get all non-whitespace children
+      const nonWhitespaceChildren = node.children.filter(child => {
+        if (child.type === 'JSXText') {
+          // Only skip if it's pure whitespace
+          return child.value.trim() !== '';
+        }
+        if (
+          child.type === 'JSXExpressionContainer' &&
+          child.expression.type === 'JSXEmptyExpression'
+        ) {
+          return false;
+        }
+        return true;
+      });
+
+      for (let i = 0; i < nonWhitespaceChildren.length - 1; i++) {
+        const current = nonWhitespaceChildren[i];
+        const next = nonWhitespaceChildren[i + 1];
+
+        if (needsSpacing(current, next)) {
+          const currentToken = sourceCode.getLastToken(current);
+          const nextToken = sourceCode.getFirstToken(next);
+
+          if (currentToken && nextToken) {
+            const linesBetween =
+              nextToken.loc.start.line - currentToken.loc.end.line;
+
+            // If there's only one line or they're on the same line
+            if (linesBetween <= 1) {
+              context.report({
+                fix(fixer) {
+                  // Find the text between the two tokens
+                  const textBetween = sourceCode
+                    .getText()
+                    .slice(currentToken.range[1], nextToken.range[0]);
+
+                  // Insert a newline if they're on the same line, or add extra newline if just one line apart
+                  const replacement =
+                    linesBetween === 0
+                      ? '\n\n                '
+                      : textBetween.replace(/\n(\s*)/, '\n\n$1');
+
+                  return fixer.replaceTextRange(
+                    [currentToken.range[1], nextToken.range[0]],
+                    replacement
+                  );
+                },
+                message:
+                  'JSX elements and expressions should be separated by a newline',
+                node: next,
+              });
+            }
+          }
+        }
+      }
+    }
+
+    return {
+      JSXElement: checkJSXElement,
+    };
+  },
+  meta: {
+    docs: {
+      description:
+        'Enforce newlines between JSX elements and JSX expression blocks',
+    },
+    fixable: 'whitespace',
+    schema: [],
+    type: 'layout',
+  },
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
 const preferDivOverP = {
   create(context) {
     return {
@@ -213,6 +322,7 @@ export const customRulesConfig = {
   plugins: {
     'ffxi-custom': {
       rules: {
+        'jsx-expression-spacing': jsxExpressionSpacing,
         'jsx-multiline-spacing': jsxMultilineSpacing,
         'prefer-div-over-p': preferDivOverP,
         'react-fc-pattern': reactFcPattern,
@@ -220,6 +330,7 @@ export const customRulesConfig = {
     },
   },
   rules: {
+    'ffxi-custom/jsx-expression-spacing': 'error',
     'ffxi-custom/jsx-multiline-spacing': 'error',
     'ffxi-custom/prefer-div-over-p': 'error',
     'ffxi-custom/react-fc-pattern': 'error',

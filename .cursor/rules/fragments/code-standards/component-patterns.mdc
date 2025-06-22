@@ -10,6 +10,7 @@ globs:
 ## Automated Patterns
 
 The following are **fully automated** by ESLint and Prettier:
+
 - ✅ Export formatting and line length decisions
 - ✅ Alphabetical sorting of exports within statements
 - ✅ Combining value and type exports in single statements
@@ -20,6 +21,7 @@ The following are **fully automated** by ESLint and Prettier:
 ### Compound Components (Shared State/Logic)
 
 **For components with shared state** (Tabs, Drawer using Radix/Vaul):
+
 ```typescript
 // ✅ Correct - Export only root with sub-components as properties
 const Tabs = Object.assign(TabsRoot, {
@@ -42,6 +44,7 @@ export {Tabs, type TabsTypes};
 ### Composable Components (Styling/Layout Only)
 
 **For components with only styling coordination** (Card):
+
 ```typescript
 // ✅ Correct - Export all components individually
 export {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
@@ -58,6 +61,7 @@ export {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
 ### Single Components
 
 **For standalone components** (Button, Input):
+
 ```typescript
 // ✅ Correct - Normal export with types
 export {Button, type ButtonProps};
@@ -74,6 +78,7 @@ export {Button, type ButtonProps};
 ## Component Index Files
 
 **Export components and types from index:**
+
 ```typescript
 // src/components/auth/index.ts
 export {LoginForm} from './LoginForm';
@@ -126,6 +131,7 @@ import {cva} from 'class-variance-authority'; // Avoid this
 ### Design System Integration
 
 **Use consistent naming across components:**
+
 ```typescript
 // ✅ Consistent variant names across all components
 const variants = {
@@ -144,6 +150,7 @@ const variants = {
 ```
 
 **Use design system color tokens:**
+
 ```typescript
 // ✅ Correct - Use design tokens
 const alertVariants = tv({
@@ -169,6 +176,7 @@ const alertVariants = tv({
 ### Component Implementation
 
 **Extract variant props for TypeScript integration:**
+
 ```typescript
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
@@ -194,7 +202,7 @@ Button.displayName = "Button";
 
 ### Folder Structure for Related Components
 
-```
+```text
 src/components/auth/
 ├── index.ts              # Barrel exports
 ├── types.ts              # Shared types (when needed)
@@ -213,6 +221,85 @@ src/components/auth/
 - **Tests**: Same as component with `.test.tsx` (`LoginForm.test.tsx`)
 - **Index**: Always `index.ts` for barrel exports
 
+## UI Component Usage
+
+### Prefer Internal Components Over Raw HTML
+
+**Always use our standardized UI components instead of raw HTML elements:**
+
+```typescript
+// ✅ Correct - Use standardized Button component
+import {Button} from '@/components/ui/button';
+
+<Button 
+  variant="link" 
+  size="sm" 
+  onClick={handleClick}
+>
+  Click here
+</Button>
+
+// ❌ Incorrect - Raw HTML with manual styling
+<button 
+  className="text-primary underline-offset-4 hover:underline text-sm"
+  onClick={handleClick}
+>
+  Click here
+</button>
+```
+
+**Benefits of using internal components:**
+
+- **Consistency**: All instances share the same styling and behavior
+- **Maintainability**: Changes are made in one place
+- **Accessibility**: Components include proper focus states and ARIA attributes
+- **Type Safety**: Full TypeScript support with proper prop validation
+- **Design System**: Automatically follows design tokens and variants
+
+### Common HTML to Component Mappings
+
+**Button Elements:**
+
+```typescript
+// Raw HTML → Button component
+<button> → <Button>
+<button type="submit"> → <Button type="submit">
+<button className="link-style"> → <Button variant="link">
+```
+
+**Input Elements:**
+
+```typescript
+// Raw HTML → Input component  
+<input type="text"> → <Input>
+<input type="email"> → <Input type="email">
+<input type="password"> → <Input type="password">
+```
+
+**Card/Container Elements:**
+
+```typescript
+// Raw HTML → Card components
+<div className="card-container"> → <Card>
+<div className="card-header"> → <CardHeader>
+<div className="card-content"> → <CardContent>
+```
+
+### When Raw HTML is Acceptable
+
+**Only use raw HTML elements when:**
+
+- No corresponding UI component exists
+- Semantic HTML is required (e.g., `<main>`, `<nav>`, `<section>`)
+- Component would add unnecessary complexity
+- Building the UI component itself
+
+**Always consider creating a UI component if:**
+
+- Element appears multiple times across the codebase
+- Element has complex styling or interactive states
+- Element needs consistent behavior across usage
+
 ## Best Practices
 
 - **Use tailwind-variants** instead of class-variance-authority
@@ -223,3 +310,4 @@ src/components/auth/
 - **Choose export patterns** based on component relationships
 - **Create index files** for clean imports
 - **Keep styling consistent** across component families
+- **Prefer internal UI components** over raw HTML elements

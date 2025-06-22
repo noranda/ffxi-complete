@@ -61,10 +61,6 @@ const registrationSchema = Yup.object({
 
 /**
  * Registration form component with comprehensive validation and error handling
- * @param root0
- * @param root0.className
- * @param root0.onSuccess
- * @param root0.onSwitchToLogin
  */
 export const RegisterForm: React.FC<RegisterFormProps> = ({
   className,
@@ -85,11 +81,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   /**
    * Handles OAuth provider sign up for Discord and Google
    * Clears existing errors and attempts sign up with the specified provider
-   * @param provider - The OAuth provider to use for sign up
-   * @example
-   * ```typescript
-   * await handleOAuthSignUp('discord');
-   * ```
    */
   const handleOAuthSignUp = async (provider: 'discord' | 'google') => {
     try {
@@ -141,17 +132,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   /**
    * Handles form submission for user registration
    * Validates form data, calls sign up API, and manages form state during submission
-   * @param values - The form values containing email, password, and confirmPassword
-   * @param formikBag - Formik helper functions for error handling and state management
-   * @param formikBag.setFieldError
-   * @param formikBag.setSubmitting
-   * @example
-   * ```typescript
-   * await handleSubmit(
-   *   {email: 'user@example.com', password: 'password123', confirmPassword: 'password123'},
-   *   {setFieldError, setSubmitting}
-   * );
-   * ```
    */
   const handleSubmit = async (
     values: RegisterFormData,
@@ -301,9 +281,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
               {/* General Errors */}
               {authError != null && (
-                <div
-                  className={`bg-destructive/10 border-destructive/20 rounded-md border p-3`}
-                >
+                <div className="bg-destructive/10 border-destructive/20 rounded-md border p-3">
                   <div className="text-destructive text-sm">{authError}</div>
                 </div>
               )}
@@ -335,14 +313,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               Already have an account?{' '}
             </span>
 
-            <button
-              className={`text-primary underline-offset-4 hover:underline`}
+            <Button
               disabled={authLoading}
               onClick={handleSwitchToLogin}
+              size="sm"
               type="button"
+              variant="link"
             >
               Sign in here
-            </button>
+            </Button>
           </div>
         )}
       </CardContent>

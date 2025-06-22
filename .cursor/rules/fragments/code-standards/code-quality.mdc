@@ -12,6 +12,7 @@ globs:
 ## Automated Quality Checks
 
 The following are **fully automated** by ESLint and require no manual verification:
+
 - ✅ Error objects for throws and Promise rejections
 - ✅ Awaiting promises and proper async patterns  
 - ✅ Promise misuse in conditionals
@@ -23,6 +24,7 @@ The following are **fully automated** by ESLint and require no manual verificati
 ### Error Boundaries
 
 **Place React Error Boundaries at appropriate component tree levels:**
+
 - Feature-level boundaries for isolated error handling
 - Page-level boundaries for graceful fallbacks
 - Global boundary for catastrophic errors
@@ -40,6 +42,7 @@ const FeatureErrorBoundary: React.FC<{children: React.ReactNode}> = ({children})
 ### User-Friendly Error Messages
 
 **Map technical errors to actionable user messages:**
+
 - Use error codes/types for consistent mapping
 - Provide clear next steps for resolution
 - Include helpful context without exposing sensitive details
@@ -62,6 +65,7 @@ const getErrorMessage = (error: ApiError): string => {
 ### Retry Logic
 
 **Implement appropriate retry strategies:**
+
 - Exponential backoff for network requests
 - Retry limits to prevent infinite loops
 - Circuit breaker patterns for upstream failures
@@ -87,6 +91,7 @@ const retryWithBackoff = async <T>(
 ### Error State Management
 
 **Design error states that guide users toward resolution:**
+
 - Show specific validation errors inline
 - Provide clear actions to resolve errors
 - Maintain form state during error recovery
@@ -97,6 +102,7 @@ const retryWithBackoff = async <T>(
 ### Test Coverage Requirements
 
 **Ensure comprehensive coverage of critical paths:**
+
 - All exported functions must have unit tests
 - Component rendering and interaction testing
 - Error state testing for all error boundaries
@@ -105,6 +111,7 @@ const retryWithBackoff = async <T>(
 ### Test Organization
 
 **Co-locate tests with source code:**
+
 - Place tests in `__tests__/` folders next to components
 - Use descriptive test file names matching source files
 - Group related tests in test suites with clear descriptions
@@ -112,6 +119,7 @@ const retryWithBackoff = async <T>(
 ### Test Quality Standards
 
 **Write maintainable and reliable tests:**
+
 - Use descriptive test names that explain behavior
 - Test behavior, not implementation details
 - Mock external dependencies appropriately
@@ -122,6 +130,7 @@ const retryWithBackoff = async <T>(
 ### React Performance
 
 **Optimize rendering performance:**
+
 - Use React.memo for expensive pure components
 - Implement useMemo and useCallback for expensive calculations
 - Avoid creating objects/functions in render methods
@@ -130,6 +139,7 @@ const retryWithBackoff = async <T>(
 ### Data Fetching Performance
 
 **Optimize data operations:**
+
 - Implement request deduplication for repeated calls
 - Use proper loading states to prevent race conditions
 - Cache frequently accessed data appropriately
@@ -138,6 +148,7 @@ const retryWithBackoff = async <T>(
 ### Bundle Performance
 
 **Keep bundle sizes manageable:**
+
 - Use dynamic imports for code splitting
 - Analyze bundle composition regularly
 - Remove unused dependencies and dead code
@@ -150,18 +161,21 @@ const retryWithBackoff = async <T>(
 **Mandatory verification during code reviews:**
 
 **Functionality:**
+
 - Code solves the intended problem correctly
 - Edge cases and error scenarios are handled
 - Performance implications are considered
 - Security implications are evaluated
 
 **Code Quality:**
+
 - Code follows established patterns and conventions
 - Functions are appropriately sized and focused
 - Complex logic is well-documented
 - Tests cover new functionality adequately
 
 **Maintainability:**
+
 - Code is readable and self-documenting
 - Dependencies are justified and minimal
 - Configuration is externalized appropriately
@@ -170,6 +184,7 @@ const retryWithBackoff = async <T>(
 ### Review Process
 
 **Structured approach to code reviews:**
+
 - Review smaller, focused pull requests
 - Provide constructive feedback with examples
 - Suggest improvements rather than just pointing out problems
@@ -179,6 +194,7 @@ const retryWithBackoff = async <T>(
 ### Quality Gates
 
 **Requirements before merging:**
+
 - All automated tests pass
 - Code coverage meets minimum thresholds
 - No linting errors or warnings
@@ -191,6 +207,7 @@ const retryWithBackoff = async <T>(
 ### Error Tracking
 
 **Implement comprehensive error monitoring:**
+
 - Log errors with sufficient context for debugging
 - Track error rates and patterns over time
 - Set up alerts for critical error thresholds
@@ -199,6 +216,7 @@ const retryWithBackoff = async <T>(
 ### Performance Monitoring
 
 **Track application performance:**
+
 - Monitor Core Web Vitals and user experience metrics
 - Track API response times and error rates
 - Monitor bundle sizes and loading performance
@@ -207,6 +225,7 @@ const retryWithBackoff = async <T>(
 ### User Experience Monitoring
 
 **Track user behavior and satisfaction:**
+
 - Monitor user flows and conversion rates
 - Track feature usage and adoption
 - Collect user feedback on error experiences

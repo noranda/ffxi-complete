@@ -18,6 +18,7 @@ globs:
 ## Testing Patterns
 
 ### Component Testing
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
@@ -31,6 +32,7 @@ describe('CharacterSelector', () => {
 ```
 
 ### Hook Testing
+
 ```typescript
 import { renderHook } from '@testing-library/react';
 import { useCharacters } from './useCharacters';
@@ -46,7 +48,8 @@ describe('useCharacters', () => {
 ## Test Organization
 
 **Co-located tests** following project structure:
-```
+
+```text
 src/components/CharacterSelector/
   CharacterSelector.tsx
   CharacterSelector.test.tsx

@@ -1,6 +1,7 @@
 # FFXI Complete
 
-A modern web application for tracking your Final Fantasy XI character progression, collections, and achievements. Built with React 19, TypeScript, and TailwindCSS.
+A modern web application for tracking your Final Fantasy XI character progression, collections, and achievements.
+Built with React 19, TypeScript, and TailwindCSS.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
@@ -144,7 +145,7 @@ Inspired by [XIV-Complete](https://xiv-complete.com), FFXI Complete emphasizes:
 
 ## 📁 Project Structure
 
-```
+```text
 src/
 ├── components/          # Reusable UI components
 │   ├── ui/             # shadcn/ui component library
@@ -237,6 +238,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<div align="center">
-  <strong>Built with ❤️ for the FFXI community</strong>
-</div>
+**Built with ❤️ for the FFXI community**

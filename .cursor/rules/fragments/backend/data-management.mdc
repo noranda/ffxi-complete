@@ -9,6 +9,7 @@ globs:
 # Data Management
 
 ## Database Schema
+
 ```sql
 -- Users table (handled by Supabase Auth)
 -- characters table
@@ -34,6 +35,7 @@ CREATE TABLE job_progress (
 ```
 
 ## Data Validation
+
 - Use Zod for runtime type validation
 - Validate all user inputs
 - Sanitize data before database operations

@@ -11,6 +11,7 @@ globs:
 ## Design Philosophy
 
 Collection-focused design inspired by XIV-Complete, emphasizing:
+
 - **Clean organization** with visual progress indicators
 - **Quick navigation** between tracking categories
 - **Efficient workflows** for completionist players
@@ -18,18 +19,21 @@ Collection-focused design inspired by XIV-Complete, emphasizing:
 ## Core Patterns
 
 ### Tab-Based Navigation
+
 - Horizontal tabs with progress indicators (`Jobs 15/22`)
 - Clear active state distinction
 - Responsive: stack/scroll on mobile
 - Quick switching between collections
 
 ### Collection Lists
+
 - Vertical list structure with consistent spacing
 - Row-based items with hover effects
 - Expandable sections using accordion pattern
 - Visual state indicators (completed/in-progress/not started)
 
 ### Progress Indicators
+
 - Circular progress for completion percentages
 - Badge counters showing ratios (15/22)
 - Color coding: Green (complete), Blue (in-progress), Gray (not started)
@@ -38,11 +42,13 @@ Collection-focused design inspired by XIV-Complete, emphasizing:
 ## Responsive Design
 
 ### Desktop (1024px+)
+
 - Full tab navigation with progress
 - Multi-column layouts
 - Hover states and keyboard shortcuts
 
 ### Mobile (< 768px)
+
 - Bottom navigation or hamburger menu
 - Single column layout
 - Touch-friendly targets (44px minimum)
@@ -51,6 +57,7 @@ Collection-focused design inspired by XIV-Complete, emphasizing:
 ## Accessibility (Required)
 
 ### Keyboard Navigation
+
 - Logical tab order
 - Enter/Space for activation
 - Arrow keys for lists
@@ -58,12 +65,14 @@ Collection-focused design inspired by XIV-Complete, emphasizing:
 - Visible focus indicators
 
 ### Screen Reader Support
+
 - Semantic HTML structure
 - ARIA labels for complex interactions
 - Clear heading hierarchy
 - Alt text for images/icons
 
 ### Visual Accessibility
+
 - Color contrast minimum 4.5:1 ratio
 - Highly visible focus indicators
 - No color-only information
@@ -73,18 +82,21 @@ Collection-focused design inspired by XIV-Complete, emphasizing:
 ## Theme System
 
 ### Colors
+
 - **Dark theme primary** with light option
 - **Progress**: Green (complete), Blue (in-progress), Gray (not started)
 - **Semantic**: Success, warning, error states
 - **Brand colors** reflecting FFXI aesthetic
 
 ### Typography
+
 - Clear hierarchy with consistent sizing
 - Readable fonts optimized for data display
 - Monospace for numerical data
 - Proper line spacing for scanning
 
 ### Spacing
+
 - Consistent scale: 4px, 8px, 16px, 24px, 32px
 - Grid system for alignment
 - White space to prevent overload

@@ -71,4 +71,5 @@ globs:
 ---
 
 **Summary:**  
-Keep rules modular, evidence-driven, and easy to maintain. Every change must be justified, tested, and clearly documented. Always show your work.
+Keep rules modular, evidence-driven, and easy to maintain. Every change must be justified, tested, and
+clearly documented. Always show your work.

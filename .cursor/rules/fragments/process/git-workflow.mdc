@@ -20,7 +20,8 @@ globs:
 ## Commit Message Format (Required)
 
 **Conventional Commits pattern:**
-```
+
+```text
 <type>[optional scope]: <description>
 
 [optional body]
@@ -48,6 +49,7 @@ globs:
 ### Examples
 
 **Simple commits:**
+
 ```bash
 feat: add character creation form
 fix: resolve tab navigation keyboard accessibility
@@ -58,6 +60,7 @@ chore: update dependencies to latest versions
 ```
 
 **With scope:**
+
 ```bash
 feat(auth): add OAuth login
 fix(ui): resolve button hover states
@@ -65,6 +68,7 @@ test(components): add Card component tests
 ```
 
 **With body:**
+
 ```bash
 feat: implement character portrait picker
 
@@ -76,6 +80,7 @@ Closes #123
 ```
 
 **Breaking change:**
+
 ```bash
 feat!: migrate to React 19
 

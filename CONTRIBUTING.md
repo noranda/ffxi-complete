@@ -1,6 +1,7 @@
 # Contributing to FFXI Progress Tracker
 
-Thank you for your interest in contributing to the FFXI Progress Tracker! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to the FFXI Progress Tracker! This document provides guidelines and
+information for contributors.
 
 ## 🎯 Ways to Contribute
 
@@ -102,7 +103,7 @@ Thank you for your interest in contributing to the FFXI Progress Tracker! This d
 
 Follow our [git workflow standards](.cursor/rules/fragments/process/git-workflow.mdc):
 
-```bash
+```text
 feat/feature-name        # New features
 fix/bug-description      # Bug fixes
 refactor/component-name  # Code refactoring
@@ -115,7 +116,7 @@ chore/maintenance-task   # Maintenance tasks
 
 Use [Conventional Commits](https://conventionalcommits.org/) format:
 
-```
+```text
 <type>[optional scope]: <description>
 
 [optional body]
@@ -163,6 +164,7 @@ test: add unit tests for Button component
    ```
 
 5. **Push and create PR**
+
    ```bash
    git push origin feat/your-feature-name
    # Create PR on GitHub
@@ -434,10 +436,9 @@ By contributing to FFXI Progress Tracker, you agree that your contributions will
 
 ## 🙏 Thank You
 
-Your contributions help make FFXI Progress Tracker better for the entire community. Whether you're fixing a typo, reporting a bug, or adding a major feature, every contribution matters!
+Your contributions help make FFXI Progress Tracker better for the entire community. Whether you're fixing a
+typo, reporting a bug, or adding a major feature, every contribution matters!
 
 ---
 
-<div align="center">
-  <strong>Happy Contributing! 🎮</strong>
-</div>
+**Happy Contributing! 🎮**

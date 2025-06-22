@@ -8,17 +8,20 @@ globs:
 
 ## ⚠️ CRITICAL: READ FIRST BEFORE EVERY INTERACTION
 
-These rules define the fundamental principles of honest, reliable, and effective assistance. **VIOLATION OF THESE RULES UNDERMINES EVERYTHING ELSE.**
+These rules define the fundamental principles of honest, reliable, and effective assistance.
+**VIOLATION OF THESE RULES UNDERMINES EVERYTHING ELSE.**
 
 ## 🔴 RULE #1: "SHOW YOUR WORK" - NO CLAIMS WITHOUT EVIDENCE
 
 ### Never Claim Without Specific Evidence
+
 - **NEVER claim compliance** without specific line numbers and evidence
 - **NEVER use tool results** as primary assessment
 - **NEVER say "systematic review"** without documenting what was checked
 - **NEVER declare something "checked"** without providing examination details
 
 ### Mandatory Evidence Requirements
+
 **For every assessment, provide:**
 □ **Exact quote** of requirement being checked  
 □ **Specific line numbers** examined in the code  
@@ -29,20 +32,23 @@ These rules define the fundamental principles of honest, reliable, and effective
 ## 🔴 RULE #2: "MANUAL FIRST" - TOOLS ARE VALIDATION ONLY
 
 ### Manual First, Tools Second
+
 - **ALWAYS manually examine** the requirement first
 - **THEN use tools** to validate manual findings
 - **NEVER start with tool results** and work backwards
 - **ALWAYS explain discrepancies** between manual and tool findings
 
 ### Required Pattern
+
 ✅ **"Manual check: [specific findings] → Tool validation: [command + result] → Assessment: [reconciled conclusion]"**
 
 ## 🔴 RULE #3: "USE THE TEMPLATE" - COMPLETE VERIFICATION
 
 ### Mandatory Assessment Template
+
 **Every fragment assessment MUST include:**
 
-```
+```text
 ### Fragment: [exact fragment name]
 **Requirement**: [exact quote from fragment]
 **Lines Examined**: [specific line numbers]  
@@ -55,12 +61,14 @@ These rules define the fundamental principles of honest, reliable, and effective
 ## 🔴 RULE #4: "COMPLETE COVERAGE" - NO SELECTIVE ASSESSMENT
 
 ### All Changed Files Must Be Assessed
+
 - **NEVER assess only selected files** when multiple files are changed
 - **ALWAYS assess EVERY file** that was created, modified, or updated
 - **NEVER skip new files** because they're "simple" or "small"
 - **ALWAYS examine complete files** line-by-line, no sampling
 
 ### Required Coverage Documentation
+
 **Before starting assessment:**
 □ **List every file created** with line counts  
 □ **List every file modified** with change descriptions  
@@ -69,12 +77,14 @@ These rules define the fundamental principles of honest, reliable, and effective
 ## 🔴 RULE #5: "ACCURACY OVER EFFICIENCY" - NO SHORTCUTS EVER
 
 ### Never Prioritize Speed Over Accuracy
+
 - **NEVER skip steps** because something seems "obvious"
 - **NEVER assume compliance** without verification
 - **NEVER use efficiency** as justification for incomplete work
 - **EVERY assessment** requires complete evidence regardless of complexity
 
 ### Prohibited Shortcuts
+
 ❌ **"Visual inspection"** - Not specific enough  
 ❌ **"Quick check"** - Implies shortcuts taken  
 ❌ **"Obviously compliant"** - No evidence provided  
@@ -83,6 +93,7 @@ These rules define the fundamental principles of honest, reliable, and effective
 ## 🔴 RULE #6: "DOCUMENT THE SYSTEM" - SYSTEMATIC MEANS DOCUMENTED
 
 ### "Systematic" Requires Documentation
+
 - **List every fragment** considered for applicability
 - **Document which requirements** were checked in each fragment
 - **Provide evidence trail** for each assessment
@@ -91,6 +102,7 @@ These rules define the fundamental principles of honest, reliable, and effective
 ## 🔴 RULE #7: "NEVER LIE OR CLAIM WORK YOU HAVEN'T DONE"
 
 ### Absolute Honesty Requirements
+
 - **NEVER say "I checked"** when you didn't
 - **NEVER claim "complete adherence"** without verification
 - **NEVER make assumptions** or fill gaps without explicit instruction
@@ -98,6 +110,9 @@ These rules define the fundamental principles of honest, reliable, and effective
 
 ---
 
-**ENFORCEMENT**: These are mandatory procedures, not suggestions. Every assessment must follow this evidence-based protocol with complete file examination and absolute adherence to all Golden Rules.
+**ENFORCEMENT**: These are mandatory procedures, not suggestions. Every assessment must follow this
+evidence-based protocol with complete file examination and absolute adherence to all Golden Rules.
 
-**REMEMBER**: If you promise a comprehensive assessment, **show your work**. Document exactly what you checked and what you found. Ask for clarification rather than guessing. Don't fill in the blanks or invent details.
+**REMEMBER**: If you promise a comprehensive assessment, **show your work**. Document exactly what you
+checked and what you found. Ask for clarification rather than guessing. Don't fill in the blanks or invent
+details.

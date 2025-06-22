@@ -225,15 +225,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   <label className="text-sm font-medium" htmlFor="password">
                     Password
                   </label>
+
                   {onForgotPassword && (
-                    <button
-                      className={`text-primary text-sm underline-offset-4 hover:underline`}
+                    <Button
                       disabled={authLoading}
                       onClick={handleForgotPasswordClick}
+                      size="sm"
                       type="button"
+                      variant="link"
                     >
                       Forgot password?
-                    </button>
+                    </Button>
                   )}
                 </div>
 
@@ -268,9 +270,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
               {/* General Errors */}
               {authError != null && (
-                <div
-                  className={`bg-destructive/10 border-destructive/20 rounded-md border p-3`}
-                >
+                <div className="bg-destructive/10 border-destructive/20 rounded-md border p-3">
                   <div className="text-destructive text-sm">{authError}</div>
                 </div>
               )}
@@ -300,14 +300,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               Don't have an account?{' '}
             </span>
 
-            <button
-              className={`text-primary underline-offset-4 hover:underline`}
+            <Button
               disabled={authLoading}
               onClick={handleSwitchToRegister}
+              size="sm"
               type="button"
+              variant="link"
             >
               Create one here
-            </button>
+            </Button>
           </div>
         )}
       </CardContent>

@@ -11,47 +11,55 @@ globs:
 
 ## 🏆 CRITICAL: READ GOLDEN RULES FIRST
 
-**BEFORE DOING ANYTHING ELSE, read [@golden-rules](mdc:golden-rules.mdc) - These define the fundamental principles that must be followed in every interaction.**
+**BEFORE DOING ANYTHING ELSE, read [@golden-rules](mdc:golden-rules.mdc) - These define
+the fundamental principles that must be followed in every interaction.**
 
 ## 🎭 Persona: The FFXI Completionist
 
-Building for dedicated FFXI players who want comprehensive progress tracking with clean, intuitive interfaces that prioritize data accuracy and simplicity over complexity.
+Building for dedicated FFXI players who want comprehensive progress tracking with clean,
+intuitive interfaces that prioritize data accuracy and simplicity over complexity.
 
 ## 📚 Rule Fragments
 
 Read fragments in order for complete guidelines:
 
 ### 🎓 Foundation & Context
+
 1. **@foundation/learning-focused-development** - Educational backend approach
 2. **@foundation/development-environment** - IDE, tools, local setup
 3. **@foundation/architecture-principles** - Core tech stack principles
 4. **@foundation/project-structure** - File organization, co-located testing
 
 ### ⚙️ Code Standards & Practices  
-5. **@code-standards/typescript-patterns** - TypeScript config, type patterns, shared component types
-6. **@code-standards/component-patterns** - Export strategies, styling with tailwind-variants
-7. **@code-standards/code-documentation** - JSDoc standards, inline commenting
-8. **@code-standards/code-quality** - Error handling, testing, performance, code review standards
+
+1. **@code-standards/typescript-patterns** - TypeScript config, type patterns, shared component types
+2. **@code-standards/component-patterns** - Export strategies, styling with tailwind-variants
+3. **@code-standards/code-documentation** - JSDoc standards, inline commenting
+4. **@code-standards/code-quality** - Error handling, testing, performance, code review standards
 
 ### 💾 Backend & Data Management
-9. **@backend/data-management** - Schema design, validation
-10. **@backend/supabase-patterns** - Supabase best practices
-11. **@backend/security-considerations** - Auth, data protection, privacy
+
+1. **@backend/data-management** - Schema design, validation
+2. **@backend/supabase-patterns** - Supabase best practices
+3. **@backend/security-considerations** - Auth, data protection, privacy
 
 ### 🔍 Testing & Quality Assurance
-12. **@testing/tdd-principles** - TDD methodology, minimal implementation
-13. **@testing/testing-strategy** - Unit, integration, E2E approaches
-14. **@testing/test-organization** - Test structure, __tests__ folders
-15. **@testing/quality-assurance** - Code quality, accessibility standards
+
+1. **@testing/tdd-principles** - TDD methodology, minimal implementation
+2. **@testing/testing-strategy** - Unit, integration, E2E approaches
+3. **@testing/test-organization** - Test structure, **tests** folders
+4. **@testing/quality-assurance** - Code quality, accessibility standards
 
 ### 🎨 Design & User Experience
-16. **@design/ui-ux-guidelines** - Design principles, responsive patterns
+
+1. **@design/ui-ux-guidelines** - Design principles, responsive patterns
 
 ### 🚀 Process & Optimization
-17. **@process/git-workflow** - Branch naming, commits, code review
-18. **@process/performance-guidelines** - Frontend/database optimization
-19. **@process/documentation** - Code and user docs requirements
-20. **@process/future-considerations** - Scalability, monitoring planning
-21. **@process/rule-management** - Cursor rules organization
-22. **@process/status-check-reporting** - End-of-response quality indicators
-23. **@process/code-guidelines-assessment** - Systematic evaluation methodology
+
+1. **@process/git-workflow** - Branch naming, commits, code review
+2. **@process/performance-guidelines** - Frontend/database optimization
+3. **@process/documentation** - Code and user docs requirements
+4. **@process/future-considerations** - Scalability, monitoring planning
+5. **@process/rule-management** - Cursor rules organization
+6. **@process/status-check-reporting** - End-of-response quality indicators
+7. **@process/code-guidelines-assessment** - Systematic evaluation methodology

@@ -11,9 +11,7 @@ import {RegisterForm} from '@/components/auth/RegisterForm';
  * Demo page for the RegisterForm component
  */
 export const RegisterDemo: React.FC<unknown> = () => (
-  <div
-    className={`bg-background flex min-h-screen items-center justify-center p-4`}
-  >
+  <div className="bg-background flex min-h-screen items-center justify-center p-4">
     <div className="w-full max-w-md">
       <div className="mb-6 text-center">
         <h1 className="text-foreground mb-2 text-2xl font-bold">
@@ -37,7 +35,7 @@ export const RegisterDemo: React.FC<unknown> = () => (
 
       <div className="mt-6 text-center">
         <a
-          className={`text-muted-foreground hover:text-foreground text-sm transition-colors`}
+          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
           href="/"
         >
           ← Back to main app

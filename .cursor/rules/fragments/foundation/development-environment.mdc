@@ -13,6 +13,7 @@ globs:
 ## Required Tools & Versions
 
 ### Core Development Tools
+
 ```bash
 # Node.js (Latest LTS recommended)
 node --version  # Should be 18.x or newer
@@ -25,6 +26,7 @@ npm install -g yarn
 ```
 
 ### Package Management
+
 ```bash
 # Primary commands
 yarn install          # Clean installs
@@ -36,6 +38,7 @@ yarn remove <package>  # Remove dependencies
 ## IDE Configuration
 
 ### VS Code Settings
+
 ```json
 // .vscode/settings.json
 {
@@ -53,6 +56,7 @@ yarn remove <package>  # Remove dependencies
 ```
 
 ### Recommended Extensions
+
 ```json
 // .vscode/extensions.json
 {
@@ -69,6 +73,7 @@ yarn remove <package>  # Remove dependencies
 ## Local Development Workflow
 
 ### Environment Variables
+
 ```bash
 # .env.local (create this file, never commit it)
 VITE_SUPABASE_URL=your_supabase_project_url
@@ -76,6 +81,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### Development Commands
+
 ```bash
 yarn dev         # Start development server
 yarn test        # Run tests
@@ -87,6 +93,7 @@ yarn build       # Build for production
 ## Database Development
 
 ### Supabase CLI Setup
+
 ```bash
 # Install and setup
 yarn global add supabase
@@ -100,6 +107,7 @@ supabase gen types typescript --linked > src/types/database.types.ts
 ## Testing Environment
 
 ### Vitest Configuration
+
 ```typescript
 // vitest.config.ts
 import { defineConfig } from 'vitest/config';
@@ -116,6 +124,7 @@ export default defineConfig({
 ```
 
 ### Test Setup
+
 ```typescript
 // src/test/setup.ts
 import { afterEach } from 'vitest';
@@ -130,6 +139,7 @@ afterEach(() => {
 ## Development Utilities
 
 ### Environment Configuration
+
 ```typescript
 // config/index.ts
 export const config = {
@@ -143,6 +153,7 @@ export const config = {
 ```
 
 ### Development Helpers
+
 ```typescript
 // utils/dev.ts
 export const devLog = (message: string, data?: any) => {
@@ -155,6 +166,7 @@ export const devLog = (message: string, data?: any) => {
 ## Troubleshooting
 
 ### Common Issues
+
 ```bash
 # TypeScript issues
 rm -rf node_modules/.cache
@@ -171,6 +183,7 @@ rm -rf node_modules/.vite
 ## Environment Validation
 
 ### Setup Checklist
+
 - [ ] Node.js and Yarn installed
 - [ ] VS Code with recommended extensions
 - [ ] Project dependencies installed
@@ -180,6 +193,7 @@ rm -rf node_modules/.vite
 - [ ] Tests can run successfully
 
 ### Validation Commands
+
 ```bash
 yarn type-check  # TypeScript working
 yarn lint        # ESLint working  

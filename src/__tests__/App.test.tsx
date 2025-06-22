@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import {describe, expect, it, vi} from 'vitest';
 
 import App from '../App';
@@ -34,11 +34,13 @@ const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => (
   <AuthProvider>{children}</AuthProvider>
 );
 describe('App', () => {
-  it('renders the application', () => {
+  it('renders the application', async () => {
     render(<App />, {wrapper: TestWrapper});
 
-    // Check that the app renders without crashing
-    expect(document.body).toBeInTheDocument();
+    // Wait for auth initialization to complete to avoid act warnings
+    await waitFor(() => {
+      expect(document.body).toBeInTheDocument();
+    });
   });
 
   it('displays the main heading when not loading', async () => {
