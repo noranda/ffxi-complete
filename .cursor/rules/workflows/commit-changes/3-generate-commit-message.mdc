@@ -1,5 +1,5 @@
 ---
-description: "Commit workflow step 3: Generate conventional commit message following git-workflow standards and get user approval"
+description: "Workflow step 3: Generate conventional commit message following git-workflow standards and get user approval"
 globs:
 ---
 

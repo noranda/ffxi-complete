@@ -1,5 +1,5 @@
 ---
-description: "Commit workflow step 2: Analyze code changes since last commit to understand scope and impact"
+description: "Workflow step 2: Analyze code changes since last commit to understand scope and impact"
 globs:
 ---
 

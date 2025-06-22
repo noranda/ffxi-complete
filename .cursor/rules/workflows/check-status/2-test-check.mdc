@@ -1,17 +1,17 @@
 ---
-description:
+description: "Workflow step 2: Test execution and failure analysis step for comprehensive test validation"
 globs:
-alwaysApply: false
 ---
+
 # Step 2: Test Check and Fix
 
 ## Goal
 
-Ensure all tests pass with 100% success rate.
+Ensure all tests pass with proper error handling and coverage.
 
-## Required Context
+## Required Context/Inputs
 
-- ESLint check from Step 1 must have passed
+- All ESLint issues from Step 1 must be resolved
 - Test environment should be properly configured
 - All test dependencies should be available
 

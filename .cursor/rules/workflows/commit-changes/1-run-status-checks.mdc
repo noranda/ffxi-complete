@@ -1,5 +1,5 @@
 ---
-description: "Commit workflow step 1: Run comprehensive status checks and verify all quality gates pass"
+description: "Workflow step 1: Run comprehensive status checks and verify all quality gates pass"
 globs:
 ---
 

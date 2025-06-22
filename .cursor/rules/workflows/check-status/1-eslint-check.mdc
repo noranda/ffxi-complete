@@ -1,15 +1,15 @@
 ---
-description:
+description: "Workflow step 1: ESLint check and auto-fix step for comprehensive code quality validation"
 globs:
-alwaysApply: false
 ---
+
 # Step 1: ESLint Check and Fix
 
 ## Goal
 
 Ensure all code passes ESLint validation with 0 errors and 0 warnings.
 
-## Required Context
+## Required Context/Inputs
 
 - Current working directory should be the project root
 - ESLint configuration should be properly set up

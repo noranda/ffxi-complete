@@ -137,6 +137,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
           break;
         case 'SIGNED_OUT':
           console.log('👋 User signed out');
+          // Note: User state is automatically cleared above via setUser(session?.user ?? null)
+          // This ensures complete session cleanup on logout
           break;
         case 'TOKEN_REFRESHED':
           console.log('🔄 Session token refreshed');
@@ -220,6 +222,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
   /**
    * Handles user sign-out and clears authentication state
+   *
+   * Performs complete session cleanup including:
+   * - Terminating Supabase session on server
+   * - Clearing local authentication state
+   * - Resetting error and loading states
+   * - Triggering auth state change listeners
    */
   const handleSignOut = async (): Promise<Omit<AuthResult, 'data'>> => {
     setLoading(true);

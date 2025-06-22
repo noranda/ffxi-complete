@@ -1,19 +1,17 @@
 ---
-description:
+description: "Workflow step 4: Prettier formatting check and auto-format step for code consistency"
 globs:
-alwaysApply: false
 ---
+
 # Step 4: Formatting Check and Fix
 
 ## Goal
 
 Ensure all files are properly formatted according to Prettier configuration.
 
-## Required Context
+## Required Context/Inputs
 
-- ESLint check from Step 1 must have passed
-- Test check from Step 2 must have passed
-- TypeScript check from Step 3 must have passed
+- All previous steps (ESLint, tests, TypeScript) must have passed
 - Prettier configuration should be properly set up
 
 ## Process

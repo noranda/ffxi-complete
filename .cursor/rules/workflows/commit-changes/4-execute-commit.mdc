@@ -1,5 +1,5 @@
 ---
-description: "Commit workflow step 4: Execute git commit with approved message (no push)"
+description: "Workflow step 4: Execute git commit with approved message (no push)"
 globs:
 ---
 

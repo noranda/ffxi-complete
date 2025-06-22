@@ -254,6 +254,51 @@ describe('AuthContext', () => {
         expect(signOutResult!).toEqual(mockResult);
       });
 
+      it('should handle sign out errors', async () => {
+        const mockResult: Omit<AuthResult, 'data'> = {
+          error: 'Sign out failed',
+          success: false,
+        };
+        vi.mocked(signOut).mockResolvedValue(mockResult);
+
+        const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
+
+        await waitFor(() => expect(result.current.loading).toBe(false));
+
+        await act(async () => await result.current.signOut());
+
+        expect(result.current.error).toBe('Sign out failed');
+      });
+
+      it('should clear error state before sign out', async () => {
+        const mockResult: Omit<AuthResult, 'data'> = {
+          error: null,
+          success: true,
+        };
+        vi.mocked(signOut).mockResolvedValue(mockResult);
+
+        // First set an error via failed sign in
+        const signInError: AuthResult = {
+          data: null,
+          error: 'Sign in failed',
+          success: false,
+        };
+        vi.mocked(signIn).mockResolvedValue(signInError);
+
+        const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
+
+        await waitFor(() => expect(result.current.loading).toBe(false));
+
+        // Trigger an error first
+        await act(async () => await result.current.signIn('test@example.com', 'wrongpassword'));
+        expect(result.current.error).toBe('Sign in failed');
+
+        // Sign out should clear the error
+        await act(async () => await result.current.signOut());
+
+        expect(result.current.error).toBe(null);
+      });
+
       it('should handle password reset', async () => {
         const mockResult: Omit<AuthResult, 'data'> = {
           error: null,

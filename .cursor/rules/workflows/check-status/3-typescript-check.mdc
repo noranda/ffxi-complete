@@ -1,18 +1,17 @@
 ---
-description:
+description: "Workflow step 3: TypeScript compilation check and type error resolution step"
 globs:
-alwaysApply: false
 ---
+
 # Step 3: TypeScript Check and Fix
 
 ## Goal
 
-Ensure TypeScript compilation succeeds with 0 errors.
+Ensure TypeScript compilation passes with 0 errors and 0 warnings and proper type safety.
 
-## Required Context
+## Required Context/Inputs
 
-- ESLint check from Step 1 must have passed
-- Test check from Step 2 must have passed  
+- All ESLint and test issues from previous steps must be resolved
 - TypeScript configuration should be properly set up
 
 ## Process

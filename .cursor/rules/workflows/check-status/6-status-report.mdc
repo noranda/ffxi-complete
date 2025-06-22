@@ -1,21 +1,18 @@
 ---
-description:
+description: "Workflow step 6: Comprehensive status report generation for all quality check results"
 globs:
-alwaysApply: false
 ---
-# Step 6: Status Report
+
+# Step 6: Status Report Generation
 
 ## Goal
 
-Generate comprehensive status report confirming all quality gates have passed.
+Generate comprehensive status report showing results of all quality checks.
 
-## Required Context
+## Required Context/Inputs
 
-- ESLint check from Step 1 must have passed
-- Test check from Step 2 must have passed
-- TypeScript check from Step 3 must have passed
-- Formatting check from Step 4 must have passed
-- Markdown lint check from Step 5 must have passed
+- All previous steps (ESLint, tests, TypeScript, formatting, markdown) must be completed
+- Results from each step should be available for reporting
 
 ## Process
 

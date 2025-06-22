@@ -285,6 +285,38 @@ describe('Authentication Utilities', () => {
       expect(result.success).toBe(false);
       expect(result.error).toBe('Your session has expired. Please sign in again.');
     });
+
+    it('should handle network errors during signout', async () => {
+      mockAuth.signOut.mockRejectedValue(new Error('Network error'));
+
+      const result = await signOut();
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('An unexpected error occurred during signout');
+      expect(console.error).toHaveBeenCalledWith('Unexpected signout error:', expect.any(Error));
+    });
+
+    it('should handle generic auth errors', async () => {
+      mockAuth.signOut.mockResolvedValue({
+        error: createMockAuthError('Unknown error') as AuthError,
+      });
+
+      const result = await signOut();
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Authentication failed. Please try again.');
+    });
+
+    it('should call supabase signOut without parameters', async () => {
+      mockAuth.signOut.mockResolvedValue({
+        error: null,
+      });
+
+      await signOut();
+
+      expect(mockAuth.signOut).toHaveBeenCalledWith();
+      expect(mockAuth.signOut).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('getCurrentUser', () => {

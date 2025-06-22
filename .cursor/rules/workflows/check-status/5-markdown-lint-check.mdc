@@ -1,20 +1,17 @@
 ---
-description:
+description: "Workflow step 5: Markdown linting check and style guide enforcement step"
 globs:
-alwaysApply: false
 ---
+
 # Step 5: Markdown Lint Check and Fix
 
 ## Goal
 
-Ensure all markdown files pass linting with 0 errors and 0 warnings.
+Ensure all markdown files follow style guidelines and formatting standards.
 
-## Required Context
+## Required Context/Inputs
 
-- ESLint check from Step 1 must have passed
-- Test check from Step 2 must have passed
-- TypeScript check from Step 3 must have passed
-- Formatting check from Step 4 must have passed
+- All previous steps (ESLint, tests, TypeScript, formatting) must have passed
 - Markdown linting configuration should be properly set up
 
 ## Process
