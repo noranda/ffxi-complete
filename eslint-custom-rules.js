@@ -29,8 +29,7 @@ const jsxMultilineSpacing = {
       return parent.children.filter(
         child =>
           child.type === 'JSXElement' ||
-          (child.type === 'JSXExpressionContainer' &&
-            child.expression.type !== 'JSXEmptyExpression')
+          (child.type === 'JSXExpressionContainer' && child.expression.type !== 'JSXEmptyExpression')
       );
     }
 
@@ -58,27 +57,18 @@ const jsxMultilineSpacing = {
 
           if (prevToken && currentToken) {
             // Count the number of line breaks between elements
-            const linesBetween =
-              currentToken.loc.start.line - prevToken.loc.end.line;
+            const linesBetween = currentToken.loc.start.line - prevToken.loc.end.line;
 
             // If there's only 1 line break (same line or next line), we need more spacing
             if (linesBetween <= 1) {
               context.report({
                 fix(fixer) {
-                  const textBetween = sourceCode
-                    .getText()
-                    .slice(prevToken.range[1], currentToken.range[0]);
+                  const textBetween = sourceCode.getText().slice(prevToken.range[1], currentToken.range[0]);
                   // Replace with proper spacing (newline + blank line)
-                  const replacement = textBetween.includes('\n')
-                    ? '\n\n      '
-                    : '\n\n      ';
-                  return fixer.replaceTextRange(
-                    [prevToken.range[1], currentToken.range[0]],
-                    replacement
-                  );
+                  const replacement = textBetween.includes('\n') ? '\n\n      ' : '\n\n      ';
+                  return fixer.replaceTextRange([prevToken.range[1], currentToken.range[0]], replacement);
                 },
-                message:
-                  'Multi-line JSX elements should have a blank line before them',
+                message: 'Multi-line JSX elements should have a blank line before them',
                 node,
               });
             }
@@ -94,25 +84,16 @@ const jsxMultilineSpacing = {
           const nextToken = sourceCode.getFirstToken(nextSibling);
 
           if (currentToken && nextToken) {
-            const linesBetween =
-              nextToken.loc.start.line - currentToken.loc.end.line;
+            const linesBetween = nextToken.loc.start.line - currentToken.loc.end.line;
 
             if (linesBetween <= 1) {
               context.report({
                 fix(fixer) {
-                  const textBetween = sourceCode
-                    .getText()
-                    .slice(currentToken.range[1], nextToken.range[0]);
-                  const replacement = textBetween.includes('\n')
-                    ? '\n\n      '
-                    : '\n\n      ';
-                  return fixer.replaceTextRange(
-                    [currentToken.range[1], nextToken.range[0]],
-                    replacement
-                  );
+                  const textBetween = sourceCode.getText().slice(currentToken.range[1], nextToken.range[0]);
+                  const replacement = textBetween.includes('\n') ? '\n\n      ' : '\n\n      ';
+                  return fixer.replaceTextRange([currentToken.range[1], nextToken.range[0]], replacement);
                 },
-                message:
-                  'Multi-line JSX elements should have a blank line before them',
+                message: 'Multi-line JSX elements should have a blank line before them',
                 node: nextSibling,
               });
             }
@@ -182,17 +163,11 @@ const jsxExpressionSpacing = {
      */
     function needsSpacing(current, next) {
       // Check if current is JSX element and next is JSX expression container
-      if (
-        current.type === 'JSXElement' &&
-        next.type === 'JSXExpressionContainer'
-      ) {
+      if (current.type === 'JSXElement' && next.type === 'JSXExpressionContainer') {
         return true;
       }
       // Check if current is JSX expression container and next is JSX element
-      if (
-        current.type === 'JSXExpressionContainer' &&
-        next.type === 'JSXElement'
-      ) {
+      if (current.type === 'JSXExpressionContainer' && next.type === 'JSXElement') {
         return true;
       }
       return false;
@@ -212,10 +187,7 @@ const jsxExpressionSpacing = {
           // Only skip if it's pure whitespace
           return child.value.trim() !== '';
         }
-        if (
-          child.type === 'JSXExpressionContainer' &&
-          child.expression.type === 'JSXEmptyExpression'
-        ) {
+        if (child.type === 'JSXExpressionContainer' && child.expression.type === 'JSXEmptyExpression') {
           return false;
         }
         return true;
@@ -230,31 +202,22 @@ const jsxExpressionSpacing = {
           const nextToken = sourceCode.getFirstToken(next);
 
           if (currentToken && nextToken) {
-            const linesBetween =
-              nextToken.loc.start.line - currentToken.loc.end.line;
+            const linesBetween = nextToken.loc.start.line - currentToken.loc.end.line;
 
             // If there's only one line or they're on the same line
             if (linesBetween <= 1) {
               context.report({
                 fix(fixer) {
                   // Find the text between the two tokens
-                  const textBetween = sourceCode
-                    .getText()
-                    .slice(currentToken.range[1], nextToken.range[0]);
+                  const textBetween = sourceCode.getText().slice(currentToken.range[1], nextToken.range[0]);
 
                   // Insert a newline if they're on the same line, or add extra newline if just one line apart
                   const replacement =
-                    linesBetween === 0
-                      ? '\n\n                '
-                      : textBetween.replace(/\n(\s*)/, '\n\n$1');
+                    linesBetween === 0 ? '\n\n                ' : textBetween.replace(/\n(\s*)/, '\n\n$1');
 
-                  return fixer.replaceTextRange(
-                    [currentToken.range[1], nextToken.range[0]],
-                    replacement
-                  );
+                  return fixer.replaceTextRange([currentToken.range[1], nextToken.range[0]], replacement);
                 },
-                message:
-                  'JSX elements and expressions should be separated by a newline',
+                message: 'JSX elements and expressions should be separated by a newline',
                 node: next,
               });
             }
@@ -269,8 +232,7 @@ const jsxExpressionSpacing = {
   },
   meta: {
     docs: {
-      description:
-        'Enforce newlines between JSX elements and JSX expression blocks',
+      description: 'Enforce newlines between JSX elements and JSX expression blocks',
     },
     fixable: 'whitespace',
     schema: [],
@@ -310,9 +272,7 @@ const noUnnecessaryDivWrapper = {
         const name = attr.name.name;
 
         // Allow event handlers and accessibility attributes
-        return meaningfulAttributes.some(meaningful =>
-          name.startsWith(meaningful)
-        );
+        return meaningfulAttributes.some(meaningful => name.startsWith(meaningful));
       });
     }
 
@@ -373,9 +333,7 @@ const noUnnecessaryDivWrapper = {
             'text-',
           ];
 
-          return layoutClasses.some(layoutClass =>
-            classes.includes(layoutClass)
-          );
+          return layoutClasses.some(layoutClass => classes.includes(layoutClass));
         }
       }
 
@@ -392,10 +350,7 @@ const noUnnecessaryDivWrapper = {
         if (child.type === 'JSXText') {
           return child.value.trim() !== '';
         }
-        if (
-          child.type === 'JSXExpressionContainer' &&
-          child.expression.type === 'JSXEmptyExpression'
-        ) {
+        if (child.type === 'JSXExpressionContainer' && child.expression.type === 'JSXEmptyExpression') {
           return false;
         }
         return true;
@@ -426,18 +381,14 @@ const noUnnecessaryDivWrapper = {
           const child = nonWhitespaceChildren[0];
 
           // Only suggest removal if the child is also a div or a simple element
-          if (
-            child.type === 'JSXElement' ||
-            child.type === 'JSXExpressionContainer'
-          ) {
+          if (child.type === 'JSXElement' || child.type === 'JSXExpressionContainer') {
             context.report({
               fix(fixer) {
                 // Get the text content of the child
                 const childText = sourceCode.getText(child);
                 return fixer.replaceText(node, childText);
               },
-              message:
-                'Unnecessary div wrapper. Consider removing the wrapper or adding meaningful attributes.',
+              message: 'Unnecessary div wrapper. Consider removing the wrapper or adding meaningful attributes.',
               node: node.openingElement,
             });
           }
@@ -450,6 +401,113 @@ const noUnnecessaryDivWrapper = {
       description: 'Disallow unnecessary div wrappers around single elements',
     },
     fixable: 'code',
+    schema: [],
+    type: 'suggestion',
+  },
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
+const preferCnForClassname = {
+  create(context) {
+    const sourceCode = context.sourceCode;
+
+    /**
+     * Checks if a node is a className attribute with template literal containing interpolation
+     * @param {import('eslint').Rule.Node} node - The JSX attribute node to check
+     * @returns {boolean} True if it's a className with template literal interpolation
+     */
+    function isClassNameWithTemplateLiteral(node) {
+      return (
+        node.type === 'JSXAttribute' &&
+        node.name &&
+        node.name.type === 'JSXIdentifier' &&
+        node.name.name === 'className' &&
+        node.value &&
+        node.value.type === 'JSXExpressionContainer' &&
+        node.value.expression &&
+        node.value.expression.type === 'TemplateLiteral' &&
+        node.value.expression.expressions.length > 0 // Has interpolations
+      );
+    }
+
+    /**
+     * Checks if the file already imports cn function
+     * @returns {boolean} True if cn is imported
+     */
+    function hasCnImport() {
+      const program = context.sourceCode.ast;
+      return program.body.some(node => {
+        if (node.type === 'ImportDeclaration') {
+          return node.specifiers.some(
+            spec => spec.type === 'ImportSpecifier' && spec.imported && spec.imported.name === 'cn'
+          );
+        }
+        return false;
+      });
+    }
+
+    return {
+      JSXAttribute(node) {
+        if (isClassNameWithTemplateLiteral(node)) {
+          const templateLiteral = node.value.expression;
+
+          // Build suggested cn usage
+          const parts = [];
+          const quasis = templateLiteral.quasis;
+          const expressions = templateLiteral.expressions;
+
+          // Simple case: base classes + conditional
+          if (quasis.length === 2 && expressions.length === 1) {
+            const baseClasses = quasis[0].value.cooked.trim();
+            const conditionalExpression = sourceCode.getText(expressions[0]);
+
+            if (baseClasses) {
+              parts.push(`'${baseClasses}'`);
+            }
+            parts.push(conditionalExpression);
+          }
+
+          const suggestedCode = `cn(${parts.join(', ')})`;
+
+          context.report({
+            fix(fixer) {
+              // Add cn import if not present
+              const fixes = [];
+
+              if (!hasCnImport()) {
+                const program = context.sourceCode.ast;
+                const imports = program.body.filter(node => node.type === 'ImportDeclaration');
+                const lastImport = imports[imports.length - 1];
+
+                if (lastImport) {
+                  fixes.push(fixer.insertTextAfter(lastImport, "\n\nimport {cn} from '@/lib/utils';"));
+                }
+              }
+
+              // Replace the className value
+              fixes.push(fixer.replaceText(node.value, `{${suggestedCode}}`));
+
+              return fixes;
+            },
+            message: 'Use cn() function for conditional className logic instead of template literals',
+            node: node.value,
+            suggest: [
+              {
+                desc: `Use cn(${parts.join(', ')})`,
+                fix: fixer => fixer.replaceText(node.value, `{${suggestedCode}}`),
+              },
+            ],
+          });
+        }
+      },
+    };
+  },
+  meta: {
+    docs: {
+      description: 'Enforce using cn() function for conditional className logic',
+    },
+    fixable: 'code',
+    hasSuggestions: true,
     schema: [],
     type: 'suggestion',
   },
@@ -494,6 +552,60 @@ const preferDivOverP = {
   },
 };
 
+/** @type {import('eslint').Rule.RuleModule} */
+const preferSingleLineArrowFunctions = {
+  create(context) {
+    const sourceCode = context.sourceCode;
+
+    return {
+      ArrowFunctionExpression(node) {
+        // Only check arrow functions with block statements
+        if (node.body.type === 'BlockStatement' && node.body.body.length === 1) {
+          const statement = node.body.body[0];
+
+          // Handle single expression statements (not return statements)
+          if (statement.type === 'ExpressionStatement') {
+            context.report({
+              fix(fixer) {
+                // Get the parameter list including parentheses and type annotations
+                let paramsText;
+                if (node.params.length === 0) {
+                  paramsText = '()';
+                } else if (node.params.length === 1 && !node.params[0].typeAnnotation) {
+                  // Single parameter without type annotation doesn't need parentheses
+                  paramsText = sourceCode.getText(node.params[0]);
+                } else {
+                  // Multiple parameters or single parameter with type annotation needs parentheses
+                  paramsText = `(${node.params.map(parameter => sourceCode.getText(parameter)).join(', ')})`;
+                }
+
+                const expression = sourceCode.getText(statement.expression);
+
+                // Preserve async keyword if present
+                const asyncKeyword = node.async ? 'async ' : '';
+
+                const replacement = `${asyncKeyword}${paramsText} => ${expression}`;
+
+                return fixer.replaceText(node, replacement);
+              },
+              message: 'Arrow function with single statement should be condensed to single line',
+              node,
+            });
+          }
+        }
+      },
+    };
+  },
+  meta: {
+    docs: {
+      description: 'Enforce single-line arrow functions for simple statements',
+    },
+    fixable: 'code',
+    schema: [],
+    type: 'style',
+  },
+};
+
 /** @type {import('eslint').Linter.Config} */
 export const customRulesConfig = {
   plugins: {
@@ -502,7 +614,9 @@ export const customRulesConfig = {
         'jsx-expression-spacing': jsxExpressionSpacing,
         'jsx-multiline-spacing': jsxMultilineSpacing,
         'no-unnecessary-div-wrapper': noUnnecessaryDivWrapper,
+        'prefer-cn-for-classname': preferCnForClassname,
         'prefer-div-over-p': preferDivOverP,
+        'prefer-single-line-arrow-functions': preferSingleLineArrowFunctions,
         'react-fc-pattern': reactFcPattern,
       },
     },
@@ -511,7 +625,9 @@ export const customRulesConfig = {
     'ffxi-custom/jsx-expression-spacing': 'error',
     'ffxi-custom/jsx-multiline-spacing': 'error',
     'ffxi-custom/no-unnecessary-div-wrapper': 'error',
+    'ffxi-custom/prefer-cn-for-classname': 'error',
     'ffxi-custom/prefer-div-over-p': 'error',
+    'ffxi-custom/prefer-single-line-arrow-functions': 'error',
     'ffxi-custom/react-fc-pattern': 'error',
   },
 };

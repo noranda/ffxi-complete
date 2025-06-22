@@ -23,35 +23,25 @@ export const Login: React.FC = () => {
   /**
    * Handles successful login by redirecting to dashboard
    */
-  const handleLoginSuccess = () => {
-    void navigate('/', {replace: true});
-  };
+  const handleLoginSuccess = () => void navigate('/', {replace: true});
 
   /**
    * Handles navigation to registration page
    */
-  const handleSwitchToRegister = () => {
-    void navigate('/register');
-  };
+  const handleSwitchToRegister = () => void navigate('/register');
 
   /**
    * Handles navigation to password reset page
    */
-  const handleForgotPassword = () => {
-    void navigate('/reset-password');
-  };
+  const handleForgotPassword = () => void navigate('/reset-password');
 
   return (
     <div className="bg-background flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <h1 className="text-foreground text-3xl font-bold tracking-tight">
-            FFXI Complete
-          </h1>
+          <h1 className="text-foreground text-3xl font-bold tracking-tight">FFXI Complete</h1>
 
-          <div className="text-muted-foreground mt-2 text-sm">
-            Track your Final Fantasy XI progress
-          </div>
+          <div className="text-muted-foreground mt-2 text-sm">Track your Final Fantasy XI progress</div>
         </div>
 
         <LoginForm

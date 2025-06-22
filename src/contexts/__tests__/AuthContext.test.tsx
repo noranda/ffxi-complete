@@ -3,15 +3,7 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import type {AuthResult} from '@/lib/auth';
 
-import {
-  getCurrentUser,
-  resetPassword,
-  signIn,
-  signInWithOAuth,
-  signOut,
-  signUp,
-  updatePassword,
-} from '@/lib/auth';
+import {getCurrentUser, resetPassword, signIn, signInWithOAuth, signOut, signUp, updatePassword} from '@/lib/auth';
 import {supabase} from '@/lib/supabase';
 
 import {AuthProvider, useAuth, useIsAuthenticated} from '../AuthContext';
@@ -55,9 +47,7 @@ const mockUser = {
 } as const;
 
 // Test wrapper component
-const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => (
-  <AuthProvider>{children}</AuthProvider>
-);
+const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => <AuthProvider>{children}</AuthProvider>;
 describe('AuthContext', () => {
   const mockUnsubscribe = vi.fn();
   const mockOnAuthStateChange = vi.fn().mockReturnValue({
@@ -72,15 +62,11 @@ describe('AuthContext', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(supabase.auth.onAuthStateChange).mockImplementation(
-      mockOnAuthStateChange
-    );
+    vi.mocked(supabase.auth.onAuthStateChange).mockImplementation(mockOnAuthStateChange);
     vi.mocked(getCurrentUser).mockResolvedValue(null);
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+  afterEach(() => vi.clearAllMocks());
 
   describe('AuthProvider', () => {
     it('should initialize with loading state', async () => {
@@ -91,9 +77,7 @@ describe('AuthContext', () => {
       expect(result.current.isAuthenticated).toBe(false);
 
       // Wait for the initial auth check to complete to avoid act warnings
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false);
-      });
+      await waitFor(() => expect(result.current.loading).toBe(false));
     });
 
     it('should load current user on initialization', async () => {
@@ -101,24 +85,18 @@ describe('AuthContext', () => {
 
       const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false);
-      });
+      await waitFor(() => expect(result.current.loading).toBe(false));
 
       expect(result.current.user).toEqual(mockUser);
       expect(result.current.isAuthenticated).toBe(true);
     });
 
     it('should handle initialization errors gracefully', async () => {
-      vi.mocked(getCurrentUser).mockRejectedValue(
-        new Error('Initialization failed')
-      );
+      vi.mocked(getCurrentUser).mockRejectedValue(new Error('Initialization failed'));
 
       const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false);
-      });
+      await waitFor(() => expect(result.current.loading).toBe(false));
 
       expect(result.current.user).toBe(null);
       expect(result.current.isAuthenticated).toBe(false);
@@ -127,21 +105,14 @@ describe('AuthContext', () => {
     it('should set up auth state change listener', async () => {
       renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-      expect(supabase.auth.onAuthStateChange).toHaveBeenCalledWith(
-        expect.any(Function)
-      );
+      expect(supabase.auth.onAuthStateChange).toHaveBeenCalledWith(expect.any(Function));
 
       // Wait for initial loading to complete to avoid act warnings
-      await waitFor(() => {
-        expect(mockOnAuthStateChange).toHaveBeenCalled();
-      });
+      await waitFor(() => expect(mockOnAuthStateChange).toHaveBeenCalled());
     });
 
     it('should handle auth state changes', async () => {
-      let authStateCallback: (
-        event: string,
-        session: null | {user: typeof mockUser}
-      ) => void;
+      let authStateCallback: (event: string, session: null | {user: typeof mockUser}) => void;
 
       const mockImplementation = vi.fn().mockImplementation(callback => {
         authStateCallback = callback as typeof authStateCallback;
@@ -156,21 +127,15 @@ describe('AuthContext', () => {
         };
       });
 
-      vi.mocked(supabase.auth.onAuthStateChange).mockImplementation(
-        mockImplementation
-      );
+      vi.mocked(supabase.auth.onAuthStateChange).mockImplementation(mockImplementation);
 
       const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
       // Wait for initial load
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false);
-      });
+      await waitFor(() => expect(result.current.loading).toBe(false));
 
       // Simulate sign in event
-      act(() => {
-        authStateCallback('SIGNED_IN', {user: mockUser});
-      });
+      act(() => authStateCallback('SIGNED_IN', {user: mockUser}));
 
       expect(result.current.user).toEqual(mockUser);
       expect(result.current.isAuthenticated).toBe(true);
@@ -180,9 +145,7 @@ describe('AuthContext', () => {
       const {unmount} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
       // Wait for initial auth check to complete
-      await waitFor(() => {
-        expect(mockOnAuthStateChange).toHaveBeenCalled();
-      });
+      await waitFor(() => expect(mockOnAuthStateChange).toHaveBeenCalled());
 
       unmount();
 
@@ -192,13 +155,9 @@ describe('AuthContext', () => {
 
   describe('useAuth hook', () => {
     it('should throw error when used outside AuthProvider', () => {
-      const consoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      expect(() => {
-        renderHook(() => useAuth());
-      }).toThrow('useAuth must be used within an AuthProvider');
+      expect(() => renderHook(() => useAuth())).toThrow('useAuth must be used within an AuthProvider');
 
       consoleError.mockRestore();
     });
@@ -214,17 +173,10 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         let signUpResult: AuthResult;
-        await act(async () => {
-          signUpResult = await result.current.signUp(
-            'test@example.com',
-            'password'
-          );
-        });
+        await act(async () => (signUpResult = await result.current.signUp('test@example.com', 'password')));
 
         expect(signUp).toHaveBeenCalledWith('test@example.com', 'password');
         expect(signUpResult!).toEqual(mockResult);
@@ -240,13 +192,9 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
-        await act(async () => {
-          await result.current.signUp('test@example.com', 'password');
-        });
+        await act(async () => await result.current.signUp('test@example.com', 'password'));
 
         expect(result.current.error).toBe('Sign up failed');
       });
@@ -261,17 +209,10 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         let signInResult: AuthResult;
-        await act(async () => {
-          signInResult = await result.current.signIn(
-            'test@example.com',
-            'password'
-          );
-        });
+        await act(async () => (signInResult = await result.current.signIn('test@example.com', 'password')));
 
         expect(signIn).toHaveBeenCalledWith('test@example.com', 'password');
         expect(signInResult!).toEqual(mockResult);
@@ -286,14 +227,10 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         let oauthResult: Omit<AuthResult, 'data'>;
-        await act(async () => {
-          oauthResult = await result.current.signInWithProvider('google');
-        });
+        await act(async () => (oauthResult = await result.current.signInWithProvider('google')));
 
         expect(signInWithOAuth).toHaveBeenCalledWith('google');
         expect(oauthResult!).toEqual(mockResult);
@@ -308,14 +245,10 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         let signOutResult: Omit<AuthResult, 'data'>;
-        await act(async () => {
-          signOutResult = await result.current.signOut();
-        });
+        await act(async () => (signOutResult = await result.current.signOut()));
 
         expect(signOut).toHaveBeenCalled();
         expect(signOutResult!).toEqual(mockResult);
@@ -330,14 +263,10 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         let resetResult: Omit<AuthResult, 'data'>;
-        await act(async () => {
-          resetResult = await result.current.resetPassword('test@example.com');
-        });
+        await act(async () => (resetResult = await result.current.resetPassword('test@example.com')));
 
         expect(resetPassword).toHaveBeenCalledWith('test@example.com');
         expect(resetResult!).toEqual(mockResult);
@@ -352,14 +281,10 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         let updateResult: Omit<AuthResult, 'data'>;
-        await act(async () => {
-          updateResult = await result.current.updatePassword('newpassword');
-        });
+        await act(async () => (updateResult = await result.current.updatePassword('newpassword')));
 
         expect(updatePassword).toHaveBeenCalledWith('newpassword');
         expect(updateResult!).toEqual(mockResult);
@@ -378,21 +303,15 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         // Trigger an error
-        await act(async () => {
-          await result.current.signIn('test@example.com', 'password');
-        });
+        await act(async () => await result.current.signIn('test@example.com', 'password'));
 
         expect(result.current.error).toBe('Test error');
 
         // Clear the error
-        act(() => {
-          result.current.clearError();
-        });
+        act(() => result.current.clearError());
 
         expect(result.current.error).toBe(null);
       });
@@ -404,15 +323,11 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         expect(result.current.user).toBe(null);
 
-        await act(async () => {
-          await result.current.refresh();
-        });
+        await act(async () => await result.current.refresh());
 
         expect(result.current.user).toEqual(mockUser);
         expect(getCurrentUser).toHaveBeenCalledTimes(2);
@@ -425,17 +340,11 @@ describe('AuthContext', () => {
 
         const {result} = renderHook(() => useAuth(), {wrapper: TestWrapper});
 
-        await waitFor(() => {
-          expect(result.current.loading).toBe(false);
-        });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
-        await act(async () => {
-          await result.current.refresh();
-        });
+        await act(async () => await result.current.refresh());
 
-        expect(result.current.error).toBe(
-          'Failed to refresh authentication. Please try again.'
-        );
+        expect(result.current.error).toBe('Failed to refresh authentication. Please try again.');
       });
     });
   });
@@ -447,9 +356,7 @@ describe('AuthContext', () => {
       });
 
       // Wait for auth initialization to complete
-      await waitFor(() => {
-        expect(result.current).toBe(false);
-      });
+      await waitFor(() => expect(result.current).toBe(false));
     });
 
     it('should return true when user is authenticated', async () => {
@@ -460,19 +367,13 @@ describe('AuthContext', () => {
       });
 
       // Wait for auth initialization to complete
-      await waitFor(() => {
-        expect(result.current).toBe(true);
-      });
+      await waitFor(() => expect(result.current).toBe(true));
     });
 
     it('should throw error when used outside AuthProvider', () => {
-      const consoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      expect(() => {
-        renderHook(() => useIsAuthenticated());
-      }).toThrow('useAuth must be used within an AuthProvider');
+      expect(() => renderHook(() => useIsAuthenticated())).toThrow('useAuth must be used within an AuthProvider');
 
       consoleError.mockRestore();
     });

@@ -7,17 +7,11 @@
  */
 import './App.css';
 
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {RegisterForm} from '@/components/auth/RegisterForm';
 import {Button} from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
 import {useAuth} from '@/hooks';
 import {supabase} from '@/lib/supabase';
@@ -26,14 +20,11 @@ import {supabase} from '@/lib/supabase';
  * Root application component with authentication testing and Supabase connection status
  */
 const App: React.FC<unknown> = () => {
-  const {loading, signIn, signInWithProvider, signOut, signUp, user} =
-    useAuth();
+  const {loading, signIn, signInWithProvider, signOut, signUp, user} = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [connectionStatus, setConnectionStatus] = useState<
-    'connected' | 'error' | 'testing'
-  >('testing');
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'error' | 'testing'>('testing');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [showRegisterForm, setShowRegisterForm] = useState(false);
 
@@ -60,7 +51,8 @@ const App: React.FC<unknown> = () => {
       }
     };
 
-    void testConnection();
+    // React best practice: call async function with proper error handling
+    testConnection().catch(error => console.error('Failed to test connection:', error));
   }, []);
 
   /**
@@ -82,7 +74,7 @@ const App: React.FC<unknown> = () => {
   /**
    * Handles user registration with email and password including error handling
    */
-  const handleSignUp = useCallback(async () => {
+  const handleSignUp = async () => {
     try {
       setMessage('Signing up...');
       const result = await signUp(email, password);
@@ -92,11 +84,10 @@ const App: React.FC<unknown> = () => {
         setMessage(`❌ Sign up failed: ${result.error}`);
       }
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       setMessage(`❌ Error: ${errorMessage}`);
     }
-  }, [email, password, signUp]);
+  };
 
   /**
    * Handles user sign-in with email and password authentication
@@ -111,8 +102,7 @@ const App: React.FC<unknown> = () => {
         setMessage(`❌ Sign in failed: ${result.error}`);
       }
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       setMessage(`❌ Error: ${errorMessage}`);
     }
   };
@@ -130,8 +120,7 @@ const App: React.FC<unknown> = () => {
         setMessage(`❌ ${provider} sign in failed: ${result.error}`);
       }
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       setMessage(`❌ Error: ${errorMessage}`);
     }
   };
@@ -149,8 +138,7 @@ const App: React.FC<unknown> = () => {
         setMessage(`❌ Sign out failed: ${result.error}`);
       }
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       setMessage(`❌ Error: ${errorMessage}`);
     }
   };
@@ -174,8 +162,7 @@ const App: React.FC<unknown> = () => {
           <h1 className="mb-4 text-4xl font-bold">FFXI Complete</h1>
 
           <div className="text-muted-foreground">
-            Track your Final Fantasy XI character progress across jobs, skills,
-            and collections
+            Track your Final Fantasy XI character progress across jobs, skills, and collections
           </div>
         </div>
 
@@ -184,9 +171,7 @@ const App: React.FC<unknown> = () => {
             <CardHeader>
               <CardTitle>Backend Connection Status</CardTitle>
 
-              <CardDescription>
-                Testing connection to Supabase backend
-              </CardDescription>
+              <CardDescription>Testing connection to Supabase backend</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -202,8 +187,7 @@ const App: React.FC<unknown> = () => {
                     </div>
 
                     <div className="text-muted-foreground mt-2 text-sm">
-                      Please check your .env.local file and ensure you have the
-                      correct Supabase URL and anon key.
+                      Please check your .env.local file and ensure you have the correct Supabase URL and anon key.
                     </div>
                   </div>
                 )}
@@ -211,8 +195,7 @@ const App: React.FC<unknown> = () => {
                 {connectionStatus === 'connected' && (
                   <div className="rounded-lg border border-green-500/20 bg-green-500/10 p-4">
                     <div className="text-sm text-green-700 dark:text-green-300">
-                      🎉 Great! Your Supabase backend is connected and ready.
-                      Next step: Set up the database schema.
+                      🎉 Great! Your Supabase backend is connected and ready. Next step: Set up the database schema.
                     </div>
                   </div>
                 )}
@@ -224,20 +207,14 @@ const App: React.FC<unknown> = () => {
             <CardHeader>
               <CardTitle>FFXI Complete - Auth Test</CardTitle>
 
-              <CardDescription>
-                {user
-                  ? `Welcome, ${user.email}!`
-                  : 'Test authentication system'}
-              </CardDescription>
+              <CardDescription>{user ? `Welcome, ${user.email}!` : 'Test authentication system'}</CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4">
               {/* Toggle between test interface and RegisterForm */}
               <div className="mb-4 flex gap-2">
                 <Button
-                  onClick={() => {
-                    setShowRegisterForm(false);
-                  }}
+                  onClick={() => setShowRegisterForm(false)}
                   size="sm"
                   variant={!showRegisterForm ? 'default' : 'outline'}
                 >
@@ -245,9 +222,7 @@ const App: React.FC<unknown> = () => {
                 </Button>
 
                 <Button
-                  onClick={() => {
-                    setShowRegisterForm(true);
-                  }}
+                  onClick={() => setShowRegisterForm(true)}
                   size="sm"
                   variant={showRegisterForm ? 'default' : 'outline'}
                 >
@@ -259,15 +234,11 @@ const App: React.FC<unknown> = () => {
                 <div className="mx-auto max-w-md">
                   <RegisterForm
                     onSuccess={() => {
-                      setMessage(
-                        '✅ Registration successful from RegisterForm!'
-                      );
+                      setMessage('✅ Registration successful from RegisterForm!');
                       setShowRegisterForm(false);
                     }}
                     onSwitchToLogin={() => {
-                      setMessage(
-                        'Switch to login clicked (login form coming in task 3.3)'
-                      );
+                      setMessage('Switch to login clicked (login form coming in task 3.3)');
                       setShowRegisterForm(false);
                     }}
                   />
@@ -276,18 +247,14 @@ const App: React.FC<unknown> = () => {
                 <>
                   <div className="space-y-2">
                     <Input
-                      onChange={e => {
-                        setEmail(e.target.value);
-                      }}
+                      onChange={event => setEmail(event.target.value)}
                       placeholder="Email"
                       type="email"
                       value={email}
                     />
 
                     <Input
-                      onChange={e => {
-                        setPassword(e.target.value);
-                      }}
+                      onChange={event => setPassword(event.target.value)}
                       placeholder="Password"
                       type="password"
                       value={password}
@@ -297,18 +264,26 @@ const App: React.FC<unknown> = () => {
                   <div className="space-y-2">
                     <Button
                       className="w-full"
-                      onClick={() => {
-                        void handleSignUp();
-                      }}
+                      onClick={() =>
+                        handleSignUp().catch(error => {
+                          console.error('Sign up error:', error);
+                          const errorMessage = error instanceof Error ? error.message : 'Sign up failed';
+                          setMessage(`❌ Error: ${errorMessage}`);
+                        })
+                      }
                     >
                       Sign Up
                     </Button>
 
                     <Button
                       className="w-full"
-                      onClick={() => {
-                        void handleSignIn();
-                      }}
+                      onClick={() =>
+                        handleSignIn().catch(error => {
+                          console.error('Sign in error:', error);
+                          const errorMessage = error instanceof Error ? error.message : 'Sign in failed';
+                          setMessage(`❌ Error: ${errorMessage}`);
+                        })
+                      }
                       variant="outline"
                     >
                       Sign In
@@ -318,9 +293,13 @@ const App: React.FC<unknown> = () => {
                   <div className="space-y-2">
                     <Button
                       className="w-full"
-                      onClick={() => {
-                        void handleOAuthSignIn('discord');
-                      }}
+                      onClick={() =>
+                        handleOAuthSignIn('discord').catch(error => {
+                          console.error('OAuth error:', error);
+                          const errorMessage = error instanceof Error ? error.message : 'Discord sign in failed';
+                          setMessage(`❌ Error: ${errorMessage}`);
+                        })
+                      }
                       variant="secondary"
                     >
                       Sign in with Discord
@@ -328,9 +307,13 @@ const App: React.FC<unknown> = () => {
 
                     <Button
                       className="w-full"
-                      onClick={() => {
-                        void handleOAuthSignIn('google');
-                      }}
+                      onClick={() =>
+                        handleOAuthSignIn('google').catch(error => {
+                          console.error('OAuth error:', error);
+                          const errorMessage = error instanceof Error ? error.message : 'Google sign in failed';
+                          setMessage(`❌ Error: ${errorMessage}`);
+                        })
+                      }
                       variant="secondary"
                     >
                       Sign in with Google
@@ -340,27 +323,24 @@ const App: React.FC<unknown> = () => {
               ) : (
                 <div className="space-y-4">
                   <div className="space-y-2 text-center">
-                    <div className="text-muted-foreground text-sm">
-                      User ID: {user?.id}
-                    </div>
+                    <div className="text-muted-foreground text-sm">User ID: {user?.id}</div>
+
+                    <div className="text-muted-foreground text-sm">Email: {user?.email}</div>
 
                     <div className="text-muted-foreground text-sm">
-                      Email: {user?.email}
-                    </div>
-
-                    <div className="text-muted-foreground text-sm">
-                      Created:{' '}
-                      {user?.created_at
-                        ? new Date(user.created_at).toLocaleDateString()
-                        : 'Unknown'}
+                      Created: {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}
                     </div>
                   </div>
 
                   <Button
                     className="w-full"
-                    onClick={() => {
-                      void handleSignOut();
-                    }}
+                    onClick={() =>
+                      handleSignOut().catch(error => {
+                        console.error('Sign out error:', error);
+                        const errorMessage = error instanceof Error ? error.message : 'Sign out failed';
+                        setMessage(`❌ Error: ${errorMessage}`);
+                      })
+                    }
                     variant="outline"
                   >
                     Sign Out
@@ -368,9 +348,7 @@ const App: React.FC<unknown> = () => {
                 </div>
               )}
 
-              {message && (
-                <div className="bg-muted rounded-md p-3 text-sm">{message}</div>
-              )}
+              {message && <div className="bg-muted rounded-md p-3 text-sm">{message}</div>}
             </CardContent>
           </Card>
 
@@ -378,9 +356,7 @@ const App: React.FC<unknown> = () => {
             <CardHeader>
               <CardTitle>Coming Soon</CardTitle>
 
-              <CardDescription>
-                Features we'll build in the next phases
-              </CardDescription>
+              <CardDescription>Features we'll build in the next phases</CardDescription>
             </CardHeader>
 
             <CardContent>

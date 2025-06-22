@@ -122,13 +122,7 @@ describe('Tabs Component', () => {
       );
 
       const tabsList = screen.getByTestId('tabs-list');
-      expect(tabsList).toHaveClass(
-        'bg-muted',
-        'text-muted-foreground',
-        'inline-flex',
-        'h-9',
-        'rounded-lg'
-      );
+      expect(tabsList).toHaveClass('bg-muted', 'text-muted-foreground', 'inline-flex', 'h-9', 'rounded-lg');
     });
 
     it('applies custom className', () => {
@@ -154,10 +148,7 @@ describe('Tabs Component', () => {
         </Tabs>
       );
 
-      expect(screen.getByTestId('tabs-list')).toHaveAttribute(
-        'data-slot',
-        'tabs-list'
-      );
+      expect(screen.getByTestId('tabs-list')).toHaveAttribute('data-slot', 'tabs-list');
     });
   });
 
@@ -213,11 +204,7 @@ describe('Tabs Component', () => {
       render(
         <Tabs defaultValue="tab1">
           <Tabs.List>
-            <Tabs.Trigger
-              className="custom-trigger"
-              data-testid="tab-trigger"
-              value="tab1"
-            >
+            <Tabs.Trigger className="custom-trigger" data-testid="tab-trigger" value="tab1">
               Tab 1
             </Tabs.Trigger>
           </Tabs.List>
@@ -240,10 +227,7 @@ describe('Tabs Component', () => {
         </Tabs>
       );
 
-      expect(screen.getByTestId('tab-trigger')).toHaveAttribute(
-        'data-slot',
-        'tabs-trigger'
-      );
+      expect(screen.getByTestId('tab-trigger')).toHaveAttribute('data-slot', 'tabs-trigger');
     });
   });
 
@@ -272,11 +256,7 @@ describe('Tabs Component', () => {
             <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
           </Tabs.List>
 
-          <Tabs.Content
-            className="custom-content"
-            data-testid="tab-content"
-            value="tab1"
-          >
+          <Tabs.Content className="custom-content" data-testid="tab-content" value="tab1">
             Content
           </Tabs.Content>
         </Tabs>
@@ -320,20 +300,15 @@ describe('Tabs Component', () => {
         </Tabs>
       );
 
-      expect(screen.getByTestId('tab-content')).toHaveAttribute(
-        'data-slot',
-        'tabs-content'
-      );
+      expect(screen.getByTestId('tab-content')).toHaveAttribute('data-slot', 'tabs-content');
     });
   });
 
-  describe('Controlled Tabs', () => {
+  describe('Controlled Tabs', () =>
     it('works as controlled component', async () => {
       const user = userEvent.setup();
       let currentValue = 'tab1';
-      const handleValueChange = (value: string) => {
-        currentValue = value;
-      };
+      const handleValueChange = (value: string) => (currentValue = value);
 
       const {rerender} = render(
         <Tabs onValueChange={handleValueChange} value={currentValue}>
@@ -363,10 +338,9 @@ describe('Tabs Component', () => {
       );
 
       expect(screen.getByText('Content 2')).toBeInTheDocument();
-    });
-  });
+    }));
 
-  describe('Accessibility', () => {
+  describe('Accessibility', () =>
     it('has proper ARIA attributes', () => {
       render(
         <Tabs defaultValue="tab1">
@@ -386,6 +360,5 @@ describe('Tabs Component', () => {
       expect(tablist).toBeInTheDocument();
       expect(tabs).toHaveLength(2);
       expect(tabpanel).toBeInTheDocument();
-    });
-  });
+    }));
 });

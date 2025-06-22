@@ -35,22 +35,16 @@ describe('FFXI Game Constants', () => {
       expect(FFXI_GENDERS.FEMALE).toBe('female');
     });
 
-    it('should have 8 valid race/gender combinations', () => {
-      expect(RACE_GENDER_COMBINATIONS).toHaveLength(8);
-    });
+    it('should have 8 valid race/gender combinations', () => expect(RACE_GENDER_COMBINATIONS).toHaveLength(8));
 
     it('should include gender-locked races correctly', () => {
       // Mithra should only be female
-      const mithraEntries = RACE_GENDER_COMBINATIONS.filter(
-        combo => combo.race === 'mithra'
-      );
+      const mithraEntries = RACE_GENDER_COMBINATIONS.filter(combo => combo.race === 'mithra');
       expect(mithraEntries).toHaveLength(1);
       expect(mithraEntries[0].gender).toBe('female');
 
       // Galka should only be male
-      const galkaEntries = RACE_GENDER_COMBINATIONS.filter(
-        combo => combo.race === 'galka'
-      );
+      const galkaEntries = RACE_GENDER_COMBINATIONS.filter(combo => combo.race === 'galka');
       expect(galkaEntries).toHaveLength(1);
       expect(galkaEntries[0].gender).toBe('male');
     });
@@ -59,9 +53,7 @@ describe('FFXI Game Constants', () => {
       const nonLockedRaces = ['hume', 'elvaan', 'tarutaru'];
 
       for (const race of nonLockedRaces) {
-        const raceEntries = RACE_GENDER_COMBINATIONS.filter(
-          combo => combo.race === race
-        );
+        const raceEntries = RACE_GENDER_COMBINATIONS.filter(combo => combo.race === race);
         expect(raceEntries).toHaveLength(2);
 
         const genders = raceEntries.map(entry => entry.gender);
@@ -85,9 +77,7 @@ describe('FFXI Game Constants', () => {
   });
 
   describe('FFXI Worlds', () => {
-    it('should have 16 active worlds', () => {
-      expect(FFXI_WORLDS).toHaveLength(16);
-    });
+    it('should have 16 active worlds', () => expect(FFXI_WORLDS).toHaveLength(16));
 
     it('should include major worlds', () => {
       expect(FFXI_WORLDS).toContain('Asura');
@@ -103,21 +93,14 @@ describe('FFXI Game Constants', () => {
       expect(FFXI_WORLDS).toEqual(sorted);
     });
 
-    it('should not include test server', () => {
-      expect(FFXI_WORLDS).not.toContain('Atomos');
-    });
+    it('should not include test server', () => expect(FFXI_WORLDS).not.toContain('Atomos'));
   });
 
   describe('Portrait Configuration', () => {
-    it('should specify WebP format', () => {
-      expect(PORTRAIT_CONFIG.FORMAT).toBe('webp');
-    });
+    it('should specify WebP format', () => expect(PORTRAIT_CONFIG.FORMAT).toBe('webp'));
 
-    it('should have consistent filename pattern', () => {
-      expect(PORTRAIT_CONFIG.FILENAME_PATTERN).toBe(
-        'portrait-{race}-{gender}-face{face}-hair{hair}.webp'
-      );
-    });
+    it('should have consistent filename pattern', () =>
+      expect(PORTRAIT_CONFIG.FILENAME_PATTERN).toBe('portrait-{race}-{gender}-face{face}-hair{hair}.webp'));
 
     it('should specify portrait dimensions', () => {
       expect(PORTRAIT_CONFIG.DIMENSIONS.WIDTH).toBe(200);
@@ -138,8 +121,7 @@ describe('FFXI Game Constants', () => {
       expect(PROGRESS_CATEGORIES.FAME).toBe('fame');
     });
 
-    it('should have at least 9 progress categories', () => {
-      expect(Object.keys(PROGRESS_CATEGORIES).length).toBeGreaterThanOrEqual(9);
-    });
+    it('should have at least 9 progress categories', () =>
+      expect(Object.keys(PROGRESS_CATEGORIES).length).toBeGreaterThanOrEqual(9));
   });
 });

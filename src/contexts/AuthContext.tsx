@@ -20,6 +20,7 @@ import {
   signOut,
   signUp,
   updatePassword,
+  updateProfile,
 } from '@/lib/auth';
 import {supabase} from '@/lib/supabase';
 
@@ -37,12 +38,11 @@ export type AuthContextType = {
   refresh: () => Promise<void>;
   resetPassword: (email: string) => Promise<Omit<AuthResult, 'data'>>;
   signIn: (email: string, password: string) => Promise<AuthResult>;
-  signInWithProvider: (
-    provider: AuthProviderType
-  ) => Promise<Omit<AuthResult, 'data'>>;
+  signInWithProvider: (provider: AuthProviderType) => Promise<Omit<AuthResult, 'data'>>;
   signOut: () => Promise<Omit<AuthResult, 'data'>>;
   signUp: (email: string, password: string) => Promise<AuthResult>;
   updatePassword: (newPassword: string) => Promise<Omit<AuthResult, 'data'>>;
+  updateProfile: (profileData: {display_name?: string; full_name?: string}) => Promise<Omit<AuthResult, 'data'>>;
   user: null | User;
 };
 
@@ -52,9 +52,7 @@ export type AuthContextType = {
  * React context that provides authentication state and methods to all
  * child components. Should be consumed via the useAuth hook.
  */
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 /**
  * Props for the AuthProvider component
@@ -161,10 +159,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles user registration with email and password including loading and error state management
    */
-  const handleSignUp = async (
-    email: string,
-    password: string
-  ): Promise<AuthResult> => {
+  const handleSignUp = async (email: string, password: string): Promise<AuthResult> => {
     setLoading(true);
     setError(null);
 
@@ -184,10 +179,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles user sign-in with email and password authentication including state management
    */
-  const handleSignIn = async (
-    email: string,
-    password: string
-  ): Promise<AuthResult> => {
+  const handleSignIn = async (email: string, password: string): Promise<AuthResult> => {
     setLoading(true);
     setError(null);
 
@@ -207,9 +199,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles OAuth authentication with external providers including redirect handling
    */
-  const handleSignInWithProvider = async (
-    provider: AuthProviderType
-  ): Promise<Omit<AuthResult, 'data'>> => {
+  const handleSignInWithProvider = async (provider: AuthProviderType): Promise<Omit<AuthResult, 'data'>> => {
     setLoading(true);
     setError(null);
 
@@ -251,9 +241,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles password reset request for user email addresses
    */
-  const handleResetPassword = async (
-    email: string
-  ): Promise<Omit<AuthResult, 'data'>> => {
+  const handleResetPassword = async (email: string): Promise<Omit<AuthResult, 'data'>> => {
     setError(null);
 
     const result = await resetPassword(email);
@@ -268,12 +256,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles password update for authenticated users
    */
-  const handleUpdatePassword = async (
-    newPassword: string
-  ): Promise<Omit<AuthResult, 'data'>> => {
+  const handleUpdatePassword = async (newPassword: string): Promise<Omit<AuthResult, 'data'>> => {
     setError(null);
 
     const result = await updatePassword(newPassword);
+
+    if (!result.success) {
+      setError(result.error);
+    }
+
+    return result;
+  };
+
+  /**
+   * Handles profile metadata update for authenticated users
+   */
+  const handleUpdateProfile = async (profileData: {
+    display_name?: string;
+    full_name?: string;
+  }): Promise<Omit<AuthResult, 'data'>> => {
+    setError(null);
+
+    const result = await updateProfile(profileData);
 
     if (!result.success) {
       setError(result.error);
@@ -287,9 +291,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Clears any authentication error state
    */
-  const clearError = (): void => {
-    setError(null);
-  };
+  const clearError = () => setError(null);
 
   /**
    * Refreshes the current authentication state from Supabase
@@ -322,12 +324,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     signOut: handleSignOut,
     signUp: handleSignUp,
     updatePassword: handleUpdatePassword,
+    updateProfile: handleUpdateProfile,
     user,
   };
 
-  return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 /**

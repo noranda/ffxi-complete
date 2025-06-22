@@ -1,0 +1,137 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Step 3: TypeScript Check and Fix
+
+## Goal
+
+Ensure TypeScript compilation succeeds with 0 errors.
+
+## Required Context
+
+- ESLint check from Step 1 must have passed
+- Test check from Step 2 must have passed  
+- TypeScript configuration should be properly set up
+
+## Process
+
+### 1. Initial TypeScript Check
+
+```bash
+yarn type-check
+```
+
+### 2. Analyze TypeScript Errors
+
+If any compilation errors are found:
+
+1. **Read error messages carefully**:
+   - Note file paths and line numbers
+   - Understand the specific type error
+   - Identify if it's a type annotation, inference, or compatibility issue
+
+2. **Categorize error types**:
+   - Missing type annotations
+   - Type mismatches in assignments
+   - Incorrect function signatures
+   - Missing properties on objects
+   - Import/export type issues
+   - Generic type problems
+   - Null/undefined safety issues
+
+### 3. Manual Fix Process
+
+#### Common TypeScript Fixes
+
+1. **Type Annotation Issues**:
+   - Add explicit type annotations where needed
+   - Fix incorrect type declarations
+   - Update function parameter and return types
+
+2. **Type Compatibility Problems**:
+   - Fix type mismatches in assignments
+   - Add type assertions where appropriate (sparingly)
+   - Update object property types
+   - Fix array and generic type usage
+
+3. **Import/Export Type Issues**:
+   - Add `type` keyword for type-only imports
+   - Fix default vs named import/export mismatches
+   - Resolve module declaration issues
+
+4. **Null/Undefined Safety**:
+   - Add null checks where needed
+   - Use optional chaining (`?.`) appropriately
+   - Fix undefined property access
+
+5. **Function Signature Issues**:
+   - Fix parameter types and counts
+   - Update return type annotations
+   - Resolve callback function type mismatches
+
+6. **React/Component Specific**:
+   - Fix component prop type definitions
+   - Update event handler types
+   - Resolve ref and state type issues
+
+### 4. Incremental Fixing
+
+For each TypeScript error:
+
+1. **Focus on one file at a time**
+2. **Run type check on specific file** (if possible):
+
+   ```bash
+   yarn tsc --noEmit path/to/file.ts
+   ```
+
+3. **Apply fixes and re-check**
+4. **Move to next error only after current one is resolved**
+
+### 5. Validation Check
+
+After all fixes, run full type check:
+
+```bash
+yarn type-check
+```
+
+### 6. Cross-Validation with ESLint
+
+Since ESLint also catches TypeScript errors, verify ESLint still passes:
+
+```bash
+yarn lint
+```
+
+### 7. Stop Conditions
+
+**Stop and ask for user guidance if**:
+
+- Type errors indicate fundamental architectural issues
+- Fixes would require changing core type definitions
+- Errors suggest missing or incorrect third-party type declarations
+- Type errors indicate breaking changes in dependencies
+- Complex generic type issues that need design decisions
+- Errors in generated or external type files
+- Multiple related type errors that suggest broader refactoring needed
+
+## Expected Output
+
+- TypeScript compilation succeeds with 0 errors and 0 warnings
+- All type annotations are correct and consistent
+- Code maintains type safety
+- ESLint continues to pass after TypeScript fixes
+
+## Success Criteria
+
+```bash
+yarn type-check
+# Should output: ✨ Done (no compilation errors)
+```
+
+## Next Step
+
+Once TypeScript check passes completely, proceed to Step 4: Formatting Check.

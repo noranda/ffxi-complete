@@ -129,6 +129,5 @@ export type FFXIGender = (typeof FFXI_GENDERS)[keyof typeof FFXI_GENDERS];
 export type FFXIRace = (typeof FFXI_RACES)[keyof typeof FFXI_RACES];
 export type FFXIWorld = (typeof FFXI_WORLDS)[number];
 export type HairStyle = (typeof HAIR_STYLES)[number];
-export type ProgressCategory =
-  (typeof PROGRESS_CATEGORIES)[keyof typeof PROGRESS_CATEGORIES];
+export type ProgressCategory = (typeof PROGRESS_CATEGORIES)[keyof typeof PROGRESS_CATEGORIES];
 export type RaceGenderCombination = (typeof RACE_GENDER_COMBINATIONS)[number];

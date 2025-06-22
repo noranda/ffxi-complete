@@ -1,0 +1,114 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Step 4: Formatting Check and Fix
+
+## Goal
+
+Ensure all files are properly formatted according to Prettier configuration.
+
+## Required Context
+
+- ESLint check from Step 1 must have passed
+- Test check from Step 2 must have passed
+- TypeScript check from Step 3 must have passed
+- Prettier configuration should be properly set up
+
+## Process
+
+### 1. Initial Formatting Check
+
+```bash
+yarn prettier --check .
+```
+
+### 2. Auto-Fix Attempt
+
+If any formatting issues are found:
+
+```bash
+yarn prettier --write .
+```
+
+### 3. Validation Check
+
+Re-run formatting check to confirm fixes:
+
+```bash
+yarn prettier --check .
+```
+
+### 4. Manual Fix Process
+
+If auto-fix doesn't resolve all issues (rare):
+
+1. **Identify problematic files**:
+   - Note specific file paths from error output
+   - Check if files are excluded from Prettier config
+   - Verify file extensions are supported
+
+2. **Common formatting issues**:
+   - Files with syntax errors (preventing parsing)
+   - Binary files incorrectly included
+   - Files with conflicting formatting rules
+   - Generated files that should be excluded
+
+3. **Manual resolution steps**:
+   - Fix syntax errors preventing Prettier from parsing
+   - Update `.prettierignore` to exclude problematic files
+   - Resolve conflicts between Prettier and other formatters
+   - Handle edge cases in specific file types
+
+### 5. Cross-Validation with ESLint
+
+Ensure formatting changes don't conflict with ESLint:
+
+```bash
+yarn lint
+```
+
+If ESLint errors appear after formatting:
+
+- Run `yarn lint --fix` to resolve conflicts
+- Check for Prettier/ESLint configuration conflicts
+- Update configurations if needed
+
+### 6. Stop Conditions
+
+**Stop and ask for user guidance if**:
+
+- Formatting conflicts with ESLint rules cannot be auto-resolved
+- Files contain syntax errors that prevent Prettier parsing
+- Configuration conflicts between tools need resolution
+- Generated files are causing formatting issues
+- Custom formatting requirements conflict with Prettier defaults
+
+## Expected Output
+
+- All files pass Prettier formatting check with 0 warnings
+- No formatting inconsistencies remain
+- ESLint continues to pass after formatting
+- Code maintains readability and consistency
+
+## Success Criteria
+
+```bash
+yarn prettier --check .
+# Should output: All matched files use Prettier code style!
+```
+
+## Validation Commands
+
+```bash
+# Confirm formatting passes
+yarn prettier --check .
+
+# Confirm ESLint still passes
+yarn lint
+```
+
+## Next Step
+
+Once formatting check passes completely, proceed to Step 5: Markdown Lint Check.

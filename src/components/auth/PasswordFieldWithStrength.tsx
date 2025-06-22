@@ -2,6 +2,7 @@ import {Field, type FieldProps} from 'formik';
 
 import {Input} from '@/components/ui/input';
 import {validatePassword} from '@/lib/auth';
+import {cn} from '@/lib/utils';
 
 /**
  * Props for the PasswordFieldWithStrength component
@@ -30,9 +31,7 @@ type PasswordFieldWithStrengthProps = {
  * Features real-time password strength validation, visual strength indicator with color coding,
  * accessibility support with proper ARIA labels, and requirements display for incomplete passwords.
  */
-export const PasswordFieldWithStrength: React.FC<
-  PasswordFieldWithStrengthProps
-> = ({
+export const PasswordFieldWithStrength: React.FC<PasswordFieldWithStrengthProps> = ({
   disabled = false,
   error,
   id,
@@ -57,13 +56,7 @@ export const PasswordFieldWithStrength: React.FC<
         {({field}: FieldProps) => (
           <Input
             {...field}
-            aria-describedby={
-              hasError
-                ? `${name}-error`
-                : showPasswordStrength
-                  ? `${name}-strength`
-                  : undefined
-            }
+            aria-describedby={hasError ? `${name}-error` : showPasswordStrength ? `${name}-strength` : undefined}
             aria-invalid={hasError}
             disabled={disabled}
             id={id ?? name}
@@ -88,7 +81,8 @@ export const PasswordFieldWithStrength: React.FC<
               <div className="flex gap-1">
                 {Array.from({length: 4}, (_, i) => (
                   <div
-                    className={`h-1 w-4 rounded ${
+                    className={cn(
+                      'h-1 w-4 rounded',
                       i < passwordValidation.strength
                         ? passwordValidation.strength === 1
                           ? 'bg-red-500'
@@ -98,7 +92,7 @@ export const PasswordFieldWithStrength: React.FC<
                               ? 'bg-blue-500'
                               : 'bg-green-500'
                         : 'bg-gray-200'
-                    }`}
+                    )}
                     key={i}
                   />
                 ))}
@@ -106,9 +100,7 @@ export const PasswordFieldWithStrength: React.FC<
             </div>
 
             {passwordValidation.requirements.length > 0 && (
-              <div className="text-muted-foreground">
-                Still needed: {passwordValidation.requirements.join(', ')}
-              </div>
+              <div className="text-muted-foreground">Still needed: {passwordValidation.requirements.join(', ')}</div>
             )}
           </div>
         </div>

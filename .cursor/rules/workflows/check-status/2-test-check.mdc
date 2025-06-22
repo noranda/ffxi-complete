@@ -1,0 +1,124 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Step 2: Test Check and Fix
+
+## Goal
+
+Ensure all tests pass with 100% success rate.
+
+## Required Context
+
+- ESLint check from Step 1 must have passed
+- Test environment should be properly configured
+- All test dependencies should be available
+
+## Process
+
+### 1. Initial Test Run
+
+```bash
+yarn test --run
+```
+
+### 2. Analyze Test Results
+
+If any tests fail:
+
+1. **Identify failing tests**:
+   - Note test file names and specific test cases
+   - Read failure messages and error details
+   - Identify patterns in failures (imports, mocks, assertions, etc.)
+
+2. **Categorize failure types**:
+   - Import/module resolution issues
+   - Mock configuration problems
+   - Assertion mismatches
+   - Component rendering issues
+   - Async/timing problems
+   - Test environment setup issues
+
+### 3. Manual Fix Process
+
+#### Common Test Fixes
+
+1. **Import Issues**:
+   - Fix import paths in test files
+   - Add missing test utilities imports
+   - Resolve module resolution conflicts
+
+2. **Mock Problems**:
+   - Update mock implementations
+   - Fix mock return values
+   - Ensure mocks match actual API signatures
+
+3. **Assertion Failures**:
+   - Update expected values to match actual behavior
+   - Fix test logic to match implementation changes
+   - Ensure assertions test the right things
+
+4. **Component Test Issues**:
+   - Update component props in tests
+   - Fix event simulation and user interactions
+   - Resolve rendering and DOM query issues
+
+5. **Async Test Problems**:
+   - Add proper `await` statements
+   - Use `waitFor` for async operations
+   - Fix timing-dependent test logic
+
+### 4. Incremental Fixing
+
+For each failing test:
+
+1. **Focus on one test file at a time**
+2. **Run specific test file**:
+
+   ```bash
+   yarn test --run path/to/specific.test.tsx
+   ```
+
+3. **Apply fixes and re-test**
+4. **Move to next failing test only after current one passes**
+
+### 5. Validation Check
+
+After all fixes, run full test suite:
+
+```bash
+yarn test --run
+```
+
+### 6. Stop Conditions
+
+**Stop and ask for user guidance if**:
+
+- Test failures indicate breaking changes in implementation
+- Fixes would require changing core application logic
+- Test failures suggest architectural issues
+- Mock updates require understanding of external API changes
+- Multiple test files have similar complex failures
+- Test failures indicate missing or incorrect business logic
+
+## Expected Output
+
+- All tests pass (100% success rate) with 0 warnings
+- No skipped or pending tests
+- Test output shows clear success message
+- All test files execute without errors
+
+## Success Criteria
+
+```bash
+yarn test --run
+# Should output: 
+# Test Files  X passed (X)
+# Tests  XXX passed (XXX)
+# Duration: X.XXs
+```
+
+## Next Step
+
+Once all tests pass completely, proceed to Step 3: TypeScript Check.

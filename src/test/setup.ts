@@ -3,9 +3,7 @@ import {cleanup} from '@testing-library/react';
 import {afterEach, beforeAll, vi} from 'vitest';
 
 // Cleanup after each test case (e.g. clearing jsdom)
-afterEach(() => {
-  cleanup();
-});
+afterEach(() => cleanup());
 
 // Mock browser APIs that are not available in jsdom
 beforeAll(() => {
@@ -52,9 +50,7 @@ beforeAll(() => {
   });
 
   // Add the fromRect static method
-  global.DOMRect.fromRect = vi
-    .fn()
-    .mockImplementation(() => mockDOMRectInstance);
+  global.DOMRect.fromRect = vi.fn().mockImplementation(() => mockDOMRectInstance);
 
   // Mock HTMLElement.getBoundingClientRect
   Element.prototype.getBoundingClientRect = vi.fn(() => ({

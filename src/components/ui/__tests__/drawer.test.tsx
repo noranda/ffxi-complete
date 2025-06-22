@@ -53,9 +53,7 @@ describe('Drawer Component', () => {
 
       render(
         <Drawer>
-          <Drawer.Trigger data-testid="drawer-trigger">
-            Open Drawer
-          </Drawer.Trigger>
+          <Drawer.Trigger data-testid="drawer-trigger">Open Drawer</Drawer.Trigger>
 
           <Drawer.Content data-testid="drawer-content">
             <Drawer.Header>
@@ -110,10 +108,7 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('trigger')).toHaveAttribute(
-        'data-slot',
-        'drawer-trigger'
-      );
+      expect(screen.getByTestId('trigger')).toHaveAttribute('data-slot', 'drawer-trigger');
     });
   });
 
@@ -131,23 +126,13 @@ describe('Drawer Component', () => {
       );
 
       const content = screen.getByTestId('drawer-content');
-      expect(content).toHaveClass(
-        'group/drawer-content',
-        'bg-background',
-        'fixed',
-        'z-50',
-        'flex',
-        'flex-col'
-      );
+      expect(content).toHaveClass('group/drawer-content', 'bg-background', 'fixed', 'z-50', 'flex', 'flex-col');
     });
 
     it('applies custom className', () => {
       render(
         <Drawer open>
-          <Drawer.Content
-            className="custom-content"
-            data-testid="drawer-content"
-          >
+          <Drawer.Content className="custom-content" data-testid="drawer-content">
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
               <Drawer.Description>Description</Drawer.Description>
@@ -156,9 +141,7 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-content')).toHaveClass(
-        'custom-content'
-      );
+      expect(screen.getByTestId('drawer-content')).toHaveClass('custom-content');
     });
 
     it('includes data-slot attribute', () => {
@@ -173,10 +156,7 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-content')).toHaveAttribute(
-        'data-slot',
-        'drawer-content'
-      );
+      expect(screen.getByTestId('drawer-content')).toHaveAttribute('data-slot', 'drawer-content');
     });
   });
 
@@ -201,10 +181,7 @@ describe('Drawer Component', () => {
       render(
         <Drawer open>
           <Drawer.Content>
-            <Drawer.Header
-              className="custom-header"
-              data-testid="drawer-header"
-            >
+            <Drawer.Header className="custom-header" data-testid="drawer-header">
               <Drawer.Title>Title</Drawer.Title>
               <Drawer.Description>Description</Drawer.Description>
             </Drawer.Header>
@@ -227,10 +204,7 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-header')).toHaveAttribute(
-        'data-slot',
-        'drawer-header'
-      );
+      expect(screen.getByTestId('drawer-header')).toHaveAttribute('data-slot', 'drawer-header');
     });
   });
 
@@ -280,10 +254,7 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-title')).toHaveAttribute(
-        'data-slot',
-        'drawer-title'
-      );
+      expect(screen.getByTestId('drawer-title')).toHaveAttribute('data-slot', 'drawer-title');
     });
   });
 
@@ -295,9 +266,7 @@ describe('Drawer Component', () => {
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
 
-              <Drawer.Description data-testid="drawer-description">
-                Description
-              </Drawer.Description>
+              <Drawer.Description data-testid="drawer-description">Description</Drawer.Description>
             </Drawer.Header>
           </Drawer.Content>
         </Drawer>
@@ -314,10 +283,7 @@ describe('Drawer Component', () => {
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
 
-              <Drawer.Description
-                className="custom-description"
-                data-testid="drawer-description"
-              >
+              <Drawer.Description className="custom-description" data-testid="drawer-description">
                 Description
               </Drawer.Description>
             </Drawer.Header>
@@ -325,9 +291,7 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-description')).toHaveClass(
-        'custom-description'
-      );
+      expect(screen.getByTestId('drawer-description')).toHaveClass('custom-description');
     });
 
     it('includes data-slot attribute', () => {
@@ -337,18 +301,13 @@ describe('Drawer Component', () => {
             <Drawer.Header>
               <Drawer.Title>Title</Drawer.Title>
 
-              <Drawer.Description data-testid="drawer-description">
-                Description
-              </Drawer.Description>
+              <Drawer.Description data-testid="drawer-description">Description</Drawer.Description>
             </Drawer.Header>
           </Drawer.Content>
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-description')).toHaveAttribute(
-        'data-slot',
-        'drawer-description'
-      );
+      expect(screen.getByTestId('drawer-description')).toHaveAttribute('data-slot', 'drawer-description');
     });
   });
 
@@ -379,10 +338,7 @@ describe('Drawer Component', () => {
               <Drawer.Description>Description</Drawer.Description>
             </Drawer.Header>
 
-            <Drawer.Footer
-              className="custom-footer"
-              data-testid="drawer-footer"
-            >
+            <Drawer.Footer className="custom-footer" data-testid="drawer-footer">
               Footer
             </Drawer.Footer>
           </Drawer.Content>
@@ -405,10 +361,7 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-footer')).toHaveAttribute(
-        'data-slot',
-        'drawer-footer'
-      );
+      expect(screen.getByTestId('drawer-footer')).toHaveAttribute('data-slot', 'drawer-footer');
     });
   });
 
@@ -472,14 +425,11 @@ describe('Drawer Component', () => {
         </Drawer>
       );
 
-      expect(screen.getByTestId('drawer-close')).toHaveAttribute(
-        'data-slot',
-        'drawer-close'
-      );
+      expect(screen.getByTestId('drawer-close')).toHaveAttribute('data-slot', 'drawer-close');
     });
   });
 
-  describe('Controlled Drawer', () => {
+  describe('Controlled Drawer', () =>
     it('works as controlled component', async () => {
       const user = userEvent.setup();
       const handleOpenChange = vi.fn();
@@ -492,9 +442,7 @@ describe('Drawer Component', () => {
             <Drawer.Header>
               <Drawer.Title>Controlled Drawer</Drawer.Title>
 
-              <Drawer.Description>
-                This is a controlled drawer
-              </Drawer.Description>
+              <Drawer.Description>This is a controlled drawer</Drawer.Description>
             </Drawer.Header>
           </Drawer.Content>
         </Drawer>
@@ -516,17 +464,14 @@ describe('Drawer Component', () => {
             <Drawer.Header>
               <Drawer.Title>Controlled Drawer</Drawer.Title>
 
-              <Drawer.Description>
-                This is a controlled drawer
-              </Drawer.Description>
+              <Drawer.Description>This is a controlled drawer</Drawer.Description>
             </Drawer.Header>
           </Drawer.Content>
         </Drawer>
       );
 
       expect(screen.getByTestId('drawer-content')).toBeInTheDocument();
-    });
-  });
+    }));
 
   describe('Complete Drawer Structure', () => {
     it('renders complete drawer with all components', () => {
@@ -536,9 +481,7 @@ describe('Drawer Component', () => {
             <Drawer.Header>
               <Drawer.Title>Complete Drawer</Drawer.Title>
 
-              <Drawer.Description>
-                This drawer has all components
-              </Drawer.Description>
+              <Drawer.Description>This drawer has all components</Drawer.Description>
             </Drawer.Header>
 
             <div className="p-4">
@@ -555,12 +498,8 @@ describe('Drawer Component', () => {
 
       expect(screen.getByTestId('complete-drawer')).toBeInTheDocument();
       expect(screen.getByText('Complete Drawer')).toBeInTheDocument();
-      expect(
-        screen.getByText('This drawer has all components')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Main drawer content goes here')
-      ).toBeInTheDocument();
+      expect(screen.getByText('This drawer has all components')).toBeInTheDocument();
+      expect(screen.getByText('Main drawer content goes here')).toBeInTheDocument();
       expect(screen.getByText('Cancel')).toBeInTheDocument();
       expect(screen.getByText('Confirm')).toBeInTheDocument();
     });
@@ -572,9 +511,7 @@ describe('Drawer Component', () => {
             <Drawer.Header data-testid="header">
               <Drawer.Title data-testid="title">Title</Drawer.Title>
 
-              <Drawer.Description data-testid="description">
-                Description
-              </Drawer.Description>
+              <Drawer.Description data-testid="description">Description</Drawer.Description>
             </Drawer.Header>
             <div data-testid="body">Body</div>
 
@@ -598,7 +535,7 @@ describe('Drawer Component', () => {
     });
   });
 
-  describe('Accessibility', () => {
+  describe('Accessibility', () =>
     it('has proper ARIA attributes', () => {
       render(
         <Drawer open>
@@ -615,6 +552,5 @@ describe('Drawer Component', () => {
       expect(dialog).toBeInTheDocument();
       expect(dialog).toHaveAttribute('aria-labelledby');
       expect(dialog).toHaveAttribute('aria-describedby');
-    });
-  });
+    }));
 });

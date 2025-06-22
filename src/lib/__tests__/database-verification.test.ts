@@ -11,10 +11,7 @@ describe('Database Verification', () => {
   describe('Database Connectivity', () => {
     it('should connect to Supabase successfully', async () => {
       // Test basic connectivity using the characters table which we know exists
-      const {data, error} = await supabase
-        .from('characters')
-        .select('id')
-        .limit(0); // Just test connectivity, not data
+      const {data, error} = await supabase.from('characters').select('id').limit(0); // Just test connectivity, not data
 
       expect(error).toBeNull();
       expect(Array.isArray(data)).toBe(true);
@@ -30,10 +27,7 @@ describe('Database Verification', () => {
   describe('Row Level Security (RLS)', () => {
     it('should block access to characters table without authentication', async () => {
       // When not authenticated, should not be able to access characters due to RLS
-      const {data, error} = await supabase
-        .from('characters')
-        .select('*')
-        .limit(10);
+      const {data, error} = await supabase.from('characters').select('*').limit(10);
 
       // Should return empty array due to RLS filtering (not an error)
       expect(error).toBeNull();
@@ -51,9 +45,7 @@ describe('Database Verification', () => {
 
       // Should fail due to RLS policy
       expect(error).toBeTruthy();
-      expect(error?.message).toContain(
-        'new row violates row-level security policy'
-      );
+      expect(error?.message).toContain('new row violates row-level security policy');
     });
   });
 });

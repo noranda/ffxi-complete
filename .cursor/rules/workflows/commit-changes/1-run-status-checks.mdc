@@ -7,20 +7,23 @@ globs:
 
 ## Goal
 
-Execute all project quality checks and verify that the codebase is in a healthy state before proceeding
+Execute the check-status workflow to verify that the codebase is in a healthy state before proceeding
 with commit creation. All checks must pass green before moving to the next step.
 
 ## Required Context/Inputs
 
-- None - this step runs standard project quality checks
+- None - this step runs the check-status workflow
 
 ## Process
 
-1. **Run ESLint**: Execute `yarn lint` to check for linting issues (capture both errors AND warnings)
-2. **Run Tests**: Execute `yarn test --run` to run all tests (using --run flag to avoid watch mode)
-3. **Run Type Check**: Execute `yarn type-check` to verify TypeScript compilation
-4. **Run Format Check**: Execute `yarn prettier --check .` to verify code formatting
-5. **Run Markdown Lint**: Execute `yarn lint:md` to check markdown file formatting
+Execute the complete check-status workflow which includes:
+
+1. **ESLint Check**: Runs `yarn lint` and auto-fixes issues where possible
+2. **Test Check**: Runs `yarn test --run` and fixes any failing tests
+3. **TypeScript Check**: Runs `yarn type-check` and fixes type errors
+4. **Format Check**: Runs `yarn prettier --check .` and auto-formats files
+5. **Markdown Lint Check**: Runs `yarn lint:md` and fixes markdown issues
+6. **Status Report**: Generates final status report
 
 ## Quality Gate Requirements
 
@@ -40,28 +43,33 @@ All five checks must pass with exit code 0:
 
 ## Instructions for AI
 
-1. Run all five status check commands and capture full output (not --quiet) to see warnings
-2. Parse outputs to count errors AND warnings separately for each tool
-3. Report results using the standard status-check-reporting format with emoji indicators:
-   - 🟢 Green: No errors, no warnings  
-   - 🟠 Orange: Warnings present, no errors
-   - 🔴 Red: Errors present (may also have warnings)
-4. If ANY check has errors, stop the workflow and report the issues - do not proceed
-5. If only warnings are present, report them but allow proceeding (user decision)
-6. Only if ALL checks are green or orange, confirm readiness to proceed to step 2
-7. Wait for explicit user approval before moving to next step
+1. Execute the complete check-status workflow (steps 1-6)
+2. The workflow will automatically:
+   - Run all quality checks
+   - Auto-fix issues where possible
+   - Stop and ask for guidance on complex issues
+   - Generate the final status report
+3. The final output should be the clean status report format:
 
-### Command Details for Capturing Output
+   ```markdown
+   ## ✅ **Status Check**
+   🟢 **Lint**: 0 Errors, 0 Warnings  
+   🟢 **Tests**: [X]/[X] passing (100% success rate)  
+   🟢 **Types**: 0 Errors - TypeScript compilation successful  
+   🟢 **Format**: All files properly formatted  
+   🟢 **Markdown**: 0 Errors, 0 Warnings  
+   ### Issues Found:
+   None - All quality gates passed ✅
+   ```
 
-- **ESLint**: Use `yarn lint` (not --quiet) to see warnings
-- **Tests**: Capture test warnings if any appear in output
-- **Other tools**: Use standard commands and parse output for warnings
+4. Only proceed to step 2 if all indicators are green (🟢)
+5. Wait for explicit user approval before moving to next step
 
 ## Failure Handling
 
-If any status check fails:
+If the check-status workflow encounters issues:
 
-- Report the specific failures clearly
-- Suggest fixes if obvious (lint auto-fix, format auto-fix)
-- Do NOT proceed to step 2 until all issues are resolved
-- User must fix issues and restart the workflow
+- The workflow will attempt auto-fixes where possible
+- For complex issues, it will stop and ask for user guidance
+- Do NOT proceed to step 2 until all quality gates are green
+- User must resolve any issues before continuing the commit workflow

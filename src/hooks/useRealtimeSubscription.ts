@@ -15,9 +15,7 @@ type RealtimePayload<T = Record<string, unknown>> = {
   old: null | T;
 };
 
-type SubscriptionCallback<T = Record<string, unknown>> = (
-  payload: RealtimePayload<T>
-) => void;
+type SubscriptionCallback<T = Record<string, unknown>> = (payload: RealtimePayload<T>) => void;
 
 type SubscriptionEvent = '*' | 'DELETE' | 'INSERT' | 'UPDATE';
 
@@ -45,9 +43,7 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
   const callbackRef = useRef(callback);
 
   // Keep callback reference current
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
+  useEffect(() => void (callbackRef.current = callback), [callback]);
 
   useEffect(() => {
     if (!enabled) {
@@ -78,9 +74,7 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
         schema: 'public',
         table,
       },
-      (payload: RealtimePayload<T>) => {
-        callbackRef.current(payload);
-      }
+      (payload: RealtimePayload<T>) => callbackRef.current(payload)
     );
 
     // Subscribe to the channel
@@ -119,10 +113,7 @@ export const useRealtimeSubscription = <T = Record<string, unknown>>(
  * Hook for subscribing to character changes for a specific user
  * Convenience wrapper around useRealtimeSubscription
  */
-export const useCharacterSubscription = (
-  userId: null | string,
-  callback: SubscriptionCallback
-) => {
+export const useCharacterSubscription = (userId: null | string, callback: SubscriptionCallback) =>
   useRealtimeSubscription(
     {
       enabled: userId != null,
@@ -131,21 +122,16 @@ export const useCharacterSubscription = (
     },
     callback
   );
-};
 
 /**
  * Hook for subscribing to character progress changes for a specific character
  * Monitors job progress, skill progress, etc.
  */
-export const useCharacterProgressSubscription = (
-  characterId: null | string,
-  callback: SubscriptionCallback
-) => {
+export const useCharacterProgressSubscription = (characterId: null | string, callback: SubscriptionCallback) => {
   useRealtimeSubscription(
     {
       enabled: characterId != null,
-      filter:
-        characterId != null ? `character_id=eq.${characterId}` : undefined,
+      filter: characterId != null ? `character_id=eq.${characterId}` : undefined,
       table: 'character_job_progress',
     },
     callback
@@ -154,8 +140,7 @@ export const useCharacterProgressSubscription = (
   useRealtimeSubscription(
     {
       enabled: characterId != null,
-      filter:
-        characterId != null ? `character_id=eq.${characterId}` : undefined,
+      filter: characterId != null ? `character_id=eq.${characterId}` : undefined,
       table: 'character_skill_progress',
     },
     callback

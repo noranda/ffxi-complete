@@ -16,9 +16,7 @@ import type {ProtectedRouteAuthState} from './types';
  */
 export type ProtectedRouteProps = {
   /** Child components to render when authenticated */
-  children:
-    | ((authState: ProtectedRouteAuthState) => React.ReactNode)
-    | React.ReactNode;
+  children: ((authState: ProtectedRouteAuthState) => React.ReactNode) | React.ReactNode;
   /** Custom loading component to show while authenticating */
   loadingComponent?: React.ReactNode;
   /** Custom redirect path for unauthenticated users (defaults to /login) */
@@ -33,9 +31,7 @@ const DefaultLoadingComponent: React.FC = () => (
     <div className="text-center" data-testid="protected-route-loading">
       <div className="border-primary mx-auto h-8 w-8 animate-spin rounded-full border-b-2" />
 
-      <div className="text-muted-foreground mt-2 text-sm">
-        Checking authentication...
-      </div>
+      <div className="text-muted-foreground mt-2 text-sm">Checking authentication...</div>
     </div>
   </div>
 );
@@ -43,11 +39,7 @@ const DefaultLoadingComponent: React.FC = () => (
 /**
  * Protected Route component that guards authenticated areas and handles auth state transitions.
  */
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children,
-  loadingComponent,
-  redirectTo = '/login',
-}) => {
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children, loadingComponent, redirectTo = '/login'}) => {
   const {isAuthenticated, loading} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();

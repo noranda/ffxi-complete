@@ -27,11 +27,7 @@ type TabsTriggerProps = React.ComponentProps<typeof TabsPrimitive.Trigger>;
  * Provides accessible tab navigation with keyboard support.
  */
 const TabsRoot: React.FC<TabsProps> = ({className, ...props}) => (
-  <TabsPrimitive.Root
-    className={cn('flex flex-col gap-2', className)}
-    data-slot="tabs"
-    {...props}
-  />
+  <TabsPrimitive.Root className={cn('flex flex-col gap-2', className)} data-slot="tabs" {...props} />
 );
 /**
  * Tabs list container for tab triggers.
@@ -67,11 +63,7 @@ const TabsTrigger: React.FC<TabsTriggerProps> = ({className, ...props}) => (
  * Contains the content associated with each tab.
  */
 const TabsContent: React.FC<TabsContentProps> = ({className, ...props}) => (
-  <TabsPrimitive.Content
-    className={cn('flex-1 outline-none', className)}
-    data-slot="tabs-content"
-    {...props}
-  />
+  <TabsPrimitive.Content className={cn('flex-1 outline-none', className)} data-slot="tabs-content" {...props} />
 );
 /**
  * Compound Tabs component with sub-components as properties

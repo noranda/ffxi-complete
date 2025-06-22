@@ -9,15 +9,7 @@ describe('Input', () => {
     render(<Input data-testid="input" />);
     const input = screen.getByTestId('input');
     expect(input).toBeInTheDocument();
-    expect(input).toHaveClass(
-      'flex',
-      'h-9',
-      'w-full',
-      'rounded-md',
-      'border',
-      'border-input',
-      'px-3'
-    );
+    expect(input).toHaveClass('flex', 'h-9', 'w-full', 'rounded-md', 'border', 'border-input', 'px-3');
   });
 
   it('applies custom className', () => {
@@ -50,10 +42,7 @@ describe('Input', () => {
     render(<Input data-testid="input" disabled />);
     const input = screen.getByTestId('input');
     expect(input).toBeDisabled();
-    expect(input).toHaveClass(
-      'disabled:pointer-events-none',
-      'disabled:opacity-50'
-    );
+    expect(input).toHaveClass('disabled:pointer-events-none', 'disabled:opacity-50');
   });
 
   it('supports different input types', () => {
@@ -72,9 +61,7 @@ describe('Input', () => {
     const handleFocus = vi.fn();
     const handleBlur = vi.fn();
 
-    render(
-      <Input data-testid="input" onBlur={handleBlur} onFocus={handleFocus} />
-    );
+    render(<Input data-testid="input" onBlur={handleBlur} onFocus={handleFocus} />);
     const input = screen.getByTestId('input');
 
     await user.click(input);
@@ -85,9 +72,7 @@ describe('Input', () => {
   });
 
   it('supports controlled input', () => {
-    const {rerender} = render(
-      <Input data-testid="input" onChange={() => {}} value="initial" />
-    );
+    const {rerender} = render(<Input data-testid="input" onChange={() => {}} value="initial" />);
     const input = screen.getByTestId('input');
     expect(input).toHaveValue('initial');
 
@@ -107,10 +92,7 @@ describe('Input', () => {
     const input = screen.getByTestId('input');
 
     await user.click(input);
-    expect(input).toHaveClass(
-      'focus-visible:border-ring',
-      'focus-visible:ring-ring/50'
-    );
+    expect(input).toHaveClass('focus-visible:border-ring', 'focus-visible:ring-ring/50');
   });
 
   it('handles required attribute', () => {
@@ -126,14 +108,7 @@ describe('Input', () => {
   });
 
   it('supports aria attributes for accessibility', () => {
-    render(
-      <Input
-        aria-describedby="help-text"
-        aria-invalid="true"
-        aria-label="Test input"
-        data-testid="input"
-      />
-    );
+    render(<Input aria-describedby="help-text" aria-invalid="true" aria-label="Test input" data-testid="input" />);
     const input = screen.getByTestId('input');
     expect(input).toHaveAttribute('aria-label', 'Test input');
     expect(input).toHaveAttribute('aria-invalid', 'true');

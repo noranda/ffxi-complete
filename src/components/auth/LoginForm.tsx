@@ -7,13 +7,7 @@ import {useState} from 'react';
 import * as Yup from 'yup';
 
 import {Button} from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
 import {useAuth} from '@/contexts/AuthContext';
 import {isValidEmail} from '@/lib/auth';
@@ -26,8 +20,7 @@ import {OAuthButtons} from './OAuthButtons';
  * Login form props
  * Extends shared auth component patterns for consistency
  */
-type LoginFormProps = BaseAuthFormProps &
-  Pick<AuthCallbacks, 'onForgotPassword' | 'onSuccess' | 'onSwitchToRegister'>;
+type LoginFormProps = BaseAuthFormProps & Pick<AuthCallbacks, 'onForgotPassword' | 'onSuccess' | 'onSwitchToRegister'>;
 
 /**
  * Yup validation schema for login form
@@ -36,31 +29,18 @@ type LoginFormProps = BaseAuthFormProps &
 const loginSchema = Yup.object({
   email: Yup.string()
     .required('Email is required')
-    .test('is-valid-email', 'Please enter a valid email address', value =>
-      value ? isValidEmail(value) : false
-    ),
+    .test('is-valid-email', 'Please enter a valid email address', value => (value ? isValidEmail(value) : false)),
   password: Yup.string().required('Password is required'),
 });
 
 /**
  * Login form component with comprehensive error handling and OAuth support
  */
-export const LoginForm: React.FC<LoginFormProps> = ({
-  className,
-  onForgotPassword,
-  onSuccess,
-  onSwitchToRegister,
-}) => {
+export const LoginForm: React.FC<LoginFormProps> = ({className, onForgotPassword, onSuccess, onSwitchToRegister}) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Auth context
-  const {
-    clearError,
-    error: authError,
-    loading: authLoading,
-    signIn,
-    signInWithProvider,
-  } = useAuth();
+  const {clearError, error: authError, loading: authLoading, signIn, signInWithProvider} = useAuth();
 
   /**
    * Handles OAuth provider sign in for Discord and Google
@@ -82,34 +62,23 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   /**
    * Handles Discord OAuth button click with error logging
    */
-  const handleDiscordClick = () => {
-    handleOAuthSignIn('discord').catch(err => {
-      console.error('Discord signin error:', err);
-    });
-  };
+  const handleDiscordClick = () =>
+    handleOAuthSignIn('discord').catch(err => console.error('Discord signin error:', err));
 
   /**
    * Handles Google OAuth button click with error logging
    */
-  const handleGoogleClick = () => {
-    handleOAuthSignIn('google').catch(err => {
-      console.error('Google signin error:', err);
-    });
-  };
+  const handleGoogleClick = () => handleOAuthSignIn('google').catch(err => console.error('Google signin error:', err));
 
   /**
    * Triggers forgot password callback when user clicks forgot password link
    */
-  const handleForgotPasswordClick = () => {
-    onForgotPassword?.();
-  };
+  const handleForgotPasswordClick = () => onForgotPassword?.();
 
   /**
    * Switches to registration form when user clicks create account link
    */
-  const handleSwitchToRegister = () => {
-    onSwitchToRegister?.();
-  };
+  const handleSwitchToRegister = () => onSwitchToRegister?.();
 
   // Initial form values
   const initialValues: LoginFormData = {
@@ -145,10 +114,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       }
     } catch (err) {
       console.error('Login error:', err);
-      setFieldError(
-        'password',
-        'An unexpected error occurred. Please try again.'
-      );
+      setFieldError('password', 'An unexpected error occurred. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -159,25 +125,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
 
-        <CardDescription>
-          Sign in to your FFXI Complete account to continue
-        </CardDescription>
+        <CardDescription>Sign in to your FFXI Complete account to continue</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-4">
         {submitSuccess && (
           <div className="rounded-md border border-green-200 bg-green-50 p-3">
-            <div className="text-sm text-green-800">
-              Successfully signed in! Redirecting...
-            </div>
+            <div className="text-sm text-green-800">Successfully signed in! Redirecting...</div>
           </div>
         )}
 
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={loginSchema}
-        >
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={loginSchema}>
           {({errors, isSubmitting, touched}) => (
             <Form className="space-y-4">
               {/* Email Field */}
@@ -191,17 +149,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     <Input
                       {...field}
                       aria-describedby={
-                        touched.email === true && errors.email !== undefined
-                          ? 'email-error'
-                          : undefined
+                        touched.email === true && errors.email !== undefined ? 'email-error' : undefined
                       }
-                      aria-invalid={
-                        touched.email === true && errors.email !== undefined
-                      }
+                      aria-invalid={touched.email === true && errors.email !== undefined}
                       disabled={isSubmitting || authLoading}
                       id="email"
-                      onChange={e => {
-                        field.onChange(e);
+                      onChange={event => {
+                        field.onChange(event);
                         if (authError !== null) {
                           clearError();
                         }
@@ -244,15 +198,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     <Input
                       {...field}
                       aria-describedby={
-                        touched.password === true &&
-                        errors.password !== undefined
-                          ? 'password-error'
-                          : undefined
+                        touched.password === true && errors.password !== undefined ? 'password-error' : undefined
                       }
-                      aria-invalid={
-                        touched.password === true &&
-                        errors.password !== undefined
-                      }
+                      aria-invalid={touched.password === true && errors.password !== undefined}
                       disabled={isSubmitting || authLoading}
                       id="password"
                       placeholder="Enter your password"
@@ -270,17 +218,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
               {/* General Errors */}
               {authError != null && (
-                <div className="bg-destructive/10 border-destructive/20 rounded-md border p-3">
-                  {authError}
-                </div>
+                <div className="bg-destructive/10 border-destructive/20 rounded-md border p-3">{authError}</div>
               )}
 
               {/* Submit Button */}
-              <Button
-                className="w-full"
-                disabled={isSubmitting || authLoading || submitSuccess}
-                type="submit"
-              >
+              <Button className="w-full" disabled={isSubmitting || authLoading || submitSuccess} type="submit">
                 {isSubmitting || authLoading ? 'Signing In...' : 'Sign In'}
               </Button>
             </Form>
@@ -296,17 +238,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         {/* Switch to Register */}
         {onSwitchToRegister && (
           <div className="text-center text-sm">
-            <span className="text-muted-foreground">
-              Don't have an account?{' '}
-            </span>
+            <span className="text-muted-foreground">Don't have an account? </span>
 
-            <Button
-              disabled={authLoading}
-              onClick={handleSwitchToRegister}
-              size="sm"
-              type="button"
-              variant="link"
-            >
+            <Button disabled={authLoading} onClick={handleSwitchToRegister} size="sm" type="button" variant="link">
               Create one here
             </Button>
           </div>

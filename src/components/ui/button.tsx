@@ -45,23 +45,11 @@ type ButtonProps = React.ComponentProps<'button'> &
  * Versatile button component with multiple variants and sizes.
  * Supports composition pattern through asChild prop using Radix Slot.
  */
-const Button: React.FC<ButtonProps> = ({
-  asChild = false,
-  className,
-  size,
-  variant,
-  ...props
-}) => {
+const Button: React.FC<ButtonProps> = ({asChild = false, className, size, variant, ...props}) => {
   // Use Slot for composition or regular button element
   const Comp = asChild ? Slot : 'button';
 
-  return (
-    <Comp
-      className={cn(buttonVariants({className, size, variant}))}
-      data-slot="button"
-      {...props}
-    />
-  );
+  return <Comp className={cn(buttonVariants({className, size, variant}))} data-slot="button" {...props} />;
 };
 
 export {Button, type ButtonProps};

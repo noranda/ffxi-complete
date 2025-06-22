@@ -13,9 +13,7 @@ import {AuthContext} from '@/contexts/AuthContext';
 import {LoginForm} from '../LoginForm';
 
 // Mock auth context helper
-const createMockAuthContext = (
-  overrides: Partial<AuthContextType> = {}
-): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
   isAuthenticated: false,
@@ -35,9 +33,7 @@ const createMockAuthContext = (
 const TestWrapper: React.FC<{
   authContext: AuthContextType;
   children: React.ReactNode;
-}> = ({authContext, children}) => (
-  <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
-);
+}> = ({authContext, children}) => <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;
 describe('LoginForm', () => {
   describe('Rendering', () => {
     it('should render login form with all required fields', () => {
@@ -65,13 +61,11 @@ describe('LoginForm', () => {
         </TestWrapper>
       );
 
-      expect(
-        screen.getByRole('button', {name: 'Forgot password?'})
-      ).toBeInTheDocument();
+      expect(screen.getByRole('button', {name: 'Forgot password?'})).toBeInTheDocument();
     });
   });
 
-  describe('Form Validation', () => {
+  describe('Form Validation', () =>
     it('should show validation errors for empty fields', async () => {
       const user = userEvent.setup();
       const mockAuthContext = createMockAuthContext();
@@ -89,8 +83,7 @@ describe('LoginForm', () => {
         expect(screen.getByText('Email is required')).toBeInTheDocument();
         expect(screen.getByText('Password is required')).toBeInTheDocument();
       });
-    });
-  });
+    }));
 
   describe('Form Submission', () => {
     it('should call signIn with correct credentials', async () => {
@@ -112,12 +105,7 @@ describe('LoginForm', () => {
       await user.type(passwordInput, 'password123');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(mockSignIn).toHaveBeenCalledWith(
-          'test@example.com',
-          'password123'
-        );
-      });
+      await waitFor(() => expect(mockSignIn).toHaveBeenCalledWith('test@example.com', 'password123'));
     });
 
     it('should call onSuccess callback when login succeeds', async () => {
@@ -140,13 +128,11 @@ describe('LoginForm', () => {
       await user.type(passwordInput, 'password123');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalled();
-      });
+      await waitFor(() => expect(onSuccess).toHaveBeenCalled());
     });
   });
 
-  describe('OAuth Authentication', () => {
+  describe('OAuth Authentication', () =>
     it('should call signInWithProvider for Discord OAuth', async () => {
       const user = userEvent.setup();
       const mockSignInWithProvider = vi.fn().mockResolvedValue({success: true});
@@ -165,13 +151,10 @@ describe('LoginForm', () => {
       });
       await user.click(discordButton);
 
-      await waitFor(() => {
-        expect(mockSignInWithProvider).toHaveBeenCalledWith('discord');
-      });
-    });
-  });
+      await waitFor(() => expect(mockSignInWithProvider).toHaveBeenCalledWith('discord'));
+    }));
 
-  describe('Loading States', () => {
+  describe('Loading States', () =>
     it('should disable form when auth context is loading', () => {
       const mockAuthContext = createMockAuthContext({loading: true});
 
@@ -183,9 +166,6 @@ describe('LoginForm', () => {
 
       expect(screen.getByLabelText('Email Address')).toBeDisabled();
       expect(screen.getByLabelText('Password')).toBeDisabled();
-      expect(
-        screen.getByRole('button', {name: 'Signing In...'})
-      ).toBeDisabled();
-    });
-  });
+      expect(screen.getByRole('button', {name: 'Signing In...'})).toBeDisabled();
+    }));
 });

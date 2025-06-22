@@ -41,10 +41,7 @@ type CardTitleProps = React.ComponentProps<'div'>;
  */
 const Card: React.FC<CardProps> = ({className, ...props}) => (
   <div
-    className={cn(
-      `bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm`,
-      className
-    )}
+    className={cn(`bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm`, className)}
     data-slot="card"
     {...props}
   />
@@ -68,25 +65,14 @@ const CardHeader: React.FC<CardHeaderProps> = ({className, ...props}) => (
  * Should be used within CardHeader for proper layout.
  */
 const CardTitle: React.FC<CardTitleProps> = ({className, ...props}) => (
-  <div
-    className={cn('leading-none font-semibold', className)}
-    data-slot="card-title"
-    {...props}
-  />
+  <div className={cn('leading-none font-semibold', className)} data-slot="card-title" {...props} />
 );
 /**
  * Card description component with muted text styling.
  * Provides secondary information below the title.
  */
-const CardDescription: React.FC<CardDescriptionProps> = ({
-  className,
-  ...props
-}) => (
-  <div
-    className={cn('text-muted-foreground text-sm', className)}
-    data-slot="card-description"
-    {...props}
-  />
+const CardDescription: React.FC<CardDescriptionProps> = ({className, ...props}) => (
+  <div className={cn('text-muted-foreground text-sm', className)} data-slot="card-description" {...props} />
 );
 /**
  * Card action component positioned in the top-right of the header.
@@ -94,10 +80,7 @@ const CardDescription: React.FC<CardDescriptionProps> = ({
  */
 const CardAction: React.FC<CardActionProps> = ({className, ...props}) => (
   <div
-    className={cn(
-      'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
-      className
-    )}
+    className={cn('col-start-2 row-span-2 row-start-1 self-start justify-self-end', className)}
     data-slot="card-action"
     {...props}
   />
@@ -114,21 +97,9 @@ const CardContent: React.FC<CardContentProps> = ({className, ...props}) => (
  * Typically used for actions or additional information.
  */
 const CardFooter: React.FC<CardFooterProps> = ({className, ...props}) => (
-  <div
-    className={cn(`flex items-center px-6 [.border-t]:pt-6`, className)}
-    data-slot="card-footer"
-    {...props}
-  />
+  <div className={cn(`flex items-center px-6 [.border-t]:pt-6`, className)} data-slot="card-footer" {...props} />
 );
-export {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-};
+export {Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
 export type {
   CardActionProps,
   CardContentProps,

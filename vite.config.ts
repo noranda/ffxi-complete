@@ -13,11 +13,7 @@ export default defineConfig({
       output: {
         // Better chunk splitting for development
         manualChunks: {
-          ui: [
-            '@radix-ui/react-slot',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-dialog',
-          ],
+          ui: ['@radix-ui/react-slot', '@radix-ui/react-tabs', '@radix-ui/react-dialog'],
           vendor: ['react', 'react-dom'],
         },
       },

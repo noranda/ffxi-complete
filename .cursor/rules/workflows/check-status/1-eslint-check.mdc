@@ -1,0 +1,95 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Step 1: ESLint Check and Fix
+
+## Goal
+
+Ensure all code passes ESLint validation with 0 errors and 0 warnings.
+
+## Required Context
+
+- Current working directory should be the project root
+- ESLint configuration should be properly set up
+
+## Process
+
+### 1. Initial ESLint Check
+
+```bash
+yarn lint
+```
+
+### 2. Auto-Fix Attempt
+
+If any errors or warnings are found:
+
+```bash
+yarn lint --fix
+```
+
+### 3. Validation Check
+
+Re-run ESLint to confirm fixes:
+
+```bash
+yarn lint
+```
+
+### 4. Manual Fix Process
+
+If auto-fix doesn't resolve all issues:
+
+1. **Analyze remaining errors/warnings**:
+   - Read error messages carefully
+   - Identify file paths and line numbers
+   - Determine root cause of each issue
+
+2. **Fix issues manually**:
+   - Open affected files
+   - Apply appropriate fixes based on error type
+   - Consider code guidelines and project patterns
+   - Make minimal, targeted changes
+
+3. **Common ESLint fixes**:
+   - Import/export issues: Fix import paths, add missing imports
+   - TypeScript errors: Fix type annotations, resolve type mismatches
+   - Code style: Apply consistent formatting, naming conventions
+   - React patterns: Fix component structure, prop usage
+   - Custom rules: Follow project-specific patterns
+
+4. **Re-validate after each fix**:
+
+   ```bash
+   yarn lint
+   ```
+
+### 5. Stop Conditions
+
+**Stop and ask for user guidance if**:
+
+- Errors involve complex architectural decisions
+- Fixes would require significant code restructuring
+- Error messages are unclear or ambiguous
+- Multiple attempts at fixing have failed
+- Changes might affect functionality in unexpected ways
+
+## Expected Output
+
+- ESLint passes with 0 errors, 0 warnings
+- All auto-fixable issues resolved
+- Any manual fixes applied correctly
+- Code maintains functionality and follows guidelines
+
+## Success Criteria
+
+```bash
+yarn lint
+# Should output: ✨ Done (no errors or warnings)
+```
+
+## Next Step
+
+Once ESLint check passes completely, proceed to Step 2: Test Check.

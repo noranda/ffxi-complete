@@ -34,6 +34,7 @@ When a user says something like "run the [workflow-name] workflow":
 - **feature-development**: 3-step process for creating PRDs, generating tasks, and managing implementation
 - **commit-changes**: 4-step process for running status checks, analyzing changes, generating commit messages,
   and executing commits
+- **check-status**: 6-step automated process for running comprehensive quality checks and fixing issues
 
 ## Example Usage
 

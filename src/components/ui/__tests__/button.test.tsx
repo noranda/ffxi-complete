@@ -47,10 +47,7 @@ describe('Button', () => {
   it('applies ghost variant styles', () => {
     render(<Button variant="ghost">Ghost</Button>);
     const button = screen.getByRole('button');
-    expect(button).toHaveClass(
-      'hover:bg-accent',
-      'hover:text-accent-foreground'
-    );
+    expect(button).toHaveClass('hover:bg-accent', 'hover:text-accent-foreground');
   });
 
   it('applies link variant styles', () => {
@@ -125,14 +122,7 @@ describe('Button', () => {
   it('includes base classes for all variants', () => {
     render(<Button>Test Button</Button>);
     const button = screen.getByRole('button');
-    expect(button).toHaveClass(
-      'inline-flex',
-      'items-center',
-      'justify-center',
-      'rounded-md',
-      'text-sm',
-      'font-medium'
-    );
+    expect(button).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded-md', 'text-sm', 'font-medium');
   });
 
   it('includes data-slot attribute', () => {

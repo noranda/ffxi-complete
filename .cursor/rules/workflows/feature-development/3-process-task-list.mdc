@@ -11,6 +11,30 @@ Guidelines for managing task lists in markdown files to track progress on comple
 
 - **One sub-task at a time:** Do **NOT** start the next sub-task until you ask the user for permission and
   they say "yes" or "y"
+
+## Development Quality Maintenance
+
+**MANDATORY during development (especially complex refactoring):**
+
+- **Incremental Quality Checks:** After making significant changes to files, run intermediate checks:
+  1. **Format Early and Often:** Run `yarn prettier --write .` after any major code changes
+  2. **Lint Frequently:** Run `yarn lint --fix` to catch and auto-fix issues early  
+  3. **Type Check Regularly:** Run `yarn type-check` after TypeScript changes
+  4. **Test Continuously:** Run relevant tests with `yarn test --run [pattern]` during development
+
+- **File Management:**
+  1. **No Backup Files:** Never commit `.bak`, `.backup`, or similar temporary files
+  2. **Clean Up Immediately:** Delete any temporary/backup files created during refactoring
+  3. **Single Source of Truth:** Maintain only the current version of each file
+
+- **Complex Refactoring Protocol:**
+  1. **Plan the changes:** Identify all files that need modification
+  2. **Make incremental changes:** Edit one file or concept at a time
+  3. **Format after each file:** Run `yarn prettier --write [file]` after editing each file
+  4. **Check compilation:** Run `yarn type-check` after TypeScript changes
+  5. **Validate incrementally:** Don't wait until the end to check for basic errors
+  6. **Clean up artifacts:** Remove any backup or temporary files immediately
+
 - **MANDATORY TDD Approach for ALL Development Tasks:**
   1. **RED Phase:** Write failing tests FIRST
      - Analyze requirements and write comprehensive test cases

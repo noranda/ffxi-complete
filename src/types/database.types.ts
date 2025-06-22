@@ -1,7 +1,5 @@
 export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
-    | {schema: keyof Database},
+  PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes'] | {schema: keyof Database},
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database;
   }
@@ -325,9 +323,7 @@ export type Database = {
 };
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
-    | {schema: keyof Database},
+  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums'] | {schema: keyof Database},
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof Database;
   }
@@ -339,13 +335,7 @@ export type Enums<
     ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
     : never;
 
-export type Json =
-  | boolean
-  | Json[]
-  | null
-  | number
-  | string
-  | {[key: string]: Json | undefined};
+export type Json = boolean | Json[] | null | number | string | {[key: string]: Json | undefined};
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
@@ -364,10 +354,8 @@ export type Tables<
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R;
       }
       ? R
@@ -375,9 +363,7 @@ export type Tables<
     : never;
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | {schema: keyof Database},
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | {schema: keyof Database},
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof Database;
   }
@@ -398,9 +384,7 @@ export type TablesInsert<
     : never;
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | {schema: keyof Database},
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | {schema: keyof Database},
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof Database;
   }

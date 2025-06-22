@@ -1,0 +1,148 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Step 5: Markdown Lint Check and Fix
+
+## Goal
+
+Ensure all markdown files pass linting with 0 errors and 0 warnings.
+
+## Required Context
+
+- ESLint check from Step 1 must have passed
+- Test check from Step 2 must have passed
+- TypeScript check from Step 3 must have passed
+- Formatting check from Step 4 must have passed
+- Markdown linting configuration should be properly set up
+
+## Process
+
+### 1. Initial Markdown Lint Check
+
+```bash
+yarn lint:md
+```
+
+### 2. Analyze Markdown Errors
+
+If any errors or warnings are found:
+
+1. **Read error messages carefully**:
+   - Note file paths and line numbers
+   - Understand the specific markdown rule violation
+   - Identify patterns in errors (heading structure, link format, etc.)
+
+2. **Categorize error types**:
+   - Heading structure issues (MD001, MD003, MD025)
+   - Line length violations (MD013)
+   - List formatting problems (MD004, MD005, MD007)
+   - Link and image issues (MD034, MD045)
+   - Whitespace problems (MD009, MD010, MD012)
+   - Code block formatting (MD031, MD040)
+
+### 3. Manual Fix Process
+
+#### Common Markdown Fixes
+
+1. **Heading Structure (MD001, MD003, MD025)**:
+   - Fix heading level increments (don't skip levels)
+   - Ensure consistent heading styles
+   - Use only one H1 per document
+   - Add proper heading hierarchy
+
+2. **Line Length (MD013)**:
+   - Break long lines appropriately
+   - Use line breaks in lists and paragraphs
+   - Respect 120-character limit (project standard)
+   - Preserve readability when wrapping
+
+3. **List Formatting (MD004, MD005, MD007)**:
+   - Use consistent list markers (-, *, +)
+   - Fix list indentation (2 spaces per level)
+   - Add proper spacing around lists
+   - Ensure consistent list item formatting
+
+4. **Link and Image Issues (MD034, MD045)**:
+   - Convert bare URLs to proper markdown links
+   - Fix broken link references
+   - Add alt text for images
+   - Ensure proper link formatting
+
+5. **Whitespace Problems (MD009, MD010, MD012)**:
+   - Remove trailing whitespace
+   - Convert hard tabs to spaces
+   - Remove excessive blank lines
+   - Fix line ending consistency
+
+6. **Code Block Formatting (MD031, MD040)**:
+   - Add blank lines around code blocks
+   - Specify language for code blocks
+   - Use proper code fence formatting
+   - Ensure consistent code block style
+
+### 4. Incremental Fixing
+
+For each markdown file with errors:
+
+1. **Focus on one file at a time**
+2. **Run markdown lint on specific file**:
+
+   ```bash
+   yarn markdownlint-cli2 path/to/file.md
+   ```
+
+3. **Apply fixes and re-check**
+4. **Move to next file only after current one passes**
+
+### 5. Validation Check
+
+After all fixes, run full markdown lint:
+
+```bash
+yarn lint:md
+```
+
+### 6. Special Considerations
+
+#### Project-Specific Rules
+
+- **Rule files (.mdc)**: Follow established patterns for workflow and guideline files
+- **Documentation**: Maintain consistent formatting across README, CONTRIBUTING, etc.
+- **Code examples**: Ensure code blocks in markdown are properly formatted and valid
+
+#### File-Specific Handling
+
+- **Generated files**: May need to be excluded from linting
+- **Third-party docs**: Consider adding to ignore list if not editable
+- **Template files**: Ensure they follow markdown standards
+
+### 7. Stop Conditions
+
+**Stop and ask for user guidance if**:
+
+- Markdown errors conflict with established project documentation patterns
+- Fixes would significantly change documentation structure or meaning
+- Generated markdown files are causing errors
+- Rule conflicts between markdown linter and project standards
+- Large numbers of similar errors suggest configuration issues
+- Errors in critical documentation that needs careful review
+
+## Expected Output
+
+- All markdown files pass linting with 0 errors, 0 warnings
+- Documentation maintains consistency and readability
+- All markdown follows project standards
+- Code examples in markdown are properly formatted
+
+## Success Criteria
+
+```bash
+yarn lint:md
+# Should output: ✨ Done (no errors or warnings)
+```
+
+## Next Step
+
+Once markdown lint check passes completely, proceed to Step 6: Status Report.

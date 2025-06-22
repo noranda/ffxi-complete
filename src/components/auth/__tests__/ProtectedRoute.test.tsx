@@ -28,9 +28,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 // Mock auth context helper
-const createMockAuthContext = (
-  overrides: Partial<AuthContextType> = {}
-): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
   isAuthenticated: false,
@@ -53,21 +51,17 @@ const TestWrapper: React.FC<{
   initialEntries?: string[];
 }> = ({authContext = {}, children, initialEntries = ['/protected']}) => (
   <MemoryRouter initialEntries={initialEntries}>
-    <AuthContext.Provider value={createMockAuthContext(authContext)}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={createMockAuthContext(authContext)}>{children}</AuthContext.Provider>
   </MemoryRouter>
 );
 
 // Test child component for protected route testing
-const TestChild: React.FC<{testId?: string}> = ({
-  testId = 'protected-content',
-}) => <div data-testid={testId}>Protected Content</div>;
+const TestChild: React.FC<{testId?: string}> = ({testId = 'protected-content'}) => (
+  <div data-testid={testId}>Protected Content</div>
+);
 
 describe('ProtectedRoute', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  beforeEach(() => vi.clearAllMocks());
 
   describe('Authentication Required Behavior', () => {
     it('should render children when user is authenticated', () => {
@@ -128,9 +122,7 @@ describe('ProtectedRoute', () => {
     });
 
     it('should show custom loading component when provided', () => {
-      const CustomLoader: React.FC = () => (
-        <div data-testid="custom-loader">Loading...</div>
-      );
+      const CustomLoader: React.FC = () => <div data-testid="custom-loader">Loading...</div>;
 
       render(
         <TestWrapper authContext={{isAuthenticated: false, loading: true}}>
@@ -141,9 +133,7 @@ describe('ProtectedRoute', () => {
       );
 
       expect(screen.getByTestId('custom-loader')).toBeInTheDocument();
-      expect(
-        screen.queryByTestId('protected-route-loading')
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('protected-route-loading')).not.toBeInTheDocument();
       expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
     });
   });
@@ -166,10 +156,7 @@ describe('ProtectedRoute', () => {
 
     it('should preserve current location in state for post-login redirect', () => {
       render(
-        <TestWrapper
-          authContext={{isAuthenticated: false, loading: false}}
-          initialEntries={['/dashboard/settings']}
-        >
+        <TestWrapper authContext={{isAuthenticated: false, loading: false}} initialEntries={['/dashboard/settings']}>
           <ProtectedRoute>
             <TestChild />
           </ProtectedRoute>
@@ -244,9 +231,7 @@ describe('ProtectedRoute', () => {
     it('should support function as children pattern', () => {
       render(
         <TestWrapper authContext={{isAuthenticated: true}}>
-          <ProtectedRoute>
-            {() => <TestChild testId="function-child" />}
-          </ProtectedRoute>
+          <ProtectedRoute>{() => <TestChild testId="function-child" />}</ProtectedRoute>
         </TestWrapper>
       );
 
@@ -254,9 +239,7 @@ describe('ProtectedRoute', () => {
     });
 
     it('should pass authentication status to function children', () => {
-      const mockFunctionChild = vi.fn(() => (
-        <TestChild testId="auth-aware-child" />
-      ));
+      const mockFunctionChild = vi.fn(() => <TestChild testId="auth-aware-child" />);
 
       render(
         <TestWrapper authContext={{isAuthenticated: true, loading: false}}>

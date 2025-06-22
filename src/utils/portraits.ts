@@ -76,10 +76,7 @@ export const generatePortraitPath = (portrait: PortraitId): string => {
 /**
  * Generate the full URL for a portrait image
  */
-export const generatePortraitUrl = (
-  portrait: PortraitId,
-  baseUrl = '/src/assets'
-): string => {
+export const generatePortraitUrl = (portrait: PortraitId, baseUrl = '/src/assets'): string => {
   const path = generatePortraitPath(portrait);
   return `${baseUrl}${path}`;
 };
@@ -91,9 +88,7 @@ export const generatePortraitUrl = (
 /**
  * Generate all possible portrait combinations for the given filters
  */
-export const generateAllPortraits = (
-  filter: PortraitFilter = {}
-): Portrait[] => {
+export const generateAllPortraits = (filter: PortraitFilter = {}): Portrait[] => {
   const portraits: Portrait[] = [];
 
   // Filter valid race/gender combinations
@@ -132,14 +127,9 @@ export const generateAllPortraits = (
 /**
  * Get available portrait options for a specific race/gender combination
  */
-export const getPortraitsForRaceGender = (
-  race: FFXIRace,
-  gender: FFXIGender
-): Portrait[] => {
+export const getPortraitsForRaceGender = (race: FFXIRace, gender: FFXIGender): Portrait[] => {
   // Validate race/gender combination
-  const isValidCombination = RACE_GENDER_COMBINATIONS.some(
-    combo => combo.race === race && combo.gender === gender
-  );
+  const isValidCombination = RACE_GENDER_COMBINATIONS.some(combo => combo.race === race && combo.gender === gender);
 
   if (!isValidCombination) {
     return [];
@@ -155,21 +145,14 @@ export const getPortraitsForRaceGender = (
 /**
  * Check if a race/gender combination is valid in FFXI
  */
-export const isValidRaceGenderCombo = (
-  race: FFXIRace,
-  gender: FFXIGender
-): boolean =>
-  RACE_GENDER_COMBINATIONS.some(
-    combo => combo.race === race && combo.gender === gender
-  );
+export const isValidRaceGenderCombo = (race: FFXIRace, gender: FFXIGender): boolean =>
+  RACE_GENDER_COMBINATIONS.some(combo => combo.race === race && combo.gender === gender);
 
 /**
  * Get valid genders for a specific race
  */
 export const getValidGendersForRace = (race: FFXIRace): FFXIGender[] =>
-  RACE_GENDER_COMBINATIONS.filter(combo => combo.race === race).map(
-    combo => combo.gender
-  );
+  RACE_GENDER_COMBINATIONS.filter(combo => combo.race === race).map(combo => combo.gender);
 
 /**
  * Parse a portrait filename to extract its characteristics
@@ -215,7 +198,7 @@ export const getPortraitStats = () => {
   const byRace = Object.fromEntries(
     Object.values(FFXI_RACES).map(race => [
       race,
-      allPossiblePortraits.filter(p => p.race === race).length,
+      allPossiblePortraits.filter(portrait => portrait.race === race).length,
     ])
   );
 

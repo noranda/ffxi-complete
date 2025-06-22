@@ -114,9 +114,7 @@ describe('Authentication Utilities', () => {
 
       expect(result.success).toBe(false);
       expect(result.data).toBeNull();
-      expect(result.error).toBe(
-        'An account with this email already exists. Please sign in instead.'
-      );
+      expect(result.error).toBe('An account with this email already exists. Please sign in instead.');
     });
 
     it('should handle unexpected errors', async () => {
@@ -162,9 +160,7 @@ describe('Authentication Utilities', () => {
 
       expect(result.success).toBe(false);
       expect(result.data).toBeNull();
-      expect(result.error).toBe(
-        'Invalid email or password. Please check your credentials.'
-      );
+      expect(result.error).toBe('Invalid email or password. Please check your credentials.');
     });
   });
 
@@ -191,9 +187,7 @@ describe('Authentication Utilities', () => {
     it('should handle OAuth errors', async () => {
       const mockResponse: OAuthResponse = {
         data: {provider: 'google', url: null},
-        error: createMockAuthError(
-          'OAuth provider not configured'
-        ) as AuthError,
+        error: createMockAuthError('OAuth provider not configured') as AuthError,
       };
       mockAuth.signInWithOAuth.mockResolvedValue(mockResponse);
 
@@ -216,12 +210,9 @@ describe('Authentication Utilities', () => {
 
       expect(result.success).toBe(true);
       expect(result.error).toBeNull();
-      expect(mockAuth.resetPasswordForEmail).toHaveBeenCalledWith(
-        'test@example.com',
-        {
-          redirectTo: 'http://localhost:3000/auth/reset-password',
-        }
-      );
+      expect(mockAuth.resetPasswordForEmail).toHaveBeenCalledWith('test@example.com', {
+        redirectTo: 'http://localhost:3000/auth/reset-password',
+      });
     });
 
     it('should handle reset password errors', async () => {
@@ -234,9 +225,7 @@ describe('Authentication Utilities', () => {
       const result = await resetPassword('test@example.com');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe(
-        'Too many email requests. Please wait a few minutes before trying again.'
-      );
+      expect(result.error).toBe('Too many email requests. Please wait a few minutes before trying again.');
     });
   });
 
@@ -262,9 +251,7 @@ describe('Authentication Utilities', () => {
       // Use a more flexible mock structure for error cases
       const mockResponse: UserResponse = {
         data: {user: null},
-        error: createMockAuthError(
-          'Password should be at least 6 characters'
-        ) as AuthError,
+        error: createMockAuthError('Password should be at least 6 characters') as AuthError,
       };
       mockAuth.updateUser.mockResolvedValue(mockResponse);
 
@@ -290,17 +277,13 @@ describe('Authentication Utilities', () => {
 
     it('should handle signout errors', async () => {
       mockAuth.signOut.mockResolvedValue({
-        error: createMockAuthError(
-          'Token has expired or is invalid'
-        ) as AuthError,
+        error: createMockAuthError('Token has expired or is invalid') as AuthError,
       });
 
       const result = await signOut();
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe(
-        'Your session has expired. Please sign in again.'
-      );
+      expect(result.error).toBe('Your session has expired. Please sign in again.');
     });
   });
 
@@ -338,10 +321,7 @@ describe('Authentication Utilities', () => {
       const result = await getCurrentUser();
 
       expect(result).toBeNull();
-      expect(console.error).toHaveBeenCalledWith(
-        'Error getting current user:',
-        expect.any(Error)
-      );
+      expect(console.error).toHaveBeenCalledWith('Error getting current user:', expect.any(Error));
     });
   });
 

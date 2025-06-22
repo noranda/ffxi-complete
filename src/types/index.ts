@@ -42,18 +42,15 @@ export type CharacterFormData = {
   server: string;
 };
 
-export type CharacterInsert =
-  Database['public']['Tables']['characters']['Insert'];
+export type CharacterInsert = Database['public']['Tables']['characters']['Insert'];
 
 // =============================================================================
 // UPDATE TYPES - For modifying existing records
 // =============================================================================
 
-export type CharacterJobProgress =
-  Database['public']['Tables']['character_job_progress']['Row'];
+export type CharacterJobProgress = Database['public']['Tables']['character_job_progress']['Row'];
 
-export type CharacterJobProgressInsert =
-  Database['public']['Tables']['character_job_progress']['Insert'];
+export type CharacterJobProgressInsert = Database['public']['Tables']['character_job_progress']['Insert'];
 
 // =============================================================================
 // CONVENIENCE TYPES - For common app-specific use cases
@@ -61,15 +58,13 @@ export type CharacterJobProgressInsert =
 
 // Removed: CharacterWithProgress - see comprehensive definition below
 
-export type CharacterJobProgressUpdate =
-  Database['public']['Tables']['character_job_progress']['Update'];
+export type CharacterJobProgressUpdate = Database['public']['Tables']['character_job_progress']['Update'];
 
 /**
  * Character progress data as stored in the database
  * Flexible progress tracking for jobs, skills, trusts, etc.
  */
-export type CharacterProgress =
-  Database['public']['Tables']['character_progress']['Row'];
+export type CharacterProgress = Database['public']['Tables']['character_progress']['Row'];
 
 /**
  * Supabase auth user type
@@ -83,8 +78,7 @@ export type {User} from '@supabase/supabase-js';
 
 // Removed: ApiResponse - see comprehensive definition below
 
-export type CharacterSkillProgress =
-  Database['public']['Tables']['character_skill_progress']['Row'];
+export type CharacterSkillProgress = Database['public']['Tables']['character_skill_progress']['Row'];
 
 // =============================================================================
 // LEARNING NOTE
@@ -125,17 +119,14 @@ developer experience with autocomplete and type checking.
 // CHARACTER TYPES
 // =============================================================================
 
-export type CharacterSkillProgressInsert =
-  Database['public']['Tables']['character_skill_progress']['Insert'];
-export type CharacterSkillProgressUpdate =
-  Database['public']['Tables']['character_skill_progress']['Update'];
+export type CharacterSkillProgressInsert = Database['public']['Tables']['character_skill_progress']['Insert'];
+export type CharacterSkillProgressUpdate = Database['public']['Tables']['character_skill_progress']['Update'];
 
 // =============================================================================
 // JOB SYSTEM TYPES
 // =============================================================================
 
-export type CharacterUpdate =
-  Database['public']['Tables']['characters']['Update'];
+export type CharacterUpdate = Database['public']['Tables']['characters']['Update'];
 // Character with full progress data
 export type CharacterWithProgress = {
   character: Character;
@@ -152,15 +143,13 @@ export type CharacterWithProgress = {
  * Data required when creating a new character
  * Some fields like id, timestamps are auto-generated
  */
-export type CreateCharacterData =
-  Database['public']['Tables']['characters']['Insert'];
+export type CreateCharacterData = Database['public']['Tables']['characters']['Insert'];
 
 /**
  * Data required when creating new progress entries
  * Some fields like id, timestamps are auto-generated
  */
-export type CreateProgressData =
-  Database['public']['Tables']['character_progress']['Insert'];
+export type CreateProgressData = Database['public']['Tables']['character_progress']['Insert'];
 export type DatabaseFunctions = Database['public']['Functions'];
 export type FFXIExpansion =
   | "Rhapsodies of Vana'diel"
@@ -170,15 +159,13 @@ export type FFXIExpansion =
   | 'Treasures of Aht Urhgan'
   | 'Wings of the Goddess';
 
-export type GetCharacterBySlugArgs =
-  DatabaseFunctions['get_character_by_slug']['Args'];
+export type GetCharacterBySlugArgs = DatabaseFunctions['get_character_by_slug']['Args'];
 
 // =============================================================================
 // SKILL SYSTEM TYPES
 // =============================================================================
 
-export type GetCharacterProgressSummaryArgs =
-  DatabaseFunctions['get_character_progress_summary']['Args'];
+export type GetCharacterProgressSummaryArgs = DatabaseFunctions['get_character_progress_summary']['Args'];
 export type Job = Database['public']['Tables']['jobs']['Row'];
 // For handling filters
 export type JobFilter = {
@@ -342,8 +329,7 @@ export type SkillType = 'combat_support' | 'craft' | 'magic' | 'weapon';
 export type SkillUpdate = Database['public']['Tables']['skills']['Update'];
 
 // Character privacy function types
-export type ToggleCharacterPrivacyArgs =
-  DatabaseFunctions['toggle_character_privacy']['Args'];
+export type ToggleCharacterPrivacyArgs = DatabaseFunctions['toggle_character_privacy']['Args'];
 
 // =============================================================================
 // UTILITY TYPES
@@ -353,19 +339,15 @@ export type ToggleCharacterPrivacyArgs =
  * Data that can be updated on an existing character
  * All fields are optional since you can update just one field
  */
-export type UpdateCharacterData =
-  Database['public']['Tables']['characters']['Update'];
+export type UpdateCharacterData = Database['public']['Tables']['characters']['Update'];
 
 // Progress update function types
-export type UpdateJobProgressArgs =
-  DatabaseFunctions['update_job_progress']['Args'];
+export type UpdateJobProgressArgs = DatabaseFunctions['update_job_progress']['Args'];
 
 /**
  * Data that can be updated on existing progress entries
  * All fields are optional since you can update just one field
  */
-export type UpdateProgressData =
-  Database['public']['Tables']['character_progress']['Update'];
+export type UpdateProgressData = Database['public']['Tables']['character_progress']['Update'];
 
-export type UpdateSkillProgressArgs =
-  DatabaseFunctions['update_skill_progress']['Args'];
+export type UpdateSkillProgressArgs = DatabaseFunctions['update_skill_progress']['Args'];

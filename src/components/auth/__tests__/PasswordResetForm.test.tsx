@@ -14,9 +14,7 @@ import {AuthContext} from '@/contexts/AuthContext';
 import {PasswordResetForm} from '../PasswordResetForm';
 
 // Mock auth context helper
-const createMockAuthContext = (
-  overrides: Partial<AuthContextType> = {}
-): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
   isAuthenticated: false,
@@ -36,9 +34,7 @@ const createMockAuthContext = (
 const TestWrapper: React.FC<{
   authContext: AuthContextType;
   children: React.ReactNode;
-}> = ({authContext, children}) => (
-  <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
-);
+}> = ({authContext, children}) => <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;
 
 describe('PasswordResetForm', () => {
   describe('Rendering', () => {
@@ -53,14 +49,10 @@ describe('PasswordResetForm', () => {
 
       expect(screen.getByText('Reset Password')).toBeInTheDocument();
       expect(
-        screen.getByText(
-          "Enter your email address and we'll send you a link to reset your password"
-        )
+        screen.getByText("Enter your email address and we'll send you a link to reset your password")
       ).toBeInTheDocument();
       expect(screen.getByLabelText('Email Address')).toBeInTheDocument();
-      expect(
-        screen.getByRole('button', {name: 'Send Reset Email'})
-      ).toBeInTheDocument();
+      expect(screen.getByRole('button', {name: 'Send Reset Email'})).toBeInTheDocument();
     });
 
     it('should render back to sign in button when callback provided', () => {
@@ -73,9 +65,7 @@ describe('PasswordResetForm', () => {
         </TestWrapper>
       );
 
-      expect(
-        screen.getByRole('button', {name: 'Back to Sign In'})
-      ).toBeInTheDocument();
+      expect(screen.getByRole('button', {name: 'Back to Sign In'})).toBeInTheDocument();
     });
 
     it('should render cancel button when callback provided', () => {
@@ -108,9 +98,7 @@ describe('PasswordResetForm', () => {
       });
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(screen.getByText('Email is required')).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());
     });
 
     it('should show validation error for invalid email format', async () => {
@@ -131,11 +119,7 @@ describe('PasswordResetForm', () => {
       await user.type(emailInput, 'invalid-email');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('Please enter a valid email address')
-        ).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument());
     });
 
     it('should not show validation error for valid email format', async () => {
@@ -159,11 +143,7 @@ describe('PasswordResetForm', () => {
       await user.type(emailInput, 'test@example.com');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(
-          screen.queryByText('Please enter a valid email address')
-        ).not.toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.queryByText('Please enter a valid email address')).not.toBeInTheDocument());
     });
   });
 
@@ -189,9 +169,7 @@ describe('PasswordResetForm', () => {
       await user.type(emailInput, 'test@example.com');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(mockResetPassword).toHaveBeenCalledWith('test@example.com');
-      });
+      await waitFor(() => expect(mockResetPassword).toHaveBeenCalledWith('test@example.com'));
     });
 
     it('should show success state when password reset succeeds', async () => {
@@ -218,11 +196,7 @@ describe('PasswordResetForm', () => {
       await waitFor(() => {
         expect(screen.getByText('Check Your Email')).toBeInTheDocument();
         expect(screen.getByText('Email Sent Successfully')).toBeInTheDocument();
-        expect(
-          screen.getByText(
-            /We've sent password reset instructions to test@example.com/
-          )
-        ).toBeInTheDocument();
+        expect(screen.getByText(/We've sent password reset instructions to test@example.com/)).toBeInTheDocument();
       });
     });
 
@@ -250,16 +224,12 @@ describe('PasswordResetForm', () => {
       await user.type(emailInput, 'test@example.com');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(screen.getByText('User not found')).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByText('User not found')).toBeInTheDocument());
     });
 
     it('should handle unexpected errors during submission', async () => {
       const user = userEvent.setup();
-      const mockResetPassword = vi
-        .fn()
-        .mockRejectedValue(new Error('Network error'));
+      const mockResetPassword = vi.fn().mockRejectedValue(new Error('Network error'));
       const mockAuthContext = createMockAuthContext({
         resetPassword: mockResetPassword,
       });
@@ -278,11 +248,9 @@ describe('PasswordResetForm', () => {
       await user.type(emailInput, 'test@example.com');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('An unexpected error occurred. Please try again.')
-        ).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByText('An unexpected error occurred. Please try again.')).toBeInTheDocument()
+      );
     });
   });
 
@@ -310,9 +278,7 @@ describe('PasswordResetForm', () => {
       await user.click(submitButton);
 
       // Wait for success state
-      await waitFor(() => {
-        expect(screen.getByText('Check Your Email')).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByText('Check Your Email')).toBeInTheDocument());
 
       // Click send another email button
       const sendAnotherButton = screen.getByRole('button', {
@@ -351,9 +317,7 @@ describe('PasswordResetForm', () => {
       await user.click(submitButton);
 
       // Wait for success state
-      await waitFor(() => {
-        expect(screen.getByText('Check Your Email')).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByText('Check Your Email')).toBeInTheDocument());
 
       // Click back to sign in button
       const backButton = screen.getByRole('button', {name: 'Back to Sign In'});
@@ -410,16 +374,12 @@ describe('PasswordResetForm', () => {
       );
 
       expect(screen.getByLabelText('Email Address')).toBeDisabled();
-      expect(
-        screen.getByRole('button', {name: 'Sending Reset Email...'})
-      ).toBeDisabled();
+      expect(screen.getByRole('button', {name: 'Sending Reset Email...'})).toBeDisabled();
     });
 
     it('should show loading text during form submission', async () => {
       const user = userEvent.setup();
-      const mockResetPassword = vi.fn(
-        () => new Promise<Omit<AuthResult, 'data'>>(() => {})
-      ); // Never resolves
+      const mockResetPassword = vi.fn(() => new Promise<Omit<AuthResult, 'data'>>(() => {})); // Never resolves
       const mockAuthContext = createMockAuthContext({
         resetPassword: mockResetPassword,
       });
@@ -438,11 +398,7 @@ describe('PasswordResetForm', () => {
       await user.type(emailInput, 'test@example.com');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(
-          screen.getByRole('button', {name: 'Sending Reset Email...'})
-        ).toBeDisabled();
-      });
+      await waitFor(() => expect(screen.getByRole('button', {name: 'Sending Reset Email...'})).toBeDisabled());
     });
   });
 

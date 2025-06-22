@@ -16,11 +16,7 @@ type OAuthButtonsProps = {
  * OAuth authentication buttons for Discord and Google sign-in
  * Provides consistent styling and disabled state handling
  */
-export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
-  disabled = false,
-  onDiscordClick,
-  onGoogleClick,
-}) => (
+export const OAuthButtons: React.FC<OAuthButtonsProps> = ({disabled = false, onDiscordClick, onGoogleClick}) => (
   <>
     {/* OAuth Divider */}
     <div className="relative">
@@ -29,9 +25,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       </div>
 
       <div className="relative flex justify-center text-xs uppercase">
-        <span className="bg-background text-muted-foreground px-2">
-          Or continue with
-        </span>
+        <span className="bg-background text-muted-foreground px-2">Or continue with</span>
       </div>
     </div>
 

@@ -1,14 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '../card';
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '../card';
 
 describe('Card Components', () => {
   describe('Card', () => {
@@ -106,11 +99,7 @@ describe('Card Components', () => {
 
   describe('CardDescription', () => {
     it('renders description with default styles', () => {
-      render(
-        <CardDescription data-testid="description">
-          Card Description
-        </CardDescription>
-      );
+      render(<CardDescription data-testid="description">Card Description</CardDescription>);
       const description = screen.getByTestId('description');
       expect(description).toBeInTheDocument();
       expect(description).toHaveClass('text-muted-foreground', 'text-sm');
@@ -127,9 +116,7 @@ describe('Card Components', () => {
     });
 
     it('includes data-slot attribute', () => {
-      render(
-        <CardDescription data-testid="description">Description</CardDescription>
-      );
+      render(<CardDescription data-testid="description">Description</CardDescription>);
       const description = screen.getByTestId('description');
       expect(description).toHaveAttribute('data-slot', 'card-description');
     });
@@ -206,12 +193,8 @@ describe('Card Components', () => {
 
       expect(screen.getByTestId('complete-card')).toBeInTheDocument();
       expect(screen.getByText('Test Card')).toBeInTheDocument();
-      expect(
-        screen.getByText('This is a test card description')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Card body content goes here')
-      ).toBeInTheDocument();
+      expect(screen.getByText('This is a test card description')).toBeInTheDocument();
+      expect(screen.getByText('Card body content goes here')).toBeInTheDocument();
       expect(screen.getByText('Footer actions')).toBeInTheDocument();
     });
 
@@ -221,9 +204,7 @@ describe('Card Components', () => {
           <CardHeader data-testid="header">
             <CardTitle data-testid="title">Title</CardTitle>
 
-            <CardDescription data-testid="description">
-              Description
-            </CardDescription>
+            <CardDescription data-testid="description">Description</CardDescription>
           </CardHeader>
           <CardContent data-testid="content">Content</CardContent>
           <CardFooter data-testid="footer">Footer</CardFooter>

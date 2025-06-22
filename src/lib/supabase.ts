@@ -67,7 +67,7 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
  * Only runs in development mode
  */
 if (import.meta.env.DEV) {
-  supabase.auth.onAuthStateChange((event, session) => {
-    console.log('🔐 Auth state changed:', event, session?.user?.email);
-  });
+  supabase.auth.onAuthStateChange((event, session) =>
+    console.log('🔐 Auth state changed:', event, session?.user?.email)
+  );
 }

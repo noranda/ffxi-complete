@@ -27,10 +27,7 @@ export type AuthResult<T = User> = {
 /**
  * Sign up a new user with email and password
  */
-export const signUp = async (
-  email: string,
-  password: string
-): Promise<AuthResult> => {
+export const signUp = async (email: string, password: string): Promise<AuthResult> => {
   try {
     const {data, error} = await supabase.auth.signUp({
       email,
@@ -63,10 +60,7 @@ export const signUp = async (
 /**
  * Sign in an existing user with email and password
  */
-export const signIn = async (
-  email: string,
-  password: string
-): Promise<AuthResult> => {
+export const signIn = async (email: string, password: string): Promise<AuthResult> => {
   try {
     const {data, error} = await supabase.auth.signInWithPassword({
       email,
@@ -99,9 +93,7 @@ export const signIn = async (
 /**
  * Sign in with OAuth provider (Discord, Google, Apple)
  */
-export const signInWithOAuth = async (
-  provider: AuthProvider
-): Promise<Omit<AuthResult, 'data'>> => {
+export const signInWithOAuth = async (provider: AuthProvider): Promise<Omit<AuthResult, 'data'>> => {
   try {
     const {error} = await supabase.auth.signInWithOAuth({
       options: {
@@ -133,9 +125,7 @@ export const signInWithOAuth = async (
 /**
  * Send password reset email to user
  */
-export const resetPassword = async (
-  email: string
-): Promise<Omit<AuthResult, 'data'>> => {
+export const resetPassword = async (email: string): Promise<Omit<AuthResult, 'data'>> => {
   try {
     const {error} = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/reset-password`,
@@ -164,9 +154,7 @@ export const resetPassword = async (
 /**
  * Update user password (requires current session)
  */
-export const updatePassword = async (
-  newPassword: string
-): Promise<Omit<AuthResult, 'data'>> => {
+export const updatePassword = async (newPassword: string): Promise<Omit<AuthResult, 'data'>> => {
   try {
     const {error} = await supabase.auth.updateUser({
       password: newPassword,
@@ -187,6 +175,38 @@ export const updatePassword = async (
     console.error('Unexpected password update error:', err);
     return {
       error: 'An unexpected error occurred while updating password',
+      success: false,
+    };
+  }
+};
+
+/**
+ * Update user profile metadata (requires current session)
+ */
+export const updateProfile = async (profileData: {
+  display_name?: string;
+  full_name?: string;
+}): Promise<Omit<AuthResult, 'data'>> => {
+  try {
+    const {error} = await supabase.auth.updateUser({
+      data: profileData,
+    });
+
+    if (error) {
+      return {
+        error: getAuthErrorMessage(error),
+        success: false,
+      };
+    }
+
+    return {
+      error: null,
+      success: true,
+    };
+  } catch (err) {
+    console.error('Unexpected profile update error:', err);
+    return {
+      error: 'An unexpected error occurred while updating profile',
       success: false,
     };
   }

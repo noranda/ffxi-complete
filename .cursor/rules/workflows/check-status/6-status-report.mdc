@@ -1,0 +1,135 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Step 6: Status Report
+
+## Goal
+
+Generate comprehensive status report confirming all quality gates have passed.
+
+## Required Context
+
+- ESLint check from Step 1 must have passed
+- Test check from Step 2 must have passed
+- TypeScript check from Step 3 must have passed
+- Formatting check from Step 4 must have passed
+- Markdown lint check from Step 5 must have passed
+
+## Process
+
+### 1. Collect Status Information
+
+Since all previous steps have already validated their respective checks, collect the final status without re-running commands.
+
+### 2. Status Information Collection
+
+Gather specific metrics from each check:
+
+1. **ESLint Results**:
+   - Count of errors (should be 0)
+   - Count of warnings (should be 0)
+   - Confirmation of successful completion
+
+2. **Test Results**:
+   - Total number of test files
+   - Total number of individual tests
+   - Pass/fail counts
+   - Success percentage (should be 100%)
+   - Warning count (should be 0)
+
+3. **TypeScript Results**:
+   - Compilation status
+   - Error count (should be 0)
+   - Warning count (should be 0)
+   - Confirmation of successful type checking
+
+4. **Formatting Results**:
+   - Number of files checked
+   - Formatting compliance status
+   - Confirmation all files use proper code style
+   - Warning count (should be 0)
+
+5. **Markdown Results**:
+   - Number of markdown files checked
+   - Error count (should be 0)
+   - Warning count (should be 0)
+
+### 3. Generate Single Status Report
+
+Create one comprehensive status report using standardized format (do not repeat multiple times):
+
+```markdown
+## ✅ **Status Check**
+
+🟢 **Lint**: 0 Errors, 0 Warnings  
+🟢 **Tests**: [X]/[X] passing (100% success rate), 0 Warnings
+🟢 **Types**: 0 Errors, 0 Warnings 
+🟢 **Format**: All files properly formatted, 0 Warnings
+🟢 **Markdown**: 0 Errors, 0 Warnings  
+
+### Issues Found:
+None - All quality gates passed ✅
+```
+
+### 4. Color Indicator Rules
+
+Use appropriate color indicators based on results:
+
+- 🟢 **Green**: Perfect status (0 errors, 0 warnings, 100% pass rate)
+- 🟠 **Orange**: Warnings present but no errors
+- 🔴 **Red**: Errors present (this should not occur if all previous steps passed)
+
+### 5. Detailed Metrics
+
+Include specific counts in the report:
+
+- **Lint**: "0 Errors, 0 Warnings" (exact counts)
+- **Tests**: "[actual]/[total] passing (percentage%), 0 Warnings (exact count)"
+- **Types**: "0 Errors, 0 Warnings" or specific count
+- **Format**: "All files properly formatted, 0 Warnings" or specific file counts
+- **Markdown**: "0 Errors, 0 Warnings" (exact counts)
+
+### 6. Additional Context
+
+If any issues were found and fixed during the workflow:
+
+```markdown
+### Issues Resolved During Check:
+- [Step X]: [Brief description of issues fixed]
+- [Step Y]: [Brief description of issues fixed]
+
+All issues have been successfully resolved ✅
+```
+
+## Expected Output
+
+- Comprehensive status report with all green indicators
+- Specific metrics showing 0 errors and 0 warnings across all checks
+- Clear summary of workflow completion
+
+## Success Criteria
+
+All status indicators should be green (🟢) with:
+
+- ESLint: 0 errors, 0 warnings
+- Tests: 100% passing, 0 warnings
+- TypeScript: 0 compilation errors, 0 warnings
+- Formatting: All files properly formatted, 0 warnings
+- Markdown: 0 errors, 0 warnings
+
+## Workflow Execution Notes
+
+**Important**: Do not re-run all quality checks in this step. Each previous step has already validated its respective
+check. Simply generate the final status report based on the successful completion of steps 1-5.
+
+## Workflow Completion
+
+This is the final step of the check-status workflow. Upon completion:
+
+- All quality gates have been validated
+- Any issues found have been resolved
+- Project is confirmed to be in a healthy state
+- Development can proceed with confidence
+- **Only one status report should be generated** (avoid redundant output)

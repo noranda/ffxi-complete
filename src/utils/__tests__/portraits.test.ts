@@ -64,26 +64,17 @@ describe('Portrait Utilities', () => {
   describe('Path Generation', () => {
     it('should generate correct file path', () => {
       const path = generatePortraitPath(samplePortrait);
-      expect(path).toBe(
-        '/portraits/hume/male/portrait-hume-male-face1-hairA.webp'
-      );
+      expect(path).toBe('/portraits/hume/male/portrait-hume-male-face1-hairA.webp');
     });
 
     it('should generate correct URL with default base', () => {
       const url = generatePortraitUrl(samplePortrait);
-      expect(url).toBe(
-        '/src/assets/portraits/hume/male/portrait-hume-male-face1-hairA.webp'
-      );
+      expect(url).toBe('/src/assets/portraits/hume/male/portrait-hume-male-face1-hairA.webp');
     });
 
     it('should generate correct URL with custom base', () => {
-      const url = generatePortraitUrl(
-        samplePortrait,
-        'https://cdn.example.com'
-      );
-      expect(url).toBe(
-        'https://cdn.example.com/portraits/hume/male/portrait-hume-male-face1-hairA.webp'
-      );
+      const url = generatePortraitUrl(samplePortrait, 'https://cdn.example.com');
+      expect(url).toBe('https://cdn.example.com/portraits/hume/male/portrait-hume-male-face1-hairA.webp');
     });
   });
 
@@ -112,9 +103,7 @@ describe('Portrait Utilities', () => {
 
       // Hume has 2 genders × 8 faces × 2 hair styles = 32 portraits
       expect(humePortraits).toHaveLength(32);
-      humePortraits.forEach(portrait => {
-        expect(portrait.race).toBe('hume');
-      });
+      humePortraits.forEach(portrait => expect(portrait.race).toBe('hume'));
     });
 
     it('should filter portraits by gender', () => {
@@ -122,9 +111,7 @@ describe('Portrait Utilities', () => {
 
       // Male: hume, elvaan, tarutaru, galka = 4 races × 8 faces × 2 hair styles = 64 portraits
       expect(malePortraits).toHaveLength(64);
-      malePortraits.forEach(portrait => {
-        expect(portrait.gender).toBe('male');
-      });
+      malePortraits.forEach(portrait => expect(portrait.gender).toBe('male'));
     });
 
     it('should filter portraits by race and gender', () => {
@@ -146,9 +133,7 @@ describe('Portrait Utilities', () => {
 
       // 8 race/gender combinations × 1 face × 2 hair styles = 16 portraits
       expect(face1Portraits).toHaveLength(16);
-      face1Portraits.forEach(portrait => {
-        expect(portrait.face).toBe(1);
-      });
+      face1Portraits.forEach(portrait => expect(portrait.face).toBe(1));
     });
 
     it('should filter portraits by hair style', () => {
@@ -156,9 +141,7 @@ describe('Portrait Utilities', () => {
 
       // 8 race/gender combinations × 8 faces × 1 hair style = 64 portraits
       expect(hairAPortraits).toHaveLength(64);
-      hairAPortraits.forEach(portrait => {
-        expect(portrait.hair).toBe('A');
-      });
+      hairAPortraits.forEach(portrait => expect(portrait.hair).toBe('A'));
     });
   });
 
@@ -204,9 +187,7 @@ describe('Portrait Utilities', () => {
 
   describe('Filename Parsing', () => {
     it('should parse valid portrait filenames', () => {
-      const parsed = parsePortraitFilename(
-        'portrait-hume-male-face1-hairA.webp'
-      );
+      const parsed = parsePortraitFilename('portrait-hume-male-face1-hairA.webp');
       expect(parsed).toEqual({
         face: 1,
         gender: 'male',
@@ -214,9 +195,7 @@ describe('Portrait Utilities', () => {
         race: 'hume',
       });
 
-      const parsed2 = parsePortraitFilename(
-        'portrait-elvaan-female-face8-hairB.webp'
-      );
+      const parsed2 = parsePortraitFilename('portrait-elvaan-female-face8-hairB.webp');
       expect(parsed2).toEqual({
         face: 8,
         gender: 'female',
@@ -227,30 +206,20 @@ describe('Portrait Utilities', () => {
 
     it('should return null for invalid filenames', () => {
       expect(parsePortraitFilename('invalid-filename.jpg')).toBeNull();
-      expect(
-        parsePortraitFilename('portrait-invalid-race-face1-hairA.webp')
-      ).toBeNull();
-      expect(
-        parsePortraitFilename('portrait-hume-male-face0-hairA.webp')
-      ).toBeNull(); // Face 0 invalid
-      expect(
-        parsePortraitFilename('portrait-hume-male-face1-hairC.webp')
-      ).toBeNull(); // Hair C invalid
+      expect(parsePortraitFilename('portrait-invalid-race-face1-hairA.webp')).toBeNull();
+      expect(parsePortraitFilename('portrait-hume-male-face0-hairA.webp')).toBeNull(); // Face 0 invalid
+      expect(parsePortraitFilename('portrait-hume-male-face1-hairC.webp')).toBeNull(); // Hair C invalid
       expect(parsePortraitFilename('not-a-portrait.webp')).toBeNull();
     });
 
     it('should handle edge cases in parsing', () => {
       expect(parsePortraitFilename('')).toBeNull();
-      expect(
-        parsePortraitFilename('portrait-hume-male-face9-hairA.webp')
-      ).toBeNull(); // Face 9 invalid
-      expect(
-        parsePortraitFilename('portrait-hume-unknown-face1-hairA.webp')
-      ).toBeNull(); // Unknown gender
+      expect(parsePortraitFilename('portrait-hume-male-face9-hairA.webp')).toBeNull(); // Face 9 invalid
+      expect(parsePortraitFilename('portrait-hume-unknown-face1-hairA.webp')).toBeNull(); // Unknown gender
     });
   });
 
-  describe('Portrait Statistics', () => {
+  describe('Portrait Statistics', () =>
     it('should calculate correct portrait statistics', () => {
       const stats = getPortraitStats();
 
@@ -265,13 +234,12 @@ describe('Portrait Utilities', () => {
       expect(stats.byRace.tarutaru).toBe(32); // 2 genders × 8 faces × 2 hair = 32
       expect(stats.byRace.mithra).toBe(16); // 1 gender × 8 faces × 2 hair = 16
       expect(stats.byRace.galka).toBe(16); // 1 gender × 8 faces × 2 hair = 16
-    });
-  });
+    }));
 
   describe('Portrait Data Integrity', () => {
     it('should generate unique IDs for all portraits', () => {
       const portraits = generateAllPortraits();
-      const ids = portraits.map(p => p.id);
+      const ids = portraits.map(portrait => portrait.id);
       const uniqueIds = new Set(ids);
 
       expect(ids).toHaveLength(uniqueIds.size); // No duplicates
@@ -299,16 +267,12 @@ describe('Portrait Utilities', () => {
       const portraits = generateAllPortraits();
 
       // Check that Mithra are only female
-      const mithraPortraits = portraits.filter(p => p.race === 'mithra');
-      mithraPortraits.forEach(portrait => {
-        expect(portrait.gender).toBe('female');
-      });
+      const mithraPortraits = portraits.filter(portrait => portrait.race === 'mithra');
+      mithraPortraits.forEach(portrait => expect(portrait.gender).toBe('female'));
 
       // Check that Galka are only male
-      const galkaPortraits = portraits.filter(p => p.race === 'galka');
-      galkaPortraits.forEach(portrait => {
-        expect(portrait.gender).toBe('male');
-      });
+      const galkaPortraits = portraits.filter(portrait => portrait.race === 'galka');
+      galkaPortraits.forEach(portrait => expect(portrait.gender).toBe('male'));
     });
   });
 });

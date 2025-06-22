@@ -5,7 +5,7 @@ export default {
   endOfLine: 'lf',
   // Tailwind CSS class sorting
   plugins: ['prettier-plugin-tailwindcss'],
-  printWidth: 80,
+  printWidth: 120,
   semi: true,
   singleQuote: true,
   tabWidth: 2,

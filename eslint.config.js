@@ -1,4 +1,5 @@
 import pluginJs from '@eslint/js';
+import pluginStylistic from '@stylistic/eslint-plugin';
 import configPrettier from 'eslint-config-prettier';
 import pluginBetterTailwind from 'eslint-plugin-better-tailwindcss';
 import pluginImport from 'eslint-plugin-import';
@@ -141,6 +142,15 @@ export default [
       ],
 
       '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
+      // Prevent one-letter variables except for common exceptions
+      'id-length': [
+        'error',
+        {
+          exceptions: ['_', 'x', 'y', 'z', 'i', 'j', 'k'], // Allow underscore and common coordinates/loop vars
+          min: 2,
+          properties: 'never', // Don't check object properties
+        },
+      ],
       // Import management (Perfectionist handles sorting)
       'import/first': 'error',
       'import/newline-after-import': 'error',
@@ -165,10 +175,7 @@ export default [
         },
       ],
       // Project-specific overrides
-      'react-refresh/only-export-components': [
-        'error',
-        {allowConstantExport: true},
-      ],
+      'react-refresh/only-export-components': ['error', {allowConstantExport: true}],
     },
     settings: {
       'import/internal-regex': '^@/',
@@ -179,7 +186,7 @@ export default [
     },
   },
 
-  // Strict type-aware rules for source files
+  // Strict type-aware rules for source files - catch ALL TypeScript compilation errors
   {
     files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
@@ -190,35 +197,39 @@ export default [
       },
     },
     rules: {
-      '@typescript-eslint/no-confusing-void-expression': 'error',
-      // Type safety rules (our most important custom rules)
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/no-misused-promises': 'error',
-      '@typescript-eslint/no-unsafe-argument': 'error',
-      '@typescript-eslint/no-unsafe-assignment': 'error',
-      '@typescript-eslint/no-unsafe-call': 'error',
-      '@typescript-eslint/no-unsafe-member-access': 'error',
-      '@typescript-eslint/no-unsafe-return': 'error',
-      '@typescript-eslint/restrict-template-expressions': 'error',
-      '@typescript-eslint/unbound-method': 'error',
+      // Use ALL TypeScript ESLint type-checked rules as errors
+      ...tseslintConfigs.strictTypeChecked.rules,
+      ...tseslintConfigs.stylisticTypeChecked.rules,
+      // Override specific rules that we want to allow or configure differently
+      '@typescript-eslint/no-confusing-void-expression': [
+        'error',
+        {
+          ignoreArrowShorthand: false,
+          ignoreVoidOperator: false,
+        },
+      ], // Enable to catch useEffect return type errors
+      '@typescript-eslint/no-explicit-any': 'error', // Keep as error in source files
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {
+          checksVoidReturn: {
+            arguments: true,
+            attributes: true,
+            properties: true,
+            returns: true,
+            variables: true,
+          },
+        },
+      ], // Re-enable to catch useEffect return type errors
     },
   },
 
   // Component size limits (excluding tests and generated files)
   {
     files: ['src/components/**/*.{ts,tsx}', 'src/pages/**/*.{ts,tsx}'],
-    ignores: [
-      '**/__tests__/**',
-      '**/*.{test,spec}.{ts,tsx}',
-      '**/types/database.types.ts',
-      'src/App.tsx',
-    ],
+    ignores: ['**/__tests__/**', '**/*.{test,spec}.{ts,tsx}', '**/types/database.types.ts', 'src/App.tsx'],
     rules: {
-      'max-lines': [
-        'error',
-        {max: 300, skipBlankLines: true, skipComments: true},
-      ],
+      'max-lines': ['error', {max: 300, skipBlankLines: true, skipComments: true}],
     },
   },
 
@@ -230,13 +241,9 @@ export default [
     },
   },
 
-  // Test files - disable strict rules, enforce explicit imports for test functions
+  // Test files - catch ALL TypeScript errors but disable some strict rules
   {
-    files: [
-      '**/__tests__/**/*.{ts,tsx}',
-      '**/*.{test,spec}.{ts,tsx}',
-      'src/test/**/*.{ts,tsx}',
-    ],
+    files: ['**/__tests__/**/*.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}', 'src/test/**/*.{ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -248,11 +255,22 @@ export default [
         // Explicitly DO NOT include vitest globals to force explicit imports
         // describe, it, expect, beforeEach, etc. must be imported
       },
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.app.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     rules: {
+      // Use ALL TypeScript ESLint type-checked rules as errors in tests too
+      ...tseslintConfigs.strictTypeChecked.rules,
+      ...tseslintConfigs.stylisticTypeChecked.rules,
+      // Allow more flexibility in tests
+      '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
@@ -294,12 +312,7 @@ export default [
 
   // Config files - minimal rules
   {
-    files: [
-      '*.config.{js,ts,mjs}',
-      'vite.config.ts',
-      'vitest.config.ts',
-      'eslint-custom-rules.js',
-    ],
+    files: ['*.config.{js,ts,mjs}', 'vite.config.ts', 'vitest.config.ts', 'eslint-custom-rules.js'],
     rules: {
       'import/no-unresolved': 'off',
       // Disable JSDoc rules for config files
@@ -326,22 +339,14 @@ export default [
     plugins: {
       'ffxi-custom': {
         rules: {
-          'jsx-expression-spacing':
-            customRulesConfig.plugins['ffxi-custom'].rules[
-              'jsx-expression-spacing'
-            ],
-          'jsx-multiline-spacing':
-            customRulesConfig.plugins['ffxi-custom'].rules[
-              'jsx-multiline-spacing'
-            ],
-          'no-unnecessary-div-wrapper':
-            customRulesConfig.plugins['ffxi-custom'].rules[
-              'no-unnecessary-div-wrapper'
-            ],
-          'prefer-div-over-p':
-            customRulesConfig.plugins['ffxi-custom'].rules['prefer-div-over-p'],
-          'react-fc-pattern':
-            customRulesConfig.plugins['ffxi-custom'].rules['react-fc-pattern'],
+          'jsx-expression-spacing': customRulesConfig.plugins['ffxi-custom'].rules['jsx-expression-spacing'],
+          'jsx-multiline-spacing': customRulesConfig.plugins['ffxi-custom'].rules['jsx-multiline-spacing'],
+          'no-unnecessary-div-wrapper': customRulesConfig.plugins['ffxi-custom'].rules['no-unnecessary-div-wrapper'],
+          'prefer-cn-for-classname': customRulesConfig.plugins['ffxi-custom'].rules['prefer-cn-for-classname'],
+          'prefer-div-over-p': customRulesConfig.plugins['ffxi-custom'].rules['prefer-div-over-p'],
+          'prefer-single-line-arrow-functions':
+            customRulesConfig.plugins['ffxi-custom'].rules['prefer-single-line-arrow-functions'],
+          'react-fc-pattern': customRulesConfig.plugins['ffxi-custom'].rules['react-fc-pattern'],
         },
       },
     },
@@ -349,7 +354,9 @@ export default [
       'ffxi-custom/jsx-expression-spacing': 'error',
       'ffxi-custom/jsx-multiline-spacing': 'error',
       'ffxi-custom/no-unnecessary-div-wrapper': 'error',
+      'ffxi-custom/prefer-cn-for-classname': 'error',
       'ffxi-custom/prefer-div-over-p': 'error',
+      'ffxi-custom/prefer-single-line-arrow-functions': 'error',
       'ffxi-custom/react-fc-pattern': 'error',
     },
   },
@@ -365,10 +372,40 @@ export default [
     },
   },
 
-  // Arrow body style automation - prefer implicit returns when possible
+  // Condensed code style - prefer single-line statements and concise expressions
   {
+    files: ['src/**/*.{ts,tsx}'],
+    plugins: {
+      '@stylistic': pluginStylistic,
+    },
     rules: {
+      // Keep function calls condensed when possible
+      '@stylistic/function-call-argument-newline': ['error', 'consistent'],
+      // Force arrow function bodies to be beside the arrow
+      '@stylistic/implicit-arrow-linebreak': ['error', 'beside'],
+      // Condensed JSX expressions - use stylistic plugin instead of custom rule
+      '@stylistic/jsx-curly-newline': ['error', {multiline: 'forbid', singleline: 'forbid'}],
+      // Prefer concise conditional expressions
+      '@stylistic/multiline-ternary': ['error', 'always-multiline'],
+      // Enforce single-line statements to be beside their parent
+      '@stylistic/nonblock-statement-body-position': ['error', 'beside'],
+      // Condensed object formatting for simple objects
+      '@stylistic/object-curly-newline': [
+        'error',
+        {
+          ObjectExpression: {consistent: true, minProperties: 4},
+          ObjectPattern: {consistent: true, minProperties: 4},
+        },
+      ],
+      // Disable TypeScript rules that conflict with condensed style
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      // Enforce condensed arrow functions for expressions (return statements)
       'arrow-body-style': ['error', 'as-needed'],
+      // Allow single-line if statements without braces for simple cases
+      curly: ['error', 'multi-line'],
+      // Enforce consistent 120-character line length limit
+      'max-len': ['error', {code: 120, ignoreComments: true, ignoreUrls: true}],
     },
   },
 
@@ -382,20 +419,10 @@ export default [
       },
     },
     rules: {
-      // Prevent misuse of promises in conditional statements
-      '@typescript-eslint/no-misused-promises': [
-        'error',
-        {
-          checksConditionals: true,
-          checksVoidReturn: true,
-        },
-      ],
       '@typescript-eslint/only-throw-error': 'error',
-
       '@typescript-eslint/prefer-promise-reject-errors': 'error',
       // Enforce Error objects for throw statements
       'no-throw-literal': 'off', // Disable base rule
-
       // Enforce Error objects for Promise rejections
       'prefer-promise-reject-errors': 'off', // Disable base rule
     },
@@ -415,8 +442,8 @@ export default [
 
   // Minimal JSDoc for function comments (error level)
   {
-    files: ['src/**/*.{ts,tsx}'], // Only apply to source files, not tests or config
-    ignores: ['**/*.test.{ts,tsx}', '**/__tests__/**/*'], // Exclude test files
+    files: ['src/**/*.{ts,tsx}'], // Apply to all source files including tests
+    ignores: ['**/__tests__/**', '**/*.{test,spec}.{ts,tsx}'],
     plugins: {
       jsdoc: pluginJsdoc,
     },
@@ -436,43 +463,35 @@ export default [
           contexts: [
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="param"])',
-              message:
-                '@param tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@param tags are not allowed. Use minimal JSDoc with description only.',
             },
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="returns"])',
-              message:
-                '@returns tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@returns tags are not allowed. Use minimal JSDoc with description only.',
             },
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="return"])',
-              message:
-                '@return tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@return tags are not allowed. Use minimal JSDoc with description only.',
             },
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="example"])',
-              message:
-                '@example tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@example tags are not allowed. Use minimal JSDoc with description only.',
             },
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="arg"])',
-              message:
-                '@arg tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@arg tags are not allowed. Use minimal JSDoc with description only.',
             },
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="argument"])',
-              message:
-                '@argument tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@argument tags are not allowed. Use minimal JSDoc with description only.',
             },
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="throws"])',
-              message:
-                '@throws tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@throws tags are not allowed. Use minimal JSDoc with description only.',
             },
             {
               comment: 'JsdocBlock:has(JsdocTag[tag="yields"])',
-              message:
-                '@yields tags are not allowed. Use minimal JSDoc with description only.',
+              message: '@yields tags are not allowed. Use minimal JSDoc with description only.',
             },
           ],
         },
@@ -489,19 +508,12 @@ export default [
       'jsdoc/require-jsdoc': [
         'error',
         {
-          checkGetters: false,
-          checkSetters: false,
-          contexts: [
-            // Also require on exported constants that are functions
-            'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression',
-          ],
-          exemptEmptyConstructors: true,
-          exemptEmptyFunctions: false,
           require: {
-            ArrowFunctionExpression: true,
-            ClassDeclaration: false, // Classes can have TypeScript interface docs
+            ArrowFunctionExpression: false, // Don't require JSDoc for arrow functions
+            ClassDeclaration: true,
+            ClassExpression: true,
             FunctionDeclaration: true,
-            FunctionExpression: true,
+            FunctionExpression: false, // Don't require JSDoc for function expressions
             MethodDefinition: true,
           },
         },
@@ -514,6 +526,86 @@ export default [
       'jsdoc/require-returns-description': 'off',
       'jsdoc/require-returns-type': 'off',
       'jsdoc/valid-types': 'off',
+    },
+  },
+
+  // JSDoc restrictions for test files (minimal - only tag restrictions, no requirement for JSDoc)
+  {
+    files: ['**/__tests__/**/*.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}', 'src/test/**/*.{ts,tsx}'],
+    plugins: {
+      jsdoc: pluginJsdoc,
+    },
+    rules: {
+      // But if JSDoc is present, require basic formatting
+      'jsdoc/check-alignment': 'error',
+      'jsdoc/check-indentation': 'error',
+      'jsdoc/multiline-blocks': 'error',
+      'jsdoc/no-multi-asterisks': 'error',
+      // Forbid specific JSDoc tags (same as source files)
+      'jsdoc/no-restricted-syntax': [
+        'error',
+        {
+          contexts: [
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="param"])',
+              message: '@param tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="returns"])',
+              message: '@returns tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="return"])',
+              message: '@return tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="example"])',
+              message: '@example tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="arg"])',
+              message: '@arg tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="argument"])',
+              message: '@argument tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="throws"])',
+              message: '@throws tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="yields"])',
+              message: '@yields tags are not allowed. Use minimal JSDoc with description only.',
+            },
+          ],
+        },
+      ],
+      'jsdoc/require-description': 'error', // If JSDoc is present, require description
+      // Don't require JSDoc on test functions
+      'jsdoc/require-jsdoc': 'off',
+      // Explicitly disable these to avoid warnings
+      'jsdoc/require-param': 'off',
+      'jsdoc/require-param-description': 'off',
+      'jsdoc/require-param-type': 'off',
+      'jsdoc/require-returns': 'off',
+      'jsdoc/require-returns-description': 'off',
+      'jsdoc/require-returns-type': 'off',
+    },
+  },
+
+  // TypeScript-specific linting for enhanced type checking
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tseslint.parser,
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
+    rules: {
+      // Basic TypeScript rules without type checking
+      ...tseslintConfigs.recommended.rules,
     },
   },
 

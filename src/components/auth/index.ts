@@ -13,8 +13,10 @@
 
 export {LoginForm} from './LoginForm';
 export {OAuthButtons} from './OAuthButtons';
+export {PasswordChangeForm} from './PasswordChangeForm';
 export {PasswordFieldWithStrength} from './PasswordFieldWithStrength';
 export {PasswordResetForm} from './PasswordResetForm';
+export {ProfileForm} from './ProfileForm';
 export {ProtectedRoute} from './ProtectedRoute';
 // Export types
 export type {ProtectedRouteProps} from './ProtectedRoute';
@@ -22,7 +24,6 @@ export {RegisterForm} from './RegisterForm';
 
 export {SuccessMessage} from './SuccessMessage';
 export type * from './types';
-
 // Export shared types for use by other components
 export type {
   AuthCallbacks,
@@ -35,3 +36,5 @@ export type {
   PasswordUpdateFormData,
   RegisterFormData,
 } from './types';
+
+export {UserProfile} from './UserProfile';

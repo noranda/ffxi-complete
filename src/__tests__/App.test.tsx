@@ -19,9 +19,7 @@ vi.mock('../lib/auth', () => ({
 vi.mock('../lib/supabase', () => ({
   supabase: {
     auth: {
-      getSession: vi
-        .fn()
-        .mockResolvedValue({data: {session: null}, error: null}),
+      getSession: vi.fn().mockResolvedValue({data: {session: null}, error: null}),
       onAuthStateChange: vi.fn(() => ({
         data: {subscription: {unsubscribe: vi.fn()}},
       })),
@@ -30,17 +28,13 @@ vi.mock('../lib/supabase', () => ({
 }));
 
 // Test wrapper with AuthProvider
-const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => (
-  <AuthProvider>{children}</AuthProvider>
-);
+const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => <AuthProvider>{children}</AuthProvider>;
 describe('App', () => {
   it('renders the application', async () => {
     render(<App />, {wrapper: TestWrapper});
 
     // Wait for auth initialization to complete to avoid act warnings
-    await waitFor(() => {
-      expect(document.body).toBeInTheDocument();
-    });
+    await waitFor(() => expect(document.body).toBeInTheDocument());
   });
 
   it('displays the main heading when not loading', async () => {

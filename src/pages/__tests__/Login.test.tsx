@@ -19,9 +19,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 // Mock auth context helper
-const createMockAuthContext = (
-  overrides: Partial<AuthContextType> = {}
-): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
   isAuthenticated: false,
@@ -41,15 +39,11 @@ const createMockAuthContext = (
 const TestWrapper: React.FC<{
   authContext: AuthContextType;
   children: React.ReactNode;
-}> = ({authContext, children}) => (
-  <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
-);
+}> = ({authContext, children}) => <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;
 describe('Login Page', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  beforeEach(() => vi.clearAllMocks());
 
-  describe('Rendering', () => {
+  describe('Rendering', () =>
     it('should render login page with branding and form', () => {
       const mockAuthContext = createMockAuthContext();
 
@@ -60,13 +54,10 @@ describe('Login Page', () => {
       );
 
       expect(screen.getByText('FFXI Complete')).toBeInTheDocument();
-      expect(
-        screen.getByText('Track your Final Fantasy XI progress')
-      ).toBeInTheDocument();
+      expect(screen.getByText('Track your Final Fantasy XI progress')).toBeInTheDocument();
       expect(screen.getByText('Welcome Back')).toBeInTheDocument();
       expect(screen.getByRole('button', {name: 'Sign In'})).toBeInTheDocument();
-    });
-  });
+    }));
 
   describe('Navigation Handling', () => {
     it('should navigate to dashboard on successful login', async () => {
@@ -88,9 +79,7 @@ describe('Login Page', () => {
       await user.type(passwordInput, 'password123');
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(mockNavigate).toHaveBeenCalledWith('/', {replace: true});
-      });
+      await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/', {replace: true}));
     });
 
     it('should navigate to register page when switch to register clicked', async () => {
@@ -130,7 +119,7 @@ describe('Login Page', () => {
     });
   });
 
-  describe('OAuth Integration', () => {
+  describe('OAuth Integration', () =>
     it('should handle OAuth authentication through LoginForm', async () => {
       const user = userEvent.setup();
       const mockSignInWithProvider = vi.fn().mockResolvedValue({success: true});
@@ -149,9 +138,6 @@ describe('Login Page', () => {
       });
       await user.click(discordButton);
 
-      await waitFor(() => {
-        expect(mockNavigate).toHaveBeenCalledWith('/', {replace: true});
-      });
-    });
-  });
+      await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/', {replace: true}));
+    }));
 });

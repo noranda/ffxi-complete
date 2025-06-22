@@ -15,9 +15,7 @@ type DrawerContentProps = React.ComponentProps<typeof DrawerPrimitive.Content>;
 /**
  * Drawer description component props extending Vaul Drawer.Description
  */
-type DrawerDescriptionProps = React.ComponentProps<
-  typeof DrawerPrimitive.Description
->;
+type DrawerDescriptionProps = React.ComponentProps<typeof DrawerPrimitive.Description>;
 
 /**
  * Drawer footer component props extending HTML div attributes
@@ -58,9 +56,7 @@ type DrawerTriggerProps = React.ComponentProps<typeof DrawerPrimitive.Trigger>;
  * Drawer root component built on Vaul.
  * Provides accessible drawer/modal functionality with gesture support.
  */
-const DrawerRoot: React.FC<DrawerProps> = ({...props}) => (
-  <DrawerPrimitive.Root data-slot="drawer" {...props} />
-);
+const DrawerRoot: React.FC<DrawerProps> = ({...props}) => <DrawerPrimitive.Root data-slot="drawer" {...props} />;
 /**
  * Drawer trigger button component.
  * Use with asChild prop to render as any element.
@@ -102,11 +98,7 @@ const DrawerOverlay: React.FC<DrawerOverlayProps> = ({className, ...props}) => (
  * Supports bottom, top, left, and right drawer directions.
  * Includes automatic overlay and portal rendering.
  */
-const DrawerContent: React.FC<DrawerContentProps> = ({
-  children,
-  className,
-  ...props
-}) => (
+const DrawerContent: React.FC<DrawerContentProps> = ({children, className, ...props}) => (
   <DrawerPortal data-slot="drawer-portal">
     <DrawerOverlay />
 
@@ -153,11 +145,7 @@ const DrawerHeader: React.FC<DrawerHeaderProps> = ({className, ...props}) => (
  * Positioned at the bottom of drawer content.
  */
 const DrawerFooter: React.FC<DrawerFooterProps> = ({className, ...props}) => (
-  <div
-    className={cn('mt-auto flex flex-col gap-2 p-4', className)}
-    data-slot="drawer-footer"
-    {...props}
-  />
+  <div className={cn('mt-auto flex flex-col gap-2 p-4', className)} data-slot="drawer-footer" {...props} />
 );
 /**
  * Drawer title component for accessibility.
@@ -174,10 +162,7 @@ const DrawerTitle: React.FC<DrawerTitleProps> = ({className, ...props}) => (
  * Drawer description component for accessibility.
  * Provides additional context about the drawer content.
  */
-const DrawerDescription: React.FC<DrawerDescriptionProps> = ({
-  className,
-  ...props
-}) => (
+const DrawerDescription: React.FC<DrawerDescriptionProps> = ({className, ...props}) => (
   <DrawerPrimitive.Description
     className={cn('text-muted-foreground text-sm', className)}
     data-slot="drawer-description"

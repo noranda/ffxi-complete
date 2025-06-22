@@ -9,13 +9,7 @@ import {Register} from '../Register';
 
 // Mock the RegisterForm component
 vi.mock('@/components/auth/RegisterForm', () => ({
-  RegisterForm: ({
-    onSuccess,
-    onSwitchToLogin,
-  }: {
-    onSuccess?: () => void;
-    onSwitchToLogin?: () => void;
-  }) => (
+  RegisterForm: ({onSuccess, onSwitchToLogin}: {onSuccess?: () => void; onSwitchToLogin?: () => void}) => (
     <div data-testid="register-form">
       <button data-testid="success-button" onClick={onSuccess}>
         Trigger Success
@@ -29,9 +23,7 @@ vi.mock('@/components/auth/RegisterForm', () => ({
 }));
 
 // Mock auth context for testing
-const createMockAuthContext = (
-  overrides: Partial<AuthContextType> = {}
-): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
   isAuthenticated: false,
@@ -52,14 +44,10 @@ const TestWrapper: React.FC<{
   authContext?: Partial<AuthContextType>;
   children: React.ReactNode;
 }> = ({authContext = {}, children}) => (
-  <AuthContext.Provider value={createMockAuthContext(authContext)}>
-    {children}
-  </AuthContext.Provider>
+  <AuthContext.Provider value={createMockAuthContext(authContext)}>{children}</AuthContext.Provider>
 );
 describe('Register', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  beforeEach(() => vi.clearAllMocks());
 
   describe('Rendering', () => {
     it('renders registration page with centered layout', () => {
@@ -72,9 +60,7 @@ describe('Register', () => {
       expect(screen.getByTestId('register-form')).toBeInTheDocument();
 
       // Check that the page has proper layout classes
-      const pageContainer = screen
-        .getByTestId('register-form')
-        .closest('[class*="min-h-screen"]');
+      const pageContainer = screen.getByTestId('register-form').closest('[class*="min-h-screen"]');
       expect(pageContainer).toBeInTheDocument();
     });
 
@@ -96,12 +82,7 @@ describe('Register', () => {
       );
 
       const outerDiv = container.firstChild as HTMLElement;
-      expect(outerDiv).toHaveClass(
-        'min-h-screen',
-        'flex',
-        'items-center',
-        'justify-center'
-      );
+      expect(outerDiv).toHaveClass('min-h-screen', 'flex', 'items-center', 'justify-center');
 
       const innerDiv = outerDiv.querySelector('[class*="max-w-md"]');
       expect(innerDiv).toBeInTheDocument();
@@ -207,13 +188,7 @@ describe('Register', () => {
       );
 
       const outerContainer = container.firstChild as HTMLElement;
-      expect(outerContainer).toHaveClass(
-        'min-h-screen',
-        'flex',
-        'items-center',
-        'justify-center',
-        'bg-background'
-      );
+      expect(outerContainer).toHaveClass('min-h-screen', 'flex', 'items-center', 'justify-center', 'bg-background');
     });
 
     it('applies responsive padding classes', () => {
@@ -246,10 +221,7 @@ describe('Register', () => {
 
       render(
         <TestWrapper>
-          <Register
-            onRegistrationSuccess={onRegistrationSuccess}
-            onSwitchToLogin={onSwitchToLogin}
-          />
+          <Register onRegistrationSuccess={onRegistrationSuccess} onSwitchToLogin={onSwitchToLogin} />
         </TestWrapper>
       );
 
