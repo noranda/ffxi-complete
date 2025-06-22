@@ -16,7 +16,7 @@ with commit creation. All checks must pass green before moving to the next step.
 
 ## Process
 
-1. **Run ESLint**: Execute `yarn lint` to check for linting issues
+1. **Run ESLint**: Execute `yarn lint` to check for linting issues (capture both errors AND warnings)
 2. **Run Tests**: Execute `yarn test --run` to run all tests (using --run flag to avoid watch mode)
 3. **Run Type Check**: Execute `yarn type-check` to verify TypeScript compilation
 4. **Run Format Check**: Execute `yarn prettier --check .` to verify code formatting
@@ -40,11 +40,22 @@ All five checks must pass with exit code 0:
 
 ## Instructions for AI
 
-1. Run all five status check commands in parallel for efficiency
-2. Report results using the standard status-check-reporting format with emoji indicators
-3. If ANY check fails, stop the workflow and report the issues - do not proceed
-4. Only if ALL checks pass, confirm readiness to proceed to step 2
-5. Wait for explicit user approval before moving to next step
+1. Run all five status check commands and capture full output (not --quiet) to see warnings
+2. Parse outputs to count errors AND warnings separately for each tool
+3. Report results using the standard status-check-reporting format with emoji indicators:
+   - 🟢 Green: No errors, no warnings  
+   - 🟠 Orange: Warnings present, no errors
+   - 🔴 Red: Errors present (may also have warnings)
+4. If ANY check has errors, stop the workflow and report the issues - do not proceed
+5. If only warnings are present, report them but allow proceeding (user decision)
+6. Only if ALL checks are green or orange, confirm readiness to proceed to step 2
+7. Wait for explicit user approval before moving to next step
+
+### Command Details for Capturing Output
+
+- **ESLint**: Use `yarn lint` (not --quiet) to see warnings
+- **Tests**: Capture test warnings if any appear in output
+- **Other tools**: Use standard commands and parse output for warnings
 
 ## Failure Handling
 

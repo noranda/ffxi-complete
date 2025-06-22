@@ -6,19 +6,8 @@ import {cn} from '@/lib/utils';
 type InputProps = React.ComponentProps<'input'>;
 
 /**
- * Styled input component with consistent design system integration
- * Provides accessible form input with proper focus and validation states
- * @param root0
- * @param root0.className
- * @param root0.type
- * @example
- * ```tsx
- * <Input
- *   aria-invalid={hasError}
- *   placeholder="Enter your email"
- *   type="email"
- * />
- * ```
+ * Styled input component with consistent design system integration.
+ * Provides accessible form input with proper focus and validation states.
  */
 const Input: React.FC<InputProps> = ({className, type, ...props}) => (
   <input

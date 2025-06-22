@@ -36,23 +36,8 @@ type CardProps = React.ComponentProps<'div'>;
 type CardTitleProps = React.ComponentProps<'div'>;
 
 /**
- * Main card container component with elevation and rounded styling
- * Provides a flexible foundation for content cards
- * @param root0
- * @param root0.className
- * @example
- * ```tsx
- * <Card>
- *   <CardHeader>
- *     <CardTitle>Card Title</CardTitle>
- *     <CardDescription>Optional description</CardDescription>
- *   </CardHeader>
- *
- *   <CardContent>
- *     Main content goes here
- *   </CardContent>
- * </Card>
- * ```
+ * Main card container component with elevation and rounded styling.
+ * Provides a flexible foundation for content cards.
  */
 const Card: React.FC<CardProps> = ({className, ...props}) => (
   <div
@@ -65,10 +50,8 @@ const Card: React.FC<CardProps> = ({className, ...props}) => (
   />
 );
 /**
- * Card header component with grid layout for title and action areas
- * Automatically handles layout when action components are present
- * @param root0
- * @param root0.className
+ * Card header component with grid layout for title and action areas.
+ * Automatically handles layout when action components are present.
  */
 const CardHeader: React.FC<CardHeaderProps> = ({className, ...props}) => (
   <div
@@ -81,10 +64,8 @@ const CardHeader: React.FC<CardHeaderProps> = ({className, ...props}) => (
   />
 );
 /**
- * Card title component with consistent typography
- * Should be used within CardHeader for proper layout
- * @param root0
- * @param root0.className
+ * Card title component with consistent typography.
+ * Should be used within CardHeader for proper layout.
  */
 const CardTitle: React.FC<CardTitleProps> = ({className, ...props}) => (
   <div
@@ -94,10 +75,8 @@ const CardTitle: React.FC<CardTitleProps> = ({className, ...props}) => (
   />
 );
 /**
- * Card description component with muted text styling
- * Provides secondary information below the title
- * @param root0
- * @param root0.className
+ * Card description component with muted text styling.
+ * Provides secondary information below the title.
  */
 const CardDescription: React.FC<CardDescriptionProps> = ({
   className,
@@ -110,10 +89,8 @@ const CardDescription: React.FC<CardDescriptionProps> = ({
   />
 );
 /**
- * Card action component positioned in the top-right of the header
- * Used for buttons, icons, or other interactive elements
- * @param root0
- * @param root0.className
+ * Card action component positioned in the top-right of the header.
+ * Used for buttons, icons, or other interactive elements.
  */
 const CardAction: React.FC<CardActionProps> = ({className, ...props}) => (
   <div
@@ -126,19 +103,15 @@ const CardAction: React.FC<CardActionProps> = ({className, ...props}) => (
   />
 );
 /**
- * Card content area with consistent padding
- * Contains the main body content of the card
- * @param root0
- * @param root0.className
+ * Card content area with consistent padding.
+ * Contains the main body content of the card.
  */
 const CardContent: React.FC<CardContentProps> = ({className, ...props}) => (
   <div className={cn('px-6', className)} data-slot="card-content" {...props} />
 );
 /**
- * Card footer component with horizontal layout
- * Typically used for actions or additional information
- * @param root0
- * @param root0.className
+ * Card footer component with horizontal layout.
+ * Typically used for actions or additional information.
  */
 const CardFooter: React.FC<CardFooterProps> = ({className, ...props}) => (
   <div

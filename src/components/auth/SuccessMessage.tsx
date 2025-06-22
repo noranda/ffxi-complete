@@ -18,18 +18,6 @@ type SuccessMessageProps = {
  * - Customizable title and message content
  * - Conditional display based on show prop
  * - Accessible notification structure
- * @param root0
- * @param root0.message
- * @param root0.show
- * @param root0.title
- * @example
- * ```tsx
- * <SuccessMessage
- *   message="Please check your email to confirm your account before signing in."
- *   show={submitSuccess}
- *   title="Registration successful!"
- * />
- * ```
  */
 export const SuccessMessage: React.FC<SuccessMessageProps> = ({
   message = 'Operation completed successfully.',

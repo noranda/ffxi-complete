@@ -279,6 +279,183 @@ const jsxExpressionSpacing = {
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
+const noUnnecessaryDivWrapper = {
+  create(context) {
+    const sourceCode = context.sourceCode;
+
+    /**
+     * Checks if a JSX element has meaningful attributes (not just className/style)
+     * @param {import('eslint').Rule.Node} node - The JSX element to check
+     * @returns {boolean} True if the element has meaningful attributes
+     */
+    function hasMeaningfulAttributes(node) {
+      if (!node.openingElement.attributes.length) return false;
+
+      // Allow certain attributes that provide functionality
+      const meaningfulAttributes = [
+        'id',
+        'role',
+        'aria-',
+        'data-',
+        'onClick',
+        'onSubmit',
+        'onKeyDown',
+        'onChange',
+        'tabIndex',
+        'ref',
+      ];
+
+      return node.openingElement.attributes.some(attr => {
+        if (attr.type !== 'JSXAttribute') return false;
+        const name = attr.name.name;
+
+        // Allow event handlers and accessibility attributes
+        return meaningfulAttributes.some(meaningful =>
+          name.startsWith(meaningful)
+        );
+      });
+    }
+
+    /**
+     * Checks if the div serves a layout purpose
+     * @param {import('eslint').Rule.Node} node - The JSX element to check
+     * @returns {boolean} True if the div serves a layout purpose
+     */
+    function servesLayoutPurpose(node) {
+      // Check if div has className that suggests layout purpose
+      const classNameAttr = node.openingElement.attributes.find(
+        attr => attr.type === 'JSXAttribute' && attr.name.name === 'className'
+      );
+
+      if (classNameAttr && classNameAttr.value) {
+        if (classNameAttr.value.type === 'Literal') {
+          const classes = classNameAttr.value.value;
+          // Common layout classes that justify a wrapper div
+          const layoutClasses = [
+            'flex',
+            'grid',
+            'space-',
+            'gap-',
+            'p-',
+            'px-',
+            'py-',
+            'm-',
+            'mx-',
+            'my-',
+            'w-',
+            'h-',
+            'max-w',
+            'max-h',
+            'min-w',
+            'min-h',
+            'absolute',
+            'relative',
+            'fixed',
+            'sticky',
+            'top-',
+            'bottom-',
+            'left-',
+            'right-',
+            'inset-',
+            'z-',
+            'container',
+            'rounded',
+            'border',
+            'bg-',
+            'text-center',
+            'text-left',
+            'text-right',
+            'justify-',
+            'items-',
+            'self-',
+            'overflow-',
+            'font-',
+            'text-',
+          ];
+
+          return layoutClasses.some(layoutClass =>
+            classes.includes(layoutClass)
+          );
+        }
+      }
+
+      return false;
+    }
+
+    /**
+     * Gets non-whitespace children
+     * @param {import('eslint').Rule.Node} node - The JSX element
+     * @returns {import('eslint').Rule.Node[]} Array of non-whitespace children
+     */
+    function getNonWhitespaceChildren(node) {
+      return node.children.filter(child => {
+        if (child.type === 'JSXText') {
+          return child.value.trim() !== '';
+        }
+        if (
+          child.type === 'JSXExpressionContainer' &&
+          child.expression.type === 'JSXEmptyExpression'
+        ) {
+          return false;
+        }
+        return true;
+      });
+    }
+
+    return {
+      JSXElement(node) {
+        // Only check div elements
+        if (
+          !node.openingElement ||
+          !node.openingElement.name ||
+          node.openingElement.name.type !== 'JSXIdentifier' ||
+          node.openingElement.name.name !== 'div'
+        ) {
+          return;
+        }
+
+        // Skip if div has meaningful attributes or serves a layout purpose
+        if (hasMeaningfulAttributes(node) || servesLayoutPurpose(node)) {
+          return;
+        }
+
+        const nonWhitespaceChildren = getNonWhitespaceChildren(node);
+
+        // Only report if there's exactly one child
+        if (nonWhitespaceChildren.length === 1) {
+          const child = nonWhitespaceChildren[0];
+
+          // Only suggest removal if the child is also a div or a simple element
+          if (
+            child.type === 'JSXElement' ||
+            child.type === 'JSXExpressionContainer'
+          ) {
+            context.report({
+              fix(fixer) {
+                // Get the text content of the child
+                const childText = sourceCode.getText(child);
+                return fixer.replaceText(node, childText);
+              },
+              message:
+                'Unnecessary div wrapper. Consider removing the wrapper or adding meaningful attributes.',
+              node: node.openingElement,
+            });
+          }
+        }
+      },
+    };
+  },
+  meta: {
+    docs: {
+      description: 'Disallow unnecessary div wrappers around single elements',
+    },
+    fixable: 'code',
+    schema: [],
+    type: 'suggestion',
+  },
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
 const preferDivOverP = {
   create(context) {
     return {
@@ -324,6 +501,7 @@ export const customRulesConfig = {
       rules: {
         'jsx-expression-spacing': jsxExpressionSpacing,
         'jsx-multiline-spacing': jsxMultilineSpacing,
+        'no-unnecessary-div-wrapper': noUnnecessaryDivWrapper,
         'prefer-div-over-p': preferDivOverP,
         'react-fc-pattern': reactFcPattern,
       },
@@ -332,6 +510,7 @@ export const customRulesConfig = {
   rules: {
     'ffxi-custom/jsx-expression-spacing': 'error',
     'ffxi-custom/jsx-multiline-spacing': 'error',
+    'ffxi-custom/no-unnecessary-div-wrapper': 'error',
     'ffxi-custom/prefer-div-over-p': 'error',
     'ffxi-custom/react-fc-pattern': 'error',
   },

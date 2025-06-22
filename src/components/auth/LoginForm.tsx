@@ -271,7 +271,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               {/* General Errors */}
               {authError != null && (
                 <div className="bg-destructive/10 border-destructive/20 rounded-md border p-3">
-                  <div className="text-destructive text-sm">{authError}</div>
+                  {authError}
                 </div>
               )}
 

@@ -26,34 +26,9 @@ type PasswordFieldWithStrengthProps = {
 };
 
 /**
- * Password input field with real-time strength validation and visual feedback
- *
- * Features:
- * - Real-time password strength validation
- * - Visual strength indicator with color coding
- * - Accessibility support with proper ARIA labels
- * - Requirements display for incomplete passwords
- * @param root0
- * @param root0.disabled
- * @param root0.error
- * @param root0.id
- * @param root0.label
- * @param root0.name
- * @param root0.placeholder
- * @param root0.touched
- * @param root0.value
- * @example
- * ```tsx
- * <PasswordFieldWithStrength
- *   name="password"
- *   value={values.password}
- *   touched={touched.password}
- *   error={errors.password}
- *   disabled={isSubmitting}
- *   label="Password"
- *   placeholder="Enter a strong password"
- * />
- * ```
+ * Password input field with real-time strength validation and visual feedback.
+ * Features real-time password strength validation, visual strength indicator with color coding,
+ * accessibility support with proper ARIA labels, and requirements display for incomplete passwords.
  */
 export const PasswordFieldWithStrength: React.FC<
   PasswordFieldWithStrengthProps

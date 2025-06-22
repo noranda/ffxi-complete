@@ -11,8 +11,21 @@ Guidelines for managing task lists in markdown files to track progress on comple
 
 - **One sub-task at a time:** Do **NOT** start the next sub-task until you ask the user for permission and
   they say "yes" or "y"
+- **MANDATORY TDD Approach for ALL Development Tasks:**
+  1. **RED Phase:** Write failing tests FIRST
+     - Analyze requirements and write comprehensive test cases
+     - Ensure tests fail for the right reasons (feature not implemented)
+     - Cover happy path, error cases, edge cases, and boundary conditions
+  2. **GREEN Phase:** Write minimal implementation to make tests pass
+     - Implement only what's needed to make tests pass
+     - Avoid over-engineering or adding extra features
+     - Focus on making tests pass, not perfect code
+  3. **REFACTOR Phase:** Clean up code while maintaining green tests
+     - Improve code structure, readability, and maintainability
+     - Extract functions, remove duplication, improve naming
+     - Ensure all tests remain green throughout refactoring
 - **MANDATORY Completion Protocol for ANY Task:**
-  1. **Complete the implementation work**
+  1. **Complete the TDD cycle (RED-GREEN-REFACTOR) for implementation work**
   2. **Run Status Checks** (following status-check-reporting.mdc format):
      - `yarn lint` - Check for ESLint errors
      - `yarn test --run` - Run all tests without watch mode
@@ -31,25 +44,27 @@ Guidelines for managing task lists in markdown files to track progress on comple
      - **NO SKIPPING**: Cannot skip any rules or parts of rules - complete assessment required
      - Document complete assessment with specific line evidence for each fragment
      - Fix ANY violations immediately before proceeding
-  4. **Status Report** - Print comprehensive status showing:
+  4. **TDD Verification** - Confirm RED-GREEN-REFACTOR cycle completion:
+     - ✅ Tests written FIRST (RED phase documented)
+     - ✅ Minimal implementation created (GREEN phase documented)
+     - ✅ Code refactored while maintaining green tests (REFACTOR phase documented)
+  5. **Status Report** - Print comprehensive status showing:
+     - TDD cycle completion (🟢 RED-GREEN-REFACTOR documented/🔴 TDD not followed)
      - Status checks results (🟢/🟠/🔴 for lint, tests, types, format)
      - Code guidelines assessment results for changed files
      - Confirmation that everything is ready for task completion
-  5. **ONLY THEN** mark task as completed by changing `[ ]` to `[x]`
-  6. **If all subtasks** underneath a parent task are now `[x]`, also mark the **parent task** as completed
-  7. **Pause and wait** for user's go-ahead before starting next task
+  6. **ONLY THEN** mark task as completed by changing `[ ]` to `[x]`
+  7. **If all subtasks** underneath a parent task are now `[x]`, also mark the **parent task** as completed
+  8. **Pause and wait** for user's go-ahead before starting next task
 
 - **Zero Tolerance Policy:**
+  - **🔴 TDD violations:** MUST follow RED-GREEN-REFACTOR cycle for ALL development tasks - no exceptions
   - **🔴 Red status:** MUST fix immediately before proceeding to next step
   - **🟠 Orange status:** MUST fix unless explicitly documented as acceptable sub-task
   - **Code violations:** ANY non-adherence to ANY rule in ANY code-standards fragment must be fixed before task completion
   - **Complete coverage:** ALL 4 code-standards fragments must be assessed against ALL lines in ALL changed files
-  - **No exceptions:** Cannot proceed to next task until ALL checks are green and ALL guidelines verified with complete evidence
-
-- **TDD emphasis:** When implementing features (not setup tasks), follow Test-Driven Development:
-  - Write tests FIRST before implementation
-  - Implement minimal code to make tests pass
-  - Refactor while keeping tests green
+  - **No exceptions:** Cannot proceed to next task until ALL checks are green, TDD cycle complete, and ALL
+  guidelines verified with complete evidence
 
 ## Task List Maintenance
 
@@ -66,8 +81,12 @@ Guidelines for managing task lists in markdown files to track progress on comple
 When working with task lists, the AI must:
 
 1. **Before starting:** Check which sub-task is next
-2. **During work:** Regularly update the task list file after finishing any significant work
-3. **After implementation:** Follow the MANDATORY Completion Protocol:
+2. **During development:** Follow MANDATORY TDD cycle:
+   - **RED:** Write failing tests first, document what you're testing and why
+   - **GREEN:** Write minimal code to make tests pass, document implementation decisions
+   - **REFACTOR:** Clean up code while maintaining green tests, document improvements made
+3. **During work:** Regularly update the task list file after finishing any significant work
+4. **After implementation:** Follow the MANDATORY Completion Protocol:
    - Run all status checks (`yarn lint`, `yarn test --run`, `yarn type-check`, `yarn prettier --check .`)
    - Identify changed files using `git status --porcelain`
    - **EXHAUSTIVE Code Guidelines Assessment:** Check ALL 4 code-standards fragments against EVERY line in
@@ -78,16 +97,20 @@ When working with task lists, the AI must:
      - code-quality.mdc: Every error pattern, testing considerations, performance guidelines
    - **COMPLETE EVIDENCE REQUIRED:** Document specific line numbers and findings for each fragment
    - Fix ANY violations immediately before proceeding
-   - Print comprehensive status report with complete evidence for all 4 fragments
-   - ONLY mark task as completed (`[x]`) after ALL checks pass and ALL 4 fragments verified with complete
-     evidence
-4. **Task completion:** Mark parent task `[x]` once ALL subtasks are `[x]`
-5. **File maintenance:** Keep "Relevant Files" section accurate and up to date
-6. **New tasks:** Add newly discovered tasks as they emerge
-7. **User approval:** Pause after each task completion and wait for user's go-ahead
+     - Verify and document TDD cycle completion (RED-GREEN-REFACTOR)
+     - Print comprehensive status report with complete evidence for all 4 fragments
+     - ONLY mark task as completed (`[x]`) after ALL checks pass, TDD cycle complete, and ALL 4 fragments
+       verified with complete evidence
+5. **Task completion:** Mark parent task `[x]` once ALL subtasks are `[x]`
+6. **File maintenance:** Keep "Relevant Files" section accurate and up to date
+7. **New tasks:** Add newly discovered tasks as they emerge
+8. **User approval:** Pause after each task completion and wait for user's go-ahead
 
 ## Critical Requirements
 
+- **MANDATORY TDD:** Every development task MUST follow RED-GREEN-REFACTOR cycle - no exceptions
+- **TDD DOCUMENTATION:** Must document each phase of TDD cycle with evidence of tests-first approach
+- **NO TDD SHORTCUTS:** Cannot write implementation before tests, cannot skip refactor phase
 - **NO SHORTCUTS:** Every task completion MUST follow the full protocol with ALL 4 fragments
 - **NO SAMPLING:** Code guidelines assessment must examine EVERY line in EVERY file, not representative sections
 - **NO SKIPPING:** Cannot skip ANY rules or ANY parts of rules in ANY fragment
@@ -98,5 +121,9 @@ When working with task lists, the AI must:
 - **SYSTEMATIC:** Use the fragment-by-fragment assessment template for ALL 4 code standards
 - **EXHAUSTIVE DOCUMENTATION:** Must document findings for every fragment, even if compliant
 
-**ABSOLUTE REQUIREMENT: Every line in every changed file must be checked against every applicable rule in
-all 4 code-standards fragments. No task can be marked complete without complete verification of all fragments.**
+**ABSOLUTE REQUIREMENTS:**
+
+1. **TDD COMPLIANCE:** Every development task must demonstrate RED-GREEN-REFACTOR cycle with documented evidence
+2. **CODE STANDARDS:** Every line in every changed file must be checked against every applicable rule in all 4
+   code-standards fragments
+3. **NO COMPLETION:** No task can be marked complete without TDD cycle documentation AND complete verification of all fragments

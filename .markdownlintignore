@@ -1,0 +1,17 @@
+# Markdown Lint Ignore File
+# Automatically ignores files that should not be linted
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+
+# Temporary files
+.cursor/temp/
+
+# Auto-generated files
+*.lock.md
+CHANGELOG_GENERATED.md 

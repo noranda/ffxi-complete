@@ -64,22 +64,6 @@ const App: React.FC<unknown> = () => {
   }, []);
 
   /**
-   * Returns the appropriate CSS color class based on connection status
-   */
-  const getStatusColor = () => {
-    switch (connectionStatus) {
-      case 'connected':
-        return 'text-green-500';
-      case 'error':
-        return 'text-red-500';
-      case 'testing':
-        return 'text-yellow-500';
-      default:
-        return 'text-gray-500';
-    }
-  };
-
-  /**
    * Returns user-friendly status text with icons based on connection state
    */
   const getStatusText = () => {
@@ -207,9 +191,7 @@ const App: React.FC<unknown> = () => {
 
             <CardContent>
               <div className="space-y-4">
-                <div className={`font-medium ${getStatusColor()}`}>
-                  {getStatusText()}
-                </div>
+                {getStatusText()}
 
                 {connectionStatus === 'error' && (
                   <div className="bg-destructive/10 border-destructive/20 rounded-lg border p-4">

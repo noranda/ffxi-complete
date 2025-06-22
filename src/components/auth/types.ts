@@ -89,6 +89,15 @@ export type PasswordUpdateFormData = {
 };
 
 /**
+ * Protected route authentication state
+ * Passed to function children for auth-aware rendering
+ */
+export type ProtectedRouteAuthState = {
+  isAuthenticated: boolean;
+  loading: boolean;
+};
+
+/**
  * Registration form specific data
  */
 export type RegisterFormData = {

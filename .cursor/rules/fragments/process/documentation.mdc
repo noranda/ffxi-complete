@@ -3,7 +3,6 @@ description: "Documentation requirements and standards for code and user-facing 
 globs:
   - "**/README.md"
   - "**/docs/**"
-  - "**/*.md"
 ---
 
 # Documentation Standards
@@ -27,4 +26,56 @@ globs:
 - **Keep current** - update docs when code changes
 - **Be specific** - provide concrete examples
 - **Test instructions** - verify setup steps work
+- **Link related docs** - cross-reference where helpful
+
+## Markdown Linting Requirements
+
+**All markdown files must pass linting** before code changes are committed:
+
+### Command to Run
+
+```bash
+yarn lint:md        # Lint all markdown files
+yarn lint:md:fix    # Auto-fix markdown issues where possible
+```
+
+### Files Included
+
+The markdown linting covers:
+
+- **Root-level files**: `*.md` (README.md, CONTRIBUTING.md, etc.)
+- **Rule files**: `.cursor/**/*.mdc` (all rule and workflow files)
+
+**Total**: ~37 files including project documentation and cursor rule files.
+
+### Configuration
+
+- **Config file**: `.markdownlint.json` - Defines style rules and line length limits
+- **Ignore file**: `.markdownlintignore` - Excludes temporary files and dependencies
+- **Tool**: `markdownlint-cli2` - Updated CLI tool with better glob pattern support
+
+### Important Notes
+
+**Why explicit patterns?**
+
+- Using `**/*.{md,mdc}` would include `node_modules` files and cause thousands of errors
+- Our explicit pattern `'*.md' '.cursor/**/*.mdc'` targets only project files
+- The `.cursor` directory requires explicit inclusion since it starts with a dot
+
+### Integration with Quality Gates
+
+Markdown linting is **required** in all status check reports:
+
+```markdown
+🟢 **Markdown**: All 37 files properly formatted (includes .cursor)
+```
+
+### Troubleshooting
+
+If markdown linting fails to find `.cursor` files:
+
+1. Verify the pattern includes `.cursor/**/*.mdc`
+2. Check that `markdownlint-cli2` (not `markdownlint-cli`) is installed
+3. Ensure `.markdownlint.json` configuration is present
+
 - **Link related docs** - cross-reference where helpful

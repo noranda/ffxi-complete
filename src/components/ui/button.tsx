@@ -42,23 +42,8 @@ type ButtonProps = React.ComponentProps<'button'> &
   };
 
 /**
- * Versatile button component with multiple variants and sizes
- * Supports composition pattern through asChild prop using Radix Slot
- * @param root0
- * @param root0.asChild
- * @param root0.className
- * @param root0.size
- * @param root0.variant
- * @example
- * ```tsx
- * <Button size="lg" variant="primary">
- *   Click me
- * </Button>
- *
- * <Button asChild>
- *   <Link to="/path">Navigate</Link>
- * </Button>
- * ```
+ * Versatile button component with multiple variants and sizes.
+ * Supports composition pattern through asChild prop using Radix Slot.
  */
 const Button: React.FC<ButtonProps> = ({
   asChild = false,

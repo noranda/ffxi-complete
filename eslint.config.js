@@ -77,6 +77,13 @@ export default [
           prevent: false,
         },
       ],
+      // Prevent unnecessary JSX fragments and nested markup
+      'react/jsx-no-useless-fragment': [
+        'error',
+        {
+          allowExpressions: true, // Allow <>{condition && <Component />}</>
+        },
+      ],
       'react/jsx-one-expression-per-line': [
         'error',
         {
@@ -138,6 +145,25 @@ export default [
       'import/first': 'error',
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
+      // Enforce importing from index files instead of directly from internal modules
+      'import/no-internal-modules': [
+        'error',
+        {
+          allow: [
+            // Allow imports from specific directories where direct imports are acceptable
+            '**/types/**',
+            '**/*.types',
+            // Allow @/* path alias imports (our internal module pattern)
+            '@/**',
+            // Allow standard library submodules
+            'react-dom/**',
+            'vitest/**',
+            '@testing-library/**',
+            // Allow specific patterns that don't use index files
+            '**/contexts/**', // Context files often imported directly
+          ],
+        },
+      ],
       // Project-specific overrides
       'react-refresh/only-export-components': [
         'error',
@@ -175,18 +201,6 @@ export default [
       '@typescript-eslint/no-unsafe-member-access': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
       '@typescript-eslint/restrict-template-expressions': 'error',
-      '@typescript-eslint/strict-boolean-expressions': [
-        'error',
-        {
-          allowAny: false,
-          allowNullableBoolean: false,
-          allowNullableNumber: false,
-          allowNullableObject: true,
-          allowNullableString: false,
-          allowNumber: true,
-          allowString: true,
-        },
-      ],
       '@typescript-eslint/unbound-method': 'error',
     },
   },
@@ -320,6 +334,10 @@ export default [
             customRulesConfig.plugins['ffxi-custom'].rules[
               'jsx-multiline-spacing'
             ],
+          'no-unnecessary-div-wrapper':
+            customRulesConfig.plugins['ffxi-custom'].rules[
+              'no-unnecessary-div-wrapper'
+            ],
           'prefer-div-over-p':
             customRulesConfig.plugins['ffxi-custom'].rules['prefer-div-over-p'],
           'react-fc-pattern':
@@ -330,6 +348,7 @@ export default [
     rules: {
       'ffxi-custom/jsx-expression-spacing': 'error',
       'ffxi-custom/jsx-multiline-spacing': 'error',
+      'ffxi-custom/no-unnecessary-div-wrapper': 'error',
       'ffxi-custom/prefer-div-over-p': 'error',
       'ffxi-custom/react-fc-pattern': 'error',
     },
@@ -410,6 +429,54 @@ export default [
       'jsdoc/check-tag-names': 'off',
       'jsdoc/multiline-blocks': 'error',
       'jsdoc/no-multi-asterisks': 'error',
+      // Forbid specific JSDoc tags to enforce minimal approach (description only)
+      'jsdoc/no-restricted-syntax': [
+        'error',
+        {
+          contexts: [
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="param"])',
+              message:
+                '@param tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="returns"])',
+              message:
+                '@returns tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="return"])',
+              message:
+                '@return tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="example"])',
+              message:
+                '@example tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="arg"])',
+              message:
+                '@arg tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="argument"])',
+              message:
+                '@argument tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="throws"])',
+              message:
+                '@throws tags are not allowed. Use minimal JSDoc with description only.',
+            },
+            {
+              comment: 'JsdocBlock:has(JsdocTag[tag="yields"])',
+              message:
+                '@yields tags are not allowed. Use minimal JSDoc with description only.',
+            },
+          ],
+        },
+      ],
       'jsdoc/no-undefined-types': 'off',
       // Require descriptions but don't enforce specific format
       'jsdoc/require-description': [

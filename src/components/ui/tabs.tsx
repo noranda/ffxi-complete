@@ -23,22 +23,8 @@ type TabsProps = React.ComponentProps<typeof TabsPrimitive.Root>;
 type TabsTriggerProps = React.ComponentProps<typeof TabsPrimitive.Trigger>;
 
 /**
- * Tabs root container component built on Radix UI
- * Provides accessible tab navigation with keyboard support
- * @param root0
- * @param root0.className
- * @example
- * ```tsx
- * <Tabs defaultValue="tab1">
- *   <TabsList>
- *     <TabsTrigger value="tab1">Tab 1</TabsTrigger>
- *     <TabsTrigger value="tab2">Tab 2</TabsTrigger>
- *   </TabsList>
- *
- *   <TabsContent value="tab1">Content 1</TabsContent>
- *   <TabsContent value="tab2">Content 2</TabsContent>
- * </Tabs>
- * ```
+ * Tabs root container component built on Radix UI.
+ * Provides accessible tab navigation with keyboard support.
  */
 const TabsRoot: React.FC<TabsProps> = ({className, ...props}) => (
   <TabsPrimitive.Root
@@ -48,10 +34,8 @@ const TabsRoot: React.FC<TabsProps> = ({className, ...props}) => (
   />
 );
 /**
- * Tabs list container for tab triggers
- * Provides a styled background for the tab navigation
- * @param root0
- * @param root0.className
+ * Tabs list container for tab triggers.
+ * Provides a styled background for the tab navigation.
  */
 const TabsList: React.FC<TabsListProps> = ({className, ...props}) => (
   <TabsPrimitive.List
@@ -64,10 +48,8 @@ const TabsList: React.FC<TabsListProps> = ({className, ...props}) => (
   />
 );
 /**
- * Individual tab trigger button
- * Shows active state styling and handles tab switching
- * @param root0
- * @param root0.className
+ * Individual tab trigger button.
+ * Shows active state styling and handles tab switching.
  */
 const TabsTrigger: React.FC<TabsTriggerProps> = ({className, ...props}) => (
   <TabsPrimitive.Trigger
@@ -81,10 +63,8 @@ const TabsTrigger: React.FC<TabsTriggerProps> = ({className, ...props}) => (
   />
 );
 /**
- * Tab content panel
- * Contains the content associated with each tab
- * @param root0
- * @param root0.className
+ * Tab content panel.
+ * Contains the content associated with each tab.
  */
 const TabsContent: React.FC<TabsContentProps> = ({className, ...props}) => (
   <TabsPrimitive.Content

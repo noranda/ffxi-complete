@@ -35,10 +35,10 @@ globs:
 
 ```bash
 yarn lint          # ESLint + strict TypeScript
-yarn test --run    # Run tests without watch mode
+yarn test --run    # Run tests without watch mode  
 yarn type-check    # TypeScript compiler check
 yarn prettier --check .  # Format check
-yarn lint:md       # Markdown linting for .md and .mdc files
+yarn lint:md       # Markdown linting for .md and .mdc files (includes .cursor directory)
 ```
 
 ## Zero Tolerance Policy

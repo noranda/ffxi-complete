@@ -17,6 +17,44 @@ The following are **fully automated** by ESLint:
 - ✅ Comment block formatting and consistency
 - ✅ Example code formatting following project linting standards
 
+## JSDoc Standards - Minimal Approach
+
+**We use minimal JSDoc comments** focused on concise descriptions only:
+
+### Required
+
+- ✅ **Description only** - Clear, concise explanation of what the function/component does
+- ✅ **JSDoc block presence** - All exported functions and components must have JSDoc
+
+### Explicitly Disabled (Enforced by ESLint)
+
+- ❌ **No @param tags** - TypeScript provides parameter information
+- ❌ **No @returns tags** - TypeScript provides return type information  
+- ❌ **No @example tags** - Keep documentation lightweight
+- ❌ **No @arg/@argument/@throws/@yields tags** - Not needed in minimal approach
+- ❌ **No parameter descriptions** - Rely on TypeScript types and meaningful names
+
+**ESLint Enforcement**: The `jsdoc/no-restricted-syntax` rule actively prevents usage of unwanted JSDoc tags
+with clear error messages, ensuring our minimal approach is automatically enforced.
+
+### Example Format
+
+```typescript
+/**
+ * Route guard component that ensures only authenticated users can access protected content.
+ */
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ ... }) => {
+  // Implementation
+};
+
+/**
+ * Validates user input and sanitizes special characters for database storage.
+ */
+export const validateInput = (input: string): ValidationResult => {
+  // Implementation  
+};
+```
+
 ## Function Documentation Requirements
 
 **All functions must have concise descriptions** explaining their purpose:
