@@ -2,8 +2,9 @@
  * Authentication components
  *
  * This module contains:
+ * - AuthErrorBoundary - Error boundary for authentication flows with retry functionality ✅
  * - RegisterForm - Registration form with validation and comprehensive error handling ✅
- * - OAuthButtons - Reusable OAuth provider buttons with consistent styling ✅
+ * - OAuthButtons - OAuth provider buttons with individual loading states and error handling ✅
  * - SuccessMessage - Success notification component for auth flows ✅
  * - LoginForm - Login form with email/password and OAuth authentication ✅
  * - PasswordResetForm - Password reset flow component ✅
@@ -12,6 +13,7 @@
  * - UserProfile - User profile management with settings and account preferences ✅
  */
 
+export {AuthErrorBoundary} from './AuthErrorBoundary';
 export {LoginForm} from './LoginForm';
 export {OAuthButtons} from './OAuthButtons';
 export {PasswordChangeForm} from './PasswordChangeForm';
