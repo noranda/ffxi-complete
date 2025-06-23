@@ -342,6 +342,7 @@ export default [
         rules: {
           'jsx-expression-spacing': customRulesConfig.plugins['ffxi-custom'].rules['jsx-expression-spacing'],
           'jsx-multiline-spacing': customRulesConfig.plugins['ffxi-custom'].rules['jsx-multiline-spacing'],
+          'no-duplicate-module-exports': customRulesConfig.plugins['ffxi-custom'].rules['no-duplicate-module-exports'],
           'no-unnecessary-div-wrapper': customRulesConfig.plugins['ffxi-custom'].rules['no-unnecessary-div-wrapper'],
           'prefer-cn-for-classname': customRulesConfig.plugins['ffxi-custom'].rules['prefer-cn-for-classname'],
           'prefer-div-over-p': customRulesConfig.plugins['ffxi-custom'].rules['prefer-div-over-p'],
@@ -354,6 +355,7 @@ export default [
     rules: {
       'ffxi-custom/jsx-expression-spacing': 'error',
       'ffxi-custom/jsx-multiline-spacing': 'error',
+      'ffxi-custom/no-duplicate-module-exports': 'error',
       'ffxi-custom/no-unnecessary-div-wrapper': 'error',
       'ffxi-custom/prefer-cn-for-classname': 'error',
       'ffxi-custom/prefer-div-over-p': 'error',

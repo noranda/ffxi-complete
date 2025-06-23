@@ -20,9 +20,9 @@ export {PasswordChangeForm} from './PasswordChangeForm';
 export {PasswordFieldWithStrength} from './PasswordFieldWithStrength';
 export {PasswordResetForm} from './PasswordResetForm';
 export {ProfileForm} from './ProfileForm';
-export {ProtectedRoute} from './ProtectedRoute';
+export {ProtectedRoute, type ProtectedRouteProps} from './ProtectedRoute';
 // Export types
-export type {ProtectedRouteProps} from './ProtectedRoute';
+
 export {RegisterForm} from './RegisterForm';
 
 export {SuccessMessage} from './SuccessMessage';

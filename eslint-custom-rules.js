@@ -606,6 +606,145 @@ const preferSingleLineArrowFunctions = {
   },
 };
 
+/** @type {import('eslint').Rule.RuleModule} */
+const noDuplicateModuleExports = {
+  create(context) {
+    const exportsByModule = new Map();
+
+    /**
+     * Checks if an export declaration can be combined with existing exports
+     * @param {import('eslint').Rule.Node} node - The export declaration node
+     * @returns {void}
+     */
+    function checkExportDeclaration(node) {
+      // Only check ExportNamedDeclaration with source (re-exports)
+      if (node.type !== 'ExportNamedDeclaration' || !node.source) {
+        return;
+      }
+
+      const moduleName = node.source.value;
+
+      if (!exportsByModule.has(moduleName)) {
+        exportsByModule.set(moduleName, []);
+      }
+
+      const existingExports = exportsByModule.get(moduleName);
+      existingExports.push(node);
+
+      // If we have multiple exports from the same module, report an error
+      if (existingExports.length > 1) {
+        const firstExport = existingExports[0];
+
+        context.report({
+          fix(fixer) {
+            // Combine all exports from the same module into a single export statement
+            const allSpecifiers = [];
+
+            // Collect all specifiers from all export statements for this module
+            existingExports.forEach(exportNode =>
+              exportNode.specifiers.forEach(spec => {
+                if (spec.type === 'ExportSpecifier') {
+                  // Check if this is a type export (either exportKind or the parent node's exportKind)
+                  const isTypeExport = exportNode.exportKind === 'type' || spec.exportKind === 'type';
+
+                  if (isTypeExport) {
+                    // Handle type exports
+                    if (spec.exported.name !== spec.local.name) {
+                      allSpecifiers.push(`type ${spec.local.name} as ${spec.exported.name}`);
+                    } else {
+                      allSpecifiers.push(`type ${spec.local.name}`);
+                    }
+                  } else {
+                    // Handle regular exports
+                    if (spec.exported.name !== spec.local.name) {
+                      allSpecifiers.push(`${spec.local.name} as ${spec.exported.name}`);
+                    } else {
+                      allSpecifiers.push(spec.local.name);
+                    }
+                  }
+                }
+              })
+            );
+
+            // Create the combined export statement
+            const combinedExport = `export {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+
+            // Remove all existing exports and replace the first one with the combined export
+            const fixes = [];
+
+            // Replace the first export with the combined export
+            fixes.push(fixer.replaceText(firstExport, combinedExport));
+
+            // Remove all other exports from the same module
+            for (let i = 1; i < existingExports.length; i++) {
+              fixes.push(fixer.remove(existingExports[i]));
+            }
+
+            return fixes;
+          },
+          message: `Multiple export statements from '${moduleName}' should be combined into a single export declaration`,
+          node,
+          suggest: [
+            {
+              desc: `Combine exports from '${moduleName}' into a single statement`,
+              fix(fixer) {
+                // Same fix logic as above but as a suggestion
+                const allSpecifiers = [];
+
+                existingExports.forEach(exportNode =>
+                  exportNode.specifiers.forEach(spec => {
+                    if (spec.type === 'ExportSpecifier') {
+                      const isTypeExport = exportNode.exportKind === 'type' || spec.exportKind === 'type';
+
+                      if (isTypeExport) {
+                        if (spec.exported.name !== spec.local.name) {
+                          allSpecifiers.push(`type ${spec.local.name} as ${spec.exported.name}`);
+                        } else {
+                          allSpecifiers.push(`type ${spec.local.name}`);
+                        }
+                      } else {
+                        if (spec.exported.name !== spec.local.name) {
+                          allSpecifiers.push(`${spec.local.name} as ${spec.exported.name}`);
+                        } else {
+                          allSpecifiers.push(spec.local.name);
+                        }
+                      }
+                    }
+                  })
+                );
+
+                const combinedExport = `export {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+                const fixes = [];
+
+                fixes.push(fixer.replaceText(firstExport, combinedExport));
+
+                for (let i = 1; i < existingExports.length; i++) {
+                  fixes.push(fixer.remove(existingExports[i]));
+                }
+
+                return fixes;
+              },
+            },
+          ],
+        });
+      }
+    }
+
+    return {
+      ExportNamedDeclaration: checkExportDeclaration,
+    };
+  },
+  meta: {
+    docs: {
+      description: 'Disallow multiple export statements from the same module',
+    },
+    fixable: 'code',
+    hasSuggestions: true,
+    schema: [],
+    type: 'suggestion',
+  },
+};
+
 /** @type {import('eslint').Linter.Config} */
 export const customRulesConfig = {
   plugins: {
@@ -613,6 +752,7 @@ export const customRulesConfig = {
       rules: {
         'jsx-expression-spacing': jsxExpressionSpacing,
         'jsx-multiline-spacing': jsxMultilineSpacing,
+        'no-duplicate-module-exports': noDuplicateModuleExports,
         'no-unnecessary-div-wrapper': noUnnecessaryDivWrapper,
         'prefer-cn-for-classname': preferCnForClassname,
         'prefer-div-over-p': preferDivOverP,
@@ -624,6 +764,7 @@ export const customRulesConfig = {
   rules: {
     'ffxi-custom/jsx-expression-spacing': 'error',
     'ffxi-custom/jsx-multiline-spacing': 'error',
+    'ffxi-custom/no-duplicate-module-exports': 'error',
     'ffxi-custom/no-unnecessary-div-wrapper': 'error',
     'ffxi-custom/prefer-cn-for-classname': 'error',
     'ffxi-custom/prefer-div-over-p': 'error',

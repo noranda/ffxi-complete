@@ -48,6 +48,13 @@ Guidelines for managing task lists in markdown files to track progress on comple
      - Improve code structure, readability, and maintainability
      - Extract functions, remove duplication, improve naming
      - Ensure all tests remain green throughout refactoring
+  4. **🎯 TDD COMPLETION CHECKPOINT** 🎯
+     - **STOP HERE** and present TDD cycle completion to user
+     - **USER CONFIRMATION REQUIRED** before proceeding to completion protocol
+     - Show summary: ✅ RED → ✅ GREEN → ✅ REFACTOR phases completed
+     - **COLORFUL REMINDER**: 🚨 **IMPORTANT** 🚨 Once user confirms TDD work, AI must continue with remaining
+       completion protocol items (Status Checks, Code Guidelines Assessment, etc.)
+     - **DO NOT SKIP**: The completion protocol items are MANDATORY after TDD confirmation
 - **MANDATORY Completion Protocol for ANY Task:**
   1. **Complete the TDD cycle (RED-GREEN-REFACTOR) for implementation work**
   2. **Run Status Checks** (using check-status workflow):
