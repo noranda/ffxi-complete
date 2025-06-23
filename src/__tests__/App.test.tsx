@@ -2,37 +2,46 @@ import {render, screen} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
 
 import App from '@/App';
+import {AuthProvider} from '@/contexts/AuthContext';
 
 describe('App', () => {
   it('renders the application', () => {
-    render(<App />);
+    render(
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    );
 
     // The app should render without crashing
     expect(document.body).toBeInTheDocument();
   });
 
-  it('displays the FFXI Complete content within MainLayout', async () => {
-    render(<App />);
+  it('displays the clean layout with AppBar only', async () => {
+    render(
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    );
 
-    // Wait for the FFXI Complete content to appear
+    // Wait for the FFXI Complete branding to appear in AppBar
     await screen.findByText('FFXI Complete');
 
-    // Verify the main heading is present
+    // Verify the AppBar branding is present
     expect(screen.getByText('FFXI Complete')).toBeInTheDocument();
-
-    // Verify the description is present
-    expect(
-      screen.getByText('Track your Final Fantasy XI character progress across jobs, skills, and collections')
-    ).toBeInTheDocument();
 
     // Verify the MainLayout structure is present
     expect(screen.getByTestId('main-layout')).toBeInTheDocument();
     expect(screen.getByTestId('main-content-area')).toBeInTheDocument();
 
-    // Verify feature cards are present
-    expect(screen.getByText('Character Management')).toBeInTheDocument();
-    expect(screen.getByText('Job Progression')).toBeInTheDocument();
-    expect(screen.getByText('Skills & Collections')).toBeInTheDocument();
-    expect(screen.getByText('Public Sharing')).toBeInTheDocument();
+    // Verify the AppBar is present
+    expect(screen.getByTestId('app-bar')).toBeInTheDocument();
+    expect(screen.getByTestId('collection-settings-toggle')).toBeInTheDocument();
+    expect(screen.getByText('Sign In')).toBeInTheDocument();
+
+    // Verify no content cards are present (clean layout)
+    expect(screen.queryByText('Character Management')).not.toBeInTheDocument();
+    expect(screen.queryByText('Job Progression')).not.toBeInTheDocument();
+    expect(screen.queryByText('Skills & Collections')).not.toBeInTheDocument();
+    expect(screen.queryByText('Public Sharing')).not.toBeInTheDocument();
   });
 });

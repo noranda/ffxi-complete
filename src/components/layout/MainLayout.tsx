@@ -12,7 +12,7 @@ import {cn} from '@/lib/utils';
  * Props for the MainLayout component
  */
 export type MainLayoutProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   footer?: React.ReactNode;
   header?: React.ReactNode;
@@ -44,8 +44,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     className={cn(
       // Viewport height management
       'min-h-dvh md:min-h-screen',
-      // Layout structure
-      'flex flex-col md:flex-row',
+      // Layout structure - always column for proper header/content/footer stacking
+      'flex flex-col',
       // Overflow management
       'overflow-hidden',
       // Theme integration
@@ -57,13 +57,19 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   >
     {/* Header Area */}
     {header && (
-      <div className="z-50 w-full md:w-auto" data-testid="header-area">
+      <div className="z-50 w-full" data-testid="header-area">
         {header}
       </div>
     )}
 
     {/* Main Content and Sidebars Container */}
-    <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
+    <div
+      className={cn(
+        'flex flex-1 flex-col overflow-hidden md:flex-row',
+        // Add top padding when header is present to account for fixed positioning
+        header && 'pt-16'
+      )}
+    >
       {/* Left Sidebar Area */}
       {leftSidebar && (
         <div className="z-40 w-full md:w-auto" data-testid="left-sidebar-area">

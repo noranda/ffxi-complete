@@ -52,6 +52,9 @@ export default {
           foreground: 'hsl(var(--secondary-foreground))',
         },
       },
+      fontFamily: {
+        sans: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
     },
   },
 };

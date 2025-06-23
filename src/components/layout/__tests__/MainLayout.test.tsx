@@ -89,7 +89,7 @@ describe('MainLayout', () => {
       );
 
       const layout = screen.getByTestId('main-layout');
-      expect(layout).toHaveClass('flex', 'flex-col', 'md:flex-row');
+      expect(layout).toHaveClass('flex', 'flex-col');
     });
 
     it('should handle different breakpoints correctly', () => {
@@ -100,8 +100,8 @@ describe('MainLayout', () => {
       );
 
       const layout = screen.getByTestId('main-layout');
-      // Mobile: flex-col, Desktop: flex-row
-      expect(layout).toHaveClass('flex-col', 'md:flex-row');
+      // Always flex-col for proper header/content/footer stacking
+      expect(layout).toHaveClass('flex-col');
     });
   });
 

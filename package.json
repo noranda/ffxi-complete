@@ -27,6 +27,7 @@
     "ci": "yarn install --frozen-lockfile && yarn quality-check"
   },
   "dependencies": {
+    "@fontsource/montserrat": "^5.2.6",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

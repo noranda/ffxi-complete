@@ -607,6 +607,254 @@ const preferSingleLineArrowFunctions = {
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
+const noDuplicateModuleImports = {
+  create(context) {
+    const importsByModule = new Map();
+
+    /**
+     * Checks if an import declaration can be combined with existing imports
+     * @param {import('eslint').Rule.Node} node - The import declaration node
+     * @returns {void}
+     */
+    function checkImportDeclaration(node) {
+      // Only check ImportDeclaration
+      if (node.type !== 'ImportDeclaration') {
+        return;
+      }
+
+      const moduleName = node.source.value;
+
+      if (!importsByModule.has(moduleName)) {
+        importsByModule.set(moduleName, []);
+      }
+
+      const existingImports = importsByModule.get(moduleName);
+      existingImports.push(node);
+
+      // If we have multiple imports from the same module, report an error
+      if (existingImports.length > 1) {
+        const firstImport = existingImports[0];
+
+        context.report({
+          fix(fixer) {
+            // Combine all imports from the same module into a single import statement
+            const allSpecifiers = [];
+            let hasDefaultImport = false;
+            let defaultImportName = '';
+
+            // Collect all specifiers from all import statements for this module
+            existingImports.forEach(importNode =>
+              importNode.specifiers.forEach(spec => {
+                if (spec.type === 'ImportDefaultSpecifier') {
+                  hasDefaultImport = true;
+                  defaultImportName = spec.local.name;
+                } else if (spec.type === 'ImportSpecifier') {
+                  // Check if this is a type import
+                  const isTypeImport = importNode.importKind === 'type' || spec.importKind === 'type';
+
+                  if (isTypeImport) {
+                    // Handle type imports
+                    if (spec.imported.name !== spec.local.name) {
+                      allSpecifiers.push(`type ${spec.imported.name} as ${spec.local.name}`);
+                    } else {
+                      allSpecifiers.push(`type ${spec.imported.name}`);
+                    }
+                  } else {
+                    // Handle regular imports
+                    if (spec.imported.name !== spec.local.name) {
+                      allSpecifiers.push(`${spec.imported.name} as ${spec.local.name}`);
+                    } else {
+                      allSpecifiers.push(spec.imported.name);
+                    }
+                  }
+                }
+              })
+            );
+
+            // Create the combined import statement
+            let combinedImport;
+            if (hasDefaultImport && allSpecifiers.length > 0) {
+              combinedImport = `import ${defaultImportName}, {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+            } else if (hasDefaultImport) {
+              combinedImport = `import ${defaultImportName} from '${moduleName}';`;
+            } else {
+              combinedImport = `import {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+            }
+
+            // Remove all existing imports and replace the first one with the combined import
+            const fixes = [];
+
+            // Replace the first import with the combined import
+            fixes.push(fixer.replaceText(firstImport, combinedImport));
+
+            // Remove all other imports from the same module
+            for (let i = 1; i < existingImports.length; i++) {
+              fixes.push(fixer.remove(existingImports[i]));
+            }
+
+            return fixes;
+          },
+          message: `Multiple import statements from '${moduleName}' should be combined into a single import declaration`,
+          node,
+          suggest: [
+            {
+              desc: `Combine imports from '${moduleName}' into a single statement`,
+              fix(fixer) {
+                // Same fix logic as above but as a suggestion
+                const allSpecifiers = [];
+                let hasDefaultImport = false;
+                let defaultImportName = '';
+
+                existingImports.forEach(importNode =>
+                  importNode.specifiers.forEach(spec => {
+                    if (spec.type === 'ImportDefaultSpecifier') {
+                      hasDefaultImport = true;
+                      defaultImportName = spec.local.name;
+                    } else if (spec.type === 'ImportSpecifier') {
+                      const isTypeImport = importNode.importKind === 'type' || spec.importKind === 'type';
+
+                      if (isTypeImport) {
+                        if (spec.imported.name !== spec.local.name) {
+                          allSpecifiers.push(`type ${spec.imported.name} as ${spec.local.name}`);
+                        } else {
+                          allSpecifiers.push(`type ${spec.imported.name}`);
+                        }
+                      } else {
+                        if (spec.imported.name !== spec.local.name) {
+                          allSpecifiers.push(`${spec.imported.name} as ${spec.local.name}`);
+                        } else {
+                          allSpecifiers.push(spec.imported.name);
+                        }
+                      }
+                    }
+                  })
+                );
+
+                let combinedImport;
+                if (hasDefaultImport && allSpecifiers.length > 0) {
+                  combinedImport = `import ${defaultImportName}, {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+                } else if (hasDefaultImport) {
+                  combinedImport = `import ${defaultImportName} from '${moduleName}';`;
+                } else {
+                  combinedImport = `import {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+                }
+
+                const fixes = [];
+                fixes.push(fixer.replaceText(firstImport, combinedImport));
+
+                for (let i = 1; i < existingImports.length; i++) {
+                  fixes.push(fixer.remove(existingImports[i]));
+                }
+
+                return fixes;
+              },
+            },
+          ],
+        });
+      }
+    }
+
+    return {
+      ImportDeclaration: checkImportDeclaration,
+    };
+  },
+  meta: {
+    docs: {
+      description: 'Disallow multiple import statements from the same module',
+    },
+    fixable: 'code',
+    hasSuggestions: true,
+    schema: [],
+    type: 'suggestion',
+  },
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
+const noRedundantDefaultProps = {
+  create(context) {
+    /**
+     * Common default prop values that are redundant to specify
+     */
+    const redundantDefaults = {
+      asChild: false,
+      size: 'default',
+      variant: 'default',
+    };
+
+    /**
+     * Checks if a JSX attribute has a redundant default value
+     * @param {import('eslint').Rule.Node} node - The JSX attribute node
+     * @returns {void}
+     */
+    function checkJSXAttribute(node) {
+      if (node.type !== 'JSXAttribute' || !node.name || !node.value) {
+        return;
+      }
+
+      const propName = node.name.name;
+      const propValue = node.value;
+
+      // Check if this prop has a known redundant default
+      if (!(propName in redundantDefaults)) {
+        return;
+      }
+
+      let actualValue;
+
+      // Extract the actual value from different JSX value types
+      if (propValue.type === 'Literal') {
+        actualValue = propValue.value;
+      } else if (propValue.type === 'JSXExpressionContainer' && propValue.expression.type === 'Literal') {
+        actualValue = propValue.expression.value;
+      } else {
+        return; // Skip complex expressions
+      }
+
+      // Check if the value matches the redundant default
+      const redundantValue = redundantDefaults[propName];
+      if (actualValue === redundantValue) {
+        context.report({
+          fix(fixer) {
+            // Remove the entire attribute including any surrounding whitespace
+            const sourceCode = context.sourceCode;
+            const tokenBefore = sourceCode.getTokenBefore(node);
+
+            // Find the range to remove (including whitespace)
+            let start = node.range[0];
+            const end = node.range[1];
+
+            // Include preceding whitespace if it exists
+            if (tokenBefore && tokenBefore.range[1] < start) {
+              const textBetween = sourceCode.text.slice(tokenBefore.range[1], start);
+              if (/^\s+$/.test(textBetween)) {
+                start = tokenBefore.range[1];
+              }
+            }
+
+            return fixer.removeRange([start, end]);
+          },
+          message: `Redundant prop '${propName}="${actualValue}"' - this is the default value and can be omitted`,
+          node,
+        });
+      }
+    }
+
+    return {
+      JSXAttribute: checkJSXAttribute,
+    };
+  },
+  meta: {
+    docs: {
+      description: 'Disallow redundant default prop values in JSX',
+      recommended: true,
+    },
+    fixable: 'code',
+    schema: [],
+    type: 'suggestion',
+  },
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
 const noDuplicateModuleExports = {
   create(context) {
     const exportsByModule = new Map();
@@ -753,6 +1001,8 @@ export const customRulesConfig = {
         'jsx-expression-spacing': jsxExpressionSpacing,
         'jsx-multiline-spacing': jsxMultilineSpacing,
         'no-duplicate-module-exports': noDuplicateModuleExports,
+        'no-duplicate-module-imports': noDuplicateModuleImports,
+        'no-redundant-default-props': noRedundantDefaultProps,
         'no-unnecessary-div-wrapper': noUnnecessaryDivWrapper,
         'prefer-cn-for-classname': preferCnForClassname,
         'prefer-div-over-p': preferDivOverP,
@@ -765,6 +1015,8 @@ export const customRulesConfig = {
     'ffxi-custom/jsx-expression-spacing': 'error',
     'ffxi-custom/jsx-multiline-spacing': 'error',
     'ffxi-custom/no-duplicate-module-exports': 'error',
+    'ffxi-custom/no-duplicate-module-imports': 'error',
+    'ffxi-custom/no-redundant-default-props': 'error',
     'ffxi-custom/no-unnecessary-div-wrapper': 'error',
     'ffxi-custom/prefer-cn-for-classname': 'error',
     'ffxi-custom/prefer-div-over-p': 'error',
