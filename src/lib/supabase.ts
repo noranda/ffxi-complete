@@ -50,16 +50,53 @@ if (!supabaseUrl || !supabaseAnonKey) {
  * - Compile-time validation of queries
  * - Proper return types for all operations
  * - Integration with generated database types
+ *
+ * Session Management:
+ * - Automatic token refresh before expiry
+ * - Persistent session storage in localStorage
+ * - Cross-tab session synchronization
+ * - Automatic session recovery on app restart
  */
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
-    // Enable automatic session refresh
+    // Enable automatic session refresh (refreshes ~5 minutes before expiry)
     autoRefreshToken: true,
-    // Detect session from URL (for OAuth flows)
+    // Detect session from URL (for OAuth flows and email confirmations)
     detectSessionInUrl: true,
-    // Persist session in localStorage
+    // Use PKCE flow for enhanced security (recommended for SPAs)
+    flowType: 'pkce',
+    // Persist session in localStorage for cross-session persistence
     persistSession: true,
+    // Additional storage options for enhanced persistence
+    storage: {
+      getItem: (key: string) => {
+        if (typeof window !== 'undefined') {
+          return window.localStorage.getItem(key);
+        }
+        return null;
+      },
+      removeItem: (key: string) => {
+        if (typeof window !== 'undefined') {
+          window.localStorage.removeItem(key);
+        }
+      },
+      setItem: (key: string, value: string) => {
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(key, value);
+        }
+      },
+    },
   },
+  // Enable debug mode in development for better session monitoring
+  ...(import.meta.env.DEV && {
+    auth: {
+      autoRefreshToken: true,
+      debug: true,
+      detectSessionInUrl: true,
+      flowType: 'pkce',
+      persistSession: true,
+    },
+  }),
 });
 
 /**

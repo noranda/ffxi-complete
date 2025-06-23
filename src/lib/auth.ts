@@ -1,4 +1,4 @@
-import type {AuthError, User} from '@supabase/supabase-js';
+import type {AuthError, Session, User} from '@supabase/supabase-js';
 
 import {supabase} from './supabase';
 
@@ -337,4 +337,167 @@ const getPasswordStrength = (password: string): number => {
   if (/[^A-Za-z0-9]/.test(password)) score++;
 
   return Math.min(score, 4);
+};
+
+/**
+ * Validates the current session and checks if it's still valid
+ *
+ * This function checks if the current session exists and is not expired.
+ * It can be used to validate sessions before making authenticated requests.
+ */
+export const validateSession = async (): Promise<{
+  error: null | string;
+  isValid: boolean;
+  session: null | Session;
+}> => {
+  try {
+    const {
+      data: {session},
+      error,
+    } = await supabase.auth.getSession();
+
+    if (error) {
+      return {
+        error: error.message,
+        isValid: false,
+        session: null,
+      };
+    }
+
+    if (!session) {
+      return {
+        error: null,
+        isValid: false,
+        session: null,
+      };
+    }
+
+    // Check if session is expired
+    const now = Date.now();
+    const expiresAt = session.expires_at ? session.expires_at * 1000 : 0;
+
+    if (expiresAt > 0 && now >= expiresAt) {
+      return {
+        error: 'Session expired',
+        isValid: false,
+        session,
+      };
+    }
+
+    return {
+      error: null,
+      isValid: true,
+      session,
+    };
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : 'Unknown error validating session',
+      isValid: false,
+      session: null,
+    };
+  }
+};
+
+/**
+ * Manually refresh the current session
+ *
+ * This function attempts to refresh the current session using the refresh token.
+ * It's useful for proactive session refresh or recovering from expired sessions.
+ */
+export const refreshSession = async (): Promise<{
+  error: null | string;
+  session: null | Session;
+  success: boolean;
+}> => {
+  try {
+    const {data, error} = await supabase.auth.refreshSession();
+
+    if (error) {
+      return {
+        error: error.message,
+        session: null,
+        success: false,
+      };
+    }
+
+    return {
+      error: null,
+      session: data.session,
+      success: true,
+    };
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : 'Unknown error refreshing session',
+      session: null,
+      success: false,
+    };
+  }
+};
+
+/**
+ * Get session information including expiry details
+ *
+ * This function provides detailed session information including
+ * time until expiry and whether the session needs refresh.
+ */
+export const getSessionInfo = async (): Promise<{
+  error: null | string;
+  expiresAt: null | number;
+  expiresIn: null | number;
+  isExpired: boolean;
+  needsRefresh: boolean;
+  session: null | Session;
+}> => {
+  try {
+    const {
+      data: {session},
+      error,
+    } = await supabase.auth.getSession();
+
+    if (error) {
+      return {
+        error: error.message,
+        expiresAt: null,
+        expiresIn: null,
+        isExpired: false,
+        needsRefresh: false,
+        session: null,
+      };
+    }
+
+    if (!session) {
+      return {
+        error: null,
+        expiresAt: null,
+        expiresIn: null,
+        isExpired: false,
+        needsRefresh: false,
+        session: null,
+      };
+    }
+
+    const now = Date.now();
+    const expiresAt = session.expires_at ? session.expires_at * 1000 : 0;
+    const expiresIn = expiresAt > 0 ? Math.max(0, expiresAt - now) : null;
+    const isExpired = expiresAt > 0 && now >= expiresAt;
+    const needsRefresh = expiresAt > 0 && expiresIn !== null && expiresIn < 5 * 60 * 1000; // Refresh if < 5 minutes
+
+    return {
+      error: null,
+      expiresAt: expiresAt > 0 ? expiresAt : null,
+      expiresIn,
+      isExpired,
+      needsRefresh,
+      session,
+    };
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : 'Unknown error getting session info',
+      expiresAt: null,
+      expiresIn: null,
+      isExpired: false,
+      needsRefresh: false,
+      session: null,
+    };
+  }
 };

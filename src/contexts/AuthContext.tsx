@@ -6,7 +6,7 @@
  * in a single place to ensure consistency and prevent multiple auth listeners.
  */
 
-import type {User} from '@supabase/supabase-js';
+import type {Session, User} from '@supabase/supabase-js';
 
 import {createContext, useContext, useEffect, useState} from 'react';
 
@@ -14,6 +14,8 @@ import type {AuthProvider as AuthProviderType, AuthResult} from '@/lib/auth';
 
 import {
   getCurrentUser,
+  getSessionInfo,
+  refreshSession as refreshSessionManually,
   resetPassword,
   signIn,
   signInWithOAuth,
@@ -21,6 +23,7 @@ import {
   signUp,
   updatePassword,
   updateProfile,
+  validateSession,
 } from '@/lib/auth';
 import {supabase} from '@/lib/supabase';
 
@@ -33,9 +36,18 @@ import {supabase} from '@/lib/supabase';
 export type AuthContextType = {
   clearError: () => void;
   error: null | string;
+  getSessionInfo: () => Promise<{
+    error: null | string;
+    expiresAt: null | number;
+    expiresIn: null | number;
+    isExpired: boolean;
+    needsRefresh: boolean;
+    session: null | Session;
+  }>;
   isAuthenticated: boolean;
   loading: boolean;
   refresh: () => Promise<void>;
+  refreshSession: () => Promise<{error: null | string; session: null | Session; success: boolean}>;
   resetPassword: (email: string) => Promise<Omit<AuthResult, 'data'>>;
   signIn: (email: string, password: string) => Promise<AuthResult>;
   signInWithProvider: (provider: AuthProviderType) => Promise<Omit<AuthResult, 'data'>>;
@@ -44,6 +56,7 @@ export type AuthContextType = {
   updatePassword: (newPassword: string) => Promise<Omit<AuthResult, 'data'>>;
   updateProfile: (profileData: {display_name?: string; full_name?: string}) => Promise<Omit<AuthResult, 'data'>>;
   user: null | User;
+  validateSession: () => Promise<{error: null | string; isValid: boolean; session: null | Session}>;
 };
 
 /**
@@ -142,6 +155,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
           break;
         case 'TOKEN_REFRESHED':
           console.log('🔄 Session token refreshed');
+          // Session is automatically updated above, no additional action needed
           break;
         case 'USER_UPDATED':
           console.log('👤 User profile updated');
@@ -294,6 +308,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     return result;
   };
 
+  // Enhanced utility methods with session management
+
+  /**
+   * Validates the current session
+   */
+  const handleValidateSession = async (): Promise<{
+    error: null | string;
+    isValid: boolean;
+    session: null | Session;
+  }> => await validateSession();
+
+  /**
+   * Manually refresh the current session
+   */
+  const handleRefreshSession = async (): Promise<{
+    error: null | string;
+    session: null | Session;
+    success: boolean;
+  }> => {
+    setError(null);
+
+    const result = await refreshSessionManually();
+
+    if (!result.success && result.error) {
+      setError(result.error);
+    }
+
+    return result;
+  };
+
+  /**
+   * Get detailed session information
+   */
+  const handleGetSessionInfo = async (): Promise<{
+    error: null | string;
+    expiresAt: null | number;
+    expiresIn: null | number;
+    isExpired: boolean;
+    needsRefresh: boolean;
+    session: null | Session;
+  }> => await getSessionInfo();
+
   // Utility methods
 
   /**
@@ -323,9 +379,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const contextValue: AuthContextType = {
     clearError,
     error,
+    getSessionInfo: handleGetSessionInfo,
     isAuthenticated,
     loading,
     refresh,
+    refreshSession: handleRefreshSession,
     resetPassword: handleResetPassword,
     signIn: handleSignIn,
     signInWithProvider: handleSignInWithProvider,
@@ -334,6 +392,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     updatePassword: handleUpdatePassword,
     updateProfile: handleUpdateProfile,
     user,
+    validateSession: handleValidateSession,
   };
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
