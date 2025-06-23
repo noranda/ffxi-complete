@@ -6,9 +6,7 @@ import {Field, type FieldProps, Form, Formik} from 'formik';
 import {useState} from 'react';
 import * as Yup from 'yup';
 
-import {Button} from '@/components/ui/button';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {Input} from '@/components/ui/input';
+import {Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input} from '@/components/ui';
 import {useAuth} from '@/contexts/AuthContext';
 import {isValidEmail} from '@/lib/auth';
 

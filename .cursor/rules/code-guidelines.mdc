@@ -61,5 +61,5 @@ Read fragments in order for complete guidelines:
 3. **@process/documentation** - Code and user docs requirements
 4. **@process/future-considerations** - Scalability, monitoring planning
 5. **@process/rule-management** - Cursor rules organization
-6. **@process/status-check-reporting** - End-of-response quality indicators
+6. **@workflows/check-status** - Quality verification workflow system
 7. **@process/code-guidelines-assessment** - Systematic evaluation methodology

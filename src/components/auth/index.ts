@@ -8,7 +8,8 @@
  * - LoginForm - Login form with email/password and OAuth authentication ✅
  * - PasswordResetForm - Password reset flow component ✅
  * - ProtectedRoute - Route guard for authenticated areas ✅
- * - UserMenu - User profile dropdown in app bar (coming next)
+ * - UserMenu - User profile dropdown in app bar ✅
+ * - UserProfile - User profile management with settings and account preferences ✅
  */
 
 export {LoginForm} from './LoginForm';
@@ -37,4 +38,5 @@ export type {
   RegisterFormData,
 } from './types';
 
+export {UserMenu} from './UserMenu';
 export {UserProfile} from './UserProfile';

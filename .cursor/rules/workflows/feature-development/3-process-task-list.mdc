@@ -50,7 +50,7 @@ Guidelines for managing task lists in markdown files to track progress on comple
      - Ensure all tests remain green throughout refactoring
 - **MANDATORY Completion Protocol for ANY Task:**
   1. **Complete the TDD cycle (RED-GREEN-REFACTOR) for implementation work**
-  2. **Run Status Checks** (following status-check-reporting.mdc format):
+  2. **Run Status Checks** (using check-status workflow):
      - `yarn lint` - Check for ESLint errors
      - `yarn test --run` - Run all tests without watch mode
      - `yarn type-check` - TypeScript compiler check

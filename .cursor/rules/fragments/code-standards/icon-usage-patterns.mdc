@@ -1,0 +1,331 @@
+---
+description: "Icon usage patterns"
+globs:
+---
+
+# Icon Usage Patterns
+
+## Purpose
+
+This rule establishes consistent icon usage across the application, mandating Font Awesome as the exclusive icon library
+and defining patterns for implementation, sizing, and accessibility.
+
+## Icon Library Standard
+
+### ✅ Required: Font Awesome Icons Only
+
+**All icons must use Font Awesome:**
+
+```typescript
+// ✅ Correct - Font Awesome icons
+import {faCheck, faChevronRight, faCircle} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
+<FontAwesomeIcon icon={faCheck} />
+<FontAwesomeIcon icon={faChevronRight} />
+<FontAwesomeIcon icon={faCircle} />
+```
+
+### ❌ Prohibited: Other Icon Libraries
+
+**Never use these icon libraries:**
+
+```typescript
+// ❌ Prohibited - Lucide React
+import {CheckIcon, ChevronRightIcon, CircleIcon} from 'lucide-react';
+
+// ❌ Prohibited - React Icons
+import {FaCheck, FaChevronRight} from 'react-icons/fa';
+
+// ❌ Prohibited - Heroicons
+import {CheckIcon} from '@heroicons/react/24/outline';
+
+// ❌ Prohibited - Material Icons
+import CheckIcon from '@mui/icons-material/Check';
+```
+
+## Implementation Patterns
+
+### 1. Basic Icon Usage
+
+**Standard icon implementation:**
+
+```typescript
+import {faCheck} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
+const Component: React.FC = () => (
+  <div>
+    <FontAwesomeIcon icon={faCheck} />
+  </div>
+);
+```
+
+### 2. Icon with Sizing
+
+**Consistent sizing patterns:**
+
+```typescript
+// ✅ Correct - Using Font Awesome size props
+<FontAwesomeIcon icon={faCheck} size="sm" />
+<FontAwesomeIcon icon={faCheck} size="lg" />
+<FontAwesomeIcon icon={faCheck} size="2x" />
+
+// ✅ Correct - Using CSS classes for custom sizing
+<FontAwesomeIcon icon={faCheck} className="h-4 w-4" />
+<FontAwesomeIcon icon={faCheck} className="size-4" />
+```
+
+### 3. Icon with Accessibility
+
+**Proper accessibility implementation:**
+
+```typescript
+// ✅ Correct - Decorative icons (no screen reader announcement)
+<FontAwesomeIcon icon={faCheck} aria-hidden="true" />
+
+// ✅ Correct - Meaningful icons with labels
+<FontAwesomeIcon icon={faCheck} aria-label="Success" />
+<FontAwesomeIcon icon={faCheck} title="Task completed" />
+
+// ✅ Correct - Icons with text alternatives
+<span>
+  <FontAwesomeIcon icon={faCheck} aria-hidden="true" />
+  <span className="sr-only">Success</span>
+</span>
+```
+
+### 4. Icon in Buttons
+
+**Icons within interactive elements:**
+
+```typescript
+// ✅ Correct - Icon button with proper accessibility
+<Button aria-label="Close dialog">
+  <FontAwesomeIcon icon={faTimes} aria-hidden="true" />
+</Button>
+
+// ✅ Correct - Button with icon and text
+<Button>
+  <FontAwesomeIcon icon={faCheck} aria-hidden="true" />
+  Save Changes
+</Button>
+```
+
+## Font Awesome Categories
+
+### 1. Solid Icons (Primary)
+
+**Use for most interface elements:**
+
+```typescript
+import {
+  faCheck,
+  faTimes,
+  faChevronDown,
+  faChevronRight,
+  faUser,
+  faCog,
+  faHome,
+  faSearch
+} from '@fortawesome/free-solid-svg-icons';
+```
+
+### 2. Regular Icons (Secondary)
+
+**Use for lighter visual weight:**
+
+```typescript
+import {
+  faCircle,
+  faSquare,
+  faHeart,
+  faBookmark
+} from '@fortawesome/free-regular-svg-icons';
+```
+
+### 3. Brand Icons (Specific Use)
+
+**Use only for brand representations:**
+
+```typescript
+import {
+  faGoogle,
+  faDiscord,
+  faGithub
+} from '@fortawesome/free-brands-svg-icons';
+```
+
+## shadcn/ui Component Integration
+
+### Replacing Lucide Icons in shadcn Components
+
+**When customizing shadcn components, replace Lucide icons:**
+
+```typescript
+// ❌ Original shadcn pattern
+import {CheckIcon, ChevronRightIcon} from 'lucide-react';
+
+// ✅ Correct replacement pattern
+import {faCheck, faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
+// Replace in component implementation
+<FontAwesomeIcon icon={faCheck} className="size-4" />
+<FontAwesomeIcon icon={faChevronRight} className="ml-auto size-4" />
+```
+
+## Common Icon Mappings
+
+### Lucide to Font Awesome Equivalents
+
+| Lucide Icon | Font Awesome Equivalent | Import |
+|-------------|------------------------|---------|
+| `CheckIcon` | `faCheck` | `@fortawesome/free-solid-svg-icons` |
+| `ChevronRightIcon` | `faChevronRight` | `@fortawesome/free-solid-svg-icons` |
+| `ChevronDownIcon` | `faChevronDown` | `@fortawesome/free-solid-svg-icons` |
+| `CircleIcon` | `faCircle` | `@fortawesome/free-regular-svg-icons` |
+| `XIcon` / `XMarkIcon` | `faTimes` | `@fortawesome/free-solid-svg-icons` |
+| `UserIcon` | `faUser` | `@fortawesome/free-solid-svg-icons` |
+| `CogIcon` | `faCog` | `@fortawesome/free-solid-svg-icons` |
+| `HomeIcon` | `faHome` | `@fortawesome/free-solid-svg-icons` |
+| `SearchIcon` | `faSearch` | `@fortawesome/free-solid-svg-icons` |
+
+## Styling Standards
+
+### 1. Consistent Sizing Classes
+
+**Use standardized size classes:**
+
+```typescript
+// ✅ Correct - Consistent sizing
+className="size-4"    // 16px (most common)
+className="size-5"    // 20px (medium)
+className="size-6"    // 24px (large)
+className="h-4 w-4"   // Alternative syntax
+
+// ✅ Correct - Font Awesome size props
+size="sm"             // Small
+size="lg"             // Large
+size="2x"             // 2x size
+```
+
+### 2. Color and State Styling
+
+**Consistent color patterns:**
+
+```typescript
+// ✅ Correct - Using design system colors
+<FontAwesomeIcon 
+  className="text-green-600" 
+  icon={faCheck} 
+/>
+
+<FontAwesomeIcon 
+  className="text-destructive" 
+  icon={faTimes} 
+/>
+
+<FontAwesomeIcon 
+  className="text-muted-foreground" 
+  icon={faUser}
+/>
+```
+
+## Package Dependencies
+
+### Required Packages
+
+**Install these Font Awesome packages:**
+
+```json
+{
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.x.x",
+    "@fortawesome/free-solid-svg-icons": "^6.x.x",
+    "@fortawesome/free-regular-svg-icons": "^6.x.x",
+    "@fortawesome/free-brands-svg-icons": "^6.x.x",
+    "@fortawesome/react-fontawesome": "^0.x.x"
+  }
+}
+```
+
+### Prohibited Packages
+
+**Remove or avoid these packages:**
+
+```json
+{
+  "dependencies": {
+    "lucide-react": "❌ Remove",
+    "react-icons": "❌ Avoid",
+    "@heroicons/react": "❌ Avoid",
+    "@mui/icons-material": "❌ Avoid"
+  }
+}
+```
+
+## Migration Checklist
+
+When updating existing components:
+
+### ✅ Icon Replacement
+
+- [ ] Replace Lucide imports with Font Awesome imports
+- [ ] Update icon component usage to FontAwesomeIcon
+- [ ] Verify icon mappings are correct
+- [ ] Test visual appearance matches expectations
+
+### ✅ Accessibility
+
+- [ ] Add appropriate aria-hidden="true" for decorative icons
+- [ ] Add aria-label or title for meaningful icons
+- [ ] Ensure screen reader compatibility
+
+### ✅ Styling
+
+- [ ] Update size classes to match design
+- [ ] Apply consistent color patterns
+- [ ] Verify responsive behavior
+
+### ✅ Testing
+
+- [ ] Visual regression testing
+- [ ] Accessibility testing
+- [ ] Component functionality testing
+
+## Best Practices
+
+### 1. Performance Optimization
+
+- Import only needed icons to reduce bundle size
+- Use tree shaking to eliminate unused icons
+- Consider icon preloading for critical icons
+
+### 2. Consistency
+
+- Use the same icon for the same action across the app
+- Maintain consistent sizing within component families
+- Follow established color patterns for icon states
+
+### 3. Accessibility First
+
+- Always consider screen reader users
+- Provide text alternatives for meaningful icons
+- Use proper ARIA attributes
+
+### 4. Documentation
+
+- Document icon choices in component JSDoc
+- Maintain icon usage guidelines in design system
+- Keep icon mapping table updated
+
+## Memory Integration
+
+This rule should be referenced whenever:
+
+- Adding new icons to components
+- Customizing shadcn/ui components with icons
+- Reviewing icon usage in code reviews
+- Migrating from other icon libraries
+- Creating new UI components with iconography

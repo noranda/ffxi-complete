@@ -10,9 +10,7 @@ import './App.css';
 import {useEffect, useState} from 'react';
 
 import {RegisterForm} from '@/components/auth/RegisterForm';
-import {Button} from '@/components/ui/button';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {Input} from '@/components/ui/input';
+import {Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input} from '@/components/ui';
 import {useAuth} from '@/hooks';
 import {supabase} from '@/lib/supabase';
 

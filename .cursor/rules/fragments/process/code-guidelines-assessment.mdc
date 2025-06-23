@@ -41,7 +41,7 @@ git status --porcelain
 - Testing: tdd-principles, testing-strategy, test-organization, quality-assurance
 - Design: ui-ux-guidelines
 - Process: git-workflow, performance-guidelines, documentation, future-considerations, rule-management,
-  status-check-reporting, code-guidelines-assessment
+  workflows/check-status, code-guidelines-assessment
 
 ### Step 3: Evidence-Based Assessment Template
 

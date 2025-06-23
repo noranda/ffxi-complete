@@ -1,0 +1,311 @@
+---
+description: "Comprehensive coding standards for shadcn/ui components"
+globs:
+  - "src/components/ui/*.tsx"
+---
+
+# shadcn/ui Component Patterns
+
+## Purpose
+
+This rule defines the specific coding standards for shadcn/ui components in the `src/components/ui/` directory. These
+components are **copy-and-own** from shadcn/ui and should be customized to meet our project's code quality standards.
+
+## Existing shadcn Components
+
+**Currently installed and refined:**
+
+- ✅ `button.tsx` - Single component with tailwind-variants
+- ✅ `card.tsx` - Composable components (Card, CardHeader, CardTitle, etc.)
+- ✅ `input.tsx` - Single component with consistent styling
+- ✅ `tabs.tsx` - Compound component with Radix UI integration
+- ✅ `drawer.tsx` - Compound component with Vaul integration
+- ✅ `dropdown-menu.tsx` - Compound component with Radix UI integration
+
+**When adding new components:**
+
+- Always check this list first
+- Use existing shadcn components instead of building custom ones
+- Add new components to this list when installed
+
+## Component Architecture Patterns
+
+### 1. Single Components (Button, Input)
+
+**Structure:**
+
+```typescript
+import {tv, type VariantProps} from 'tailwind-variants';
+import {cn} from '@/lib/utils';
+
+const componentVariants = tv({
+  base: "base-styles-here",
+  variants: {
+    variant: { /* variants */ },
+    size: { /* sizes */ }
+  },
+  defaultVariants: { /* defaults */ }
+});
+
+type ComponentProps = React.ComponentProps<'element'> & 
+  VariantProps<typeof componentVariants> & {
+    asChild?: boolean; // if using Radix Slot
+  };
+
+const Component: React.FC<ComponentProps> = ({className, variant, size, ...props}) => (
+  <element 
+    className={cn(componentVariants({variant, size, className}))} 
+    data-slot="component-name"
+    {...props} 
+  />
+);
+
+export {Component, type ComponentProps};
+```
+
+### 2. Composable Components (Card)
+
+**Structure:**
+
+```typescript
+import {cn} from '@/lib/utils';
+
+// Define all prop types first
+type ComponentProps = React.ComponentProps<'div'>;
+type ComponentHeaderProps = React.ComponentProps<'div'>;
+// ... other sub-component types
+
+// Implement components with React.FC pattern
+const Component: React.FC<ComponentProps> = ({className, ...props}) => (
+  <div className={cn('base-styles', className)} data-slot="component" {...props} />
+);
+
+const ComponentHeader: React.FC<ComponentHeaderProps> = ({className, ...props}) => (
+  <div className={cn('header-styles', className)} data-slot="component-header" {...props} />
+);
+
+// Export all components individually
+export {Component, ComponentHeader, ComponentTitle};
+export type {ComponentProps, ComponentHeaderProps, ComponentTitleProps};
+```
+
+### 3. Compound Components (Tabs, Drawer, DropdownMenu)
+
+**Structure:**
+
+```typescript
+import * as PrimitiveName from '@radix-ui/react-primitive';
+import {cn} from '@/lib/utils';
+
+// Define all prop types first
+type ComponentProps = React.ComponentProps<typeof PrimitiveName.Root>;
+type ComponentContentProps = React.ComponentProps<typeof PrimitiveName.Content>;
+// ... other sub-component types
+
+// Implement root and sub-components with React.FC pattern
+const ComponentRoot: React.FC<ComponentProps> = ({className, ...props}) => (
+  <PrimitiveName.Root className={cn('styles', className)} data-slot="component" {...props} />
+);
+
+const ComponentContent: React.FC<ComponentContentProps> = ({className, ...props}) => (
+  <PrimitiveName.Content className={cn('styles', className)} data-slot="component-content" {...props} />
+);
+
+// Create compound component with Object.assign
+const Component = Object.assign(ComponentRoot, {
+  Content: ComponentContent,
+  Trigger: ComponentTrigger,
+  // ... other sub-components
+});
+
+// Define namespaced types
+type ComponentTypes = {
+  Props: ComponentProps;
+  ContentProps: ComponentContentProps;
+  // ... other prop types
+};
+
+export {Component, type ComponentTypes};
+```
+
+## Code Quality Standards
+
+### 1. Type Definitions
+
+**Always define explicit prop types:**
+
+```typescript
+// ✅ Correct - Explicit prop types
+type DropdownMenuItemProps = React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
+  variant?: 'default' | 'destructive';
+  inset?: boolean;
+};
+
+// ❌ Incorrect - Inline props without types
+function DropdownMenuItem({...props}: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {variant?: string}) {
+```
+
+### 2. Component Implementation
+
+**Use React.FC pattern consistently:**
+
+```typescript
+// ✅ Correct - React.FC with explicit types
+const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({className, variant = 'default', ...props}) => (
+  <DropdownMenuPrimitive.Item
+    className={cn('base-styles', className)}
+    data-slot="dropdown-menu-item"
+    data-variant={variant}
+    {...props}
+  />
+);
+
+// ❌ Incorrect - Function declarations
+function DropdownMenuItem({className, ...props}: DropdownMenuItemProps) {
+  return (
+    <DropdownMenuPrimitive.Item
+      className={cn('base-styles', className)}
+      {...props}
+    />
+  );
+}
+```
+
+### 3. JSDoc Documentation
+
+**Comprehensive documentation for all components:**
+
+```typescript
+/**
+ * Individual dropdown menu item with variant support.
+ * Supports destructive styling for dangerous actions.
+ */
+const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({...}) => (
+  // Implementation
+);
+```
+
+### 4. Data Attributes
+
+**Consistent data-slot attributes:**
+
+```typescript
+// ✅ Correct - kebab-case data-slot
+data-slot="dropdown-menu-item"
+data-slot="dropdown-menu-content"
+
+// ❌ Incorrect - inconsistent naming
+data-slot="dropdownMenuItem"
+data-slot="content"
+```
+
+### 5. Styling Standards
+
+**Use consistent className patterns:**
+
+```typescript
+// ✅ Correct - Consistent string formatting and trailing commas
+className={cn(
+  'focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none',
+  className,
+)}
+
+// ❌ Incorrect - Mixed quotes and formatting
+className={cn(
+  "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none",
+  className
+)}
+```
+
+## Export Patterns by Component Type
+
+### Single Components
+
+```typescript
+export {Button, type ButtonProps};
+export {Input, type InputProps};
+```
+
+### Composable Components  
+
+```typescript
+export {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
+export type {CardProps, CardContentProps, CardDescriptionProps, CardFooterProps, CardHeaderProps, CardTitleProps};
+```
+
+### Compound Components
+
+```typescript
+export {Tabs, type TabsTypes};
+export {Drawer, type DrawerTypes};
+export {DropdownMenu, type DropdownMenuTypes};
+```
+
+## Component Refinement Checklist
+
+When adding or updating shadcn components:
+
+### ✅ Code Structure
+
+- [ ] Proper TypeScript prop type definitions
+- [ ] React.FC pattern for all components
+- [ ] Consistent data-slot attributes
+- [ ] Comprehensive JSDoc documentation
+
+### ✅ Styling Standards
+
+- [ ] Single quotes for className strings
+- [ ] Trailing commas in cn() calls
+- [ ] Consistent class ordering and formatting
+- [ ] Proper use of design system tokens
+
+### ✅ Export Patterns
+
+- [ ] Correct export pattern based on component type
+- [ ] Proper type exports alongside components
+- [ ] Consistent naming conventions
+
+### ✅ Integration Standards
+
+- [ ] No direct React type imports (use React.ComponentProps inline)
+- [ ] Proper import organization (Radix, utils, types)
+- [ ] ESLint and Prettier compliance
+- [ ] Test coverage for component functionality
+
+## Best Practices
+
+### 1. Always Use Existing Components First
+
+Before creating custom implementations, check if a shadcn component exists that can be customized.
+
+### 2. Maintain Radix UI Patterns
+
+For Radix-based components, preserve the original API structure while applying our styling standards.
+
+### 3. Consistent Variant Systems
+
+Use consistent variant naming across all components (default, destructive, outline, etc.).
+
+### 4. Accessibility Preservation
+
+Maintain all accessibility features from the original shadcn components while applying our standards.
+
+### 5. Documentation Standards
+
+Every component should have clear JSDoc explaining its purpose and usage patterns.
+
+## Memory Integration
+
+This rule should be referenced whenever:
+
+- Adding new shadcn/ui components
+- Refactoring existing UI components  
+- Creating custom components that could use shadcn alternatives
+- Reviewing component implementation patterns
+
+related_rules:
+
+- "component-patterns.mdc"
+- "typescript-patterns.mdc"
+- "code-documentation.mdc"
+- "icon-usage-patterns.mdc"

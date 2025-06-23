@@ -1,6 +1,6 @@
 import {Field, type FieldProps} from 'formik';
 
-import {Input} from '@/components/ui/input';
+import {Input} from '@/components/ui';
 import {validatePassword} from '@/lib/auth';
 import {cn} from '@/lib/utils';
 
