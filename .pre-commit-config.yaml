@@ -1,0 +1,105 @@
+# Pre-commit hooks configuration for FFXI Complete
+# These hooks run before each commit to maintain code quality
+# See https://pre-commit.com for more information
+
+repos:
+  # Built-in hooks for basic file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # JavaScript/TypeScript/JSON formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        additional_dependencies:
+          - prettier@3.1.0
+        files: \.(js|ts|tsx|json|yaml|yml|md)$
+        exclude: |
+          (?x)^(
+            yarn\.lock|
+            package-lock\.json|
+            \.cursor/temp/.*|
+            coverage/.*|
+            dist/.*|
+            node_modules/.*
+          )$
+
+  # Local project hooks
+  - repo: local
+    hooks:
+      # ESLint with auto-fix
+      - id: eslint
+        name: ESLint (auto-fix)
+        entry: yarn lint --fix
+        language: system
+        files: \.(js|ts|tsx)$
+        exclude: |
+          (?x)^(
+            node_modules/.*|
+            dist/.*|
+            coverage/.*|
+            \.cursor/temp/.*
+          )$
+        pass_filenames: false
+
+      # TypeScript type checking
+      - id: typescript
+        name: TypeScript Check
+        entry: yarn type-check
+        language: system
+        files: \.(ts|tsx)$
+        exclude: |
+          (?x)^(
+            node_modules/.*|
+            dist/.*|
+            coverage/.*|
+            \.cursor/temp/.*
+          )$
+        pass_filenames: false
+
+      # Markdown linting
+      - id: markdownlint
+        name: Markdown Lint
+        entry: yarn lint:md
+        language: system
+        files: \.(md|mdc)$
+        exclude: |
+          (?x)^(
+            node_modules/.*|
+            \.cursor/temp/.*
+          )$
+        pass_filenames: false
+
+      # ESLint rules validation
+      - id: eslint-rules-validation
+        name: ESLint Rules Validation
+        entry: yarn validate:rules:structure
+        language: system
+        files: ^eslint-rules/
+        pass_filenames: false
+
+      # ESLint rules testing (fast subset)
+      - id: eslint-rules-test
+        name: ESLint Rules Test
+        entry: yarn test:rules
+        language: system
+        files: ^eslint-rules/
+        pass_filenames: false
+
+# Global configuration
+default_stages: [pre-commit]
+fail_fast: false
+minimum_pre_commit_version: 3.0.0

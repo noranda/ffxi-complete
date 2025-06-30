@@ -113,7 +113,7 @@ yarn test --run
 
 ```bash
 yarn test --run
-# Should output: 
+# Should output:
 # Test Files  X passed (X)
 # Tests  XXX passed (XXX)
 # Duration: X.XXs

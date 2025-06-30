@@ -12,10 +12,7 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {AuthErrorBoundary} from '../AuthErrorBoundary';
 
 // Mock component that throws errors for testing
-const ThrowError: React.FC<{errorMessage?: string; shouldThrow: boolean}> = ({
-  errorMessage = 'Test error',
-  shouldThrow,
-}) => {
+const ThrowError: React.FC = ({errorMessage = 'Test error', shouldThrow}) => {
   if (shouldThrow) {
     throw new Error(errorMessage);
   }

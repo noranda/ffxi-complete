@@ -1,7 +1,7 @@
 /**
  * Props for the SuccessMessage component
  */
-type SuccessMessageProps = {
+export type SuccessMessageProps = {
   /** Success message content */
   message?: string;
   /** Whether to show the success message */
@@ -19,11 +19,7 @@ type SuccessMessageProps = {
  * - Conditional display based on show prop
  * - Accessible notification structure
  */
-export const SuccessMessage: React.FC<SuccessMessageProps> = ({
-  message = 'Operation completed successfully.',
-  show,
-  title = 'Success!',
-}) => {
+export const SuccessMessage: React.FC = ({message = 'Operation completed successfully.', show, title = 'Success!'}) => {
   if (!show) {
     return null;
   }

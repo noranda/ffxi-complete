@@ -15,7 +15,7 @@ import {supabase} from './supabase';
  * result objects for easy consumption in React components.
  */
 
-export type AuthProvider = 'apple' | 'discord' | 'google';
+export type AuthProvider = 'discord' | 'google';
 
 // Authentication result types for consistent error handling
 export type AuthResult<T = User> = {
@@ -24,10 +24,36 @@ export type AuthResult<T = User> = {
   success: boolean;
 };
 
+export type AuthResultNoData = {
+  error: null | string;
+  success: boolean;
+};
+
+export type SessionInfoResult = {
+  error: null | string;
+  expiresAt: null | number;
+  expiresIn: null | number;
+  isExpired: boolean;
+  needsRefresh: boolean;
+  session: null | Session;
+};
+
+export type SessionRefreshResult = {
+  error: null | string;
+  session: null | Session;
+  success: boolean;
+};
+
+export type SessionValidationResult = {
+  error: null | string;
+  isValid: boolean;
+  session: null | Session;
+};
+
 /**
  * Sign up a new user with email and password
  */
-export const signUp = async (email: string, password: string): Promise<AuthResult> => {
+export const signUp = async (email: string, password: string): Promise => {
   try {
     const {data, error} = await supabase.auth.signUp({
       email,
@@ -60,7 +86,7 @@ export const signUp = async (email: string, password: string): Promise<AuthResul
 /**
  * Sign in an existing user with email and password
  */
-export const signIn = async (email: string, password: string): Promise<AuthResult> => {
+export const signIn = async (email: string, password: string): Promise => {
   try {
     const {data, error} = await supabase.auth.signInWithPassword({
       email,
@@ -93,7 +119,7 @@ export const signIn = async (email: string, password: string): Promise<AuthResul
 /**
  * Sign in with OAuth provider (Discord, Google, Apple)
  */
-export const signInWithOAuth = async (provider: AuthProvider): Promise<Omit<AuthResult, 'data'>> => {
+export const signInWithOAuth = async (provider: AuthProvider): Promise => {
   try {
     const {error} = await supabase.auth.signInWithOAuth({
       options: {
@@ -125,7 +151,7 @@ export const signInWithOAuth = async (provider: AuthProvider): Promise<Omit<Auth
 /**
  * Send password reset email to user
  */
-export const resetPassword = async (email: string): Promise<Omit<AuthResult, 'data'>> => {
+export const resetPassword = async (email: string): Promise => {
   try {
     const {error} = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/reset-password`,
@@ -154,7 +180,7 @@ export const resetPassword = async (email: string): Promise<Omit<AuthResult, 'da
 /**
  * Update user password (requires current session)
  */
-export const updatePassword = async (newPassword: string): Promise<Omit<AuthResult, 'data'>> => {
+export const updatePassword = async (newPassword: string): Promise => {
   try {
     const {error} = await supabase.auth.updateUser({
       password: newPassword,
@@ -183,10 +209,7 @@ export const updatePassword = async (newPassword: string): Promise<Omit<AuthResu
 /**
  * Update user profile metadata (requires current session)
  */
-export const updateProfile = async (profileData: {
-  display_name?: string;
-  full_name?: string;
-}): Promise<Omit<AuthResult, 'data'>> => {
+export const updateProfile = async (profileData: {display_name?: string; full_name?: string}): Promise => {
   try {
     const {error} = await supabase.auth.updateUser({
       data: profileData,
@@ -215,7 +238,7 @@ export const updateProfile = async (profileData: {
 /**
  * Sign out the current user
  */
-export const signOut = async (): Promise<Omit<AuthResult, 'data'>> => {
+export const signOut = async (): Promise => {
   try {
     const {error} = await supabase.auth.signOut();
 
@@ -242,7 +265,7 @@ export const signOut = async (): Promise<Omit<AuthResult, 'data'>> => {
 /**
  * Get the current user session
  */
-export const getCurrentUser = async (): Promise<null | User> => {
+export const getCurrentUser = async (): Promise => {
   try {
     const {
       data: {user},
@@ -345,11 +368,7 @@ const getPasswordStrength = (password: string): number => {
  * This function checks if the current session exists and is not expired.
  * It can be used to validate sessions before making authenticated requests.
  */
-export const validateSession = async (): Promise<{
-  error: null | string;
-  isValid: boolean;
-  session: null | Session;
-}> => {
+export const validateSession = async (): Promise => {
   try {
     const {
       data: {session},
@@ -404,11 +423,7 @@ export const validateSession = async (): Promise<{
  * This function attempts to refresh the current session using the refresh token.
  * It's useful for proactive session refresh or recovering from expired sessions.
  */
-export const refreshSession = async (): Promise<{
-  error: null | string;
-  session: null | Session;
-  success: boolean;
-}> => {
+export const refreshSession = async (): Promise => {
   try {
     const {data, error} = await supabase.auth.refreshSession();
 
@@ -440,14 +455,7 @@ export const refreshSession = async (): Promise<{
  * This function provides detailed session information including
  * time until expiry and whether the session needs refresh.
  */
-export const getSessionInfo = async (): Promise<{
-  error: null | string;
-  expiresAt: null | number;
-  expiresIn: null | number;
-  isExpired: boolean;
-  needsRefresh: boolean;
-  session: null | Session;
-}> => {
+export const getSessionInfo = async (): Promise => {
   try {
     const {
       data: {session},

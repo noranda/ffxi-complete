@@ -11,22 +11,22 @@
 CREATE TABLE characters (
   -- Primary key using UUID for better performance and security
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Foreign key to Supabase auth.users - establishes ownership
   -- CASCADE DELETE ensures character data is cleaned up when user is deleted
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Character details
   name TEXT NOT NULL CHECK (length(name) >= 1 AND length(name) <= 15),
   server TEXT NOT NULL CHECK (length(server) >= 1),
-  
+
   -- Privacy setting - allows characters to be public or private
   is_public BOOLEAN NOT NULL DEFAULT false,
-  
+
   -- Standard audit fields with timezone awareness
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  
+
   -- Ensure one character name per user per server (realistic constraint)
   UNIQUE(user_id, name, server)
 );
@@ -40,7 +40,7 @@ COMMENT ON COLUMN characters.is_public IS 'Controls whether character progress c
 COMMENT ON COLUMN characters.name IS 'FFXI character name (1-15 characters as per game limits)';
 
 -- ============================================================================
--- CHARACTER_PROGRESS TABLE  
+-- CHARACTER_PROGRESS TABLE
 -- ============================================================================
 -- Flexible progress tracking for any type of progression (jobs, skills, trusts, etc.)
 -- Uses a key-value approach with structured metadata for extensibility
@@ -48,33 +48,33 @@ COMMENT ON COLUMN characters.name IS 'FFXI character name (1-15 characters as pe
 CREATE TABLE character_progress (
   -- Primary key
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Foreign key to characters - establishes which character this progress belongs to
   -- CASCADE DELETE ensures progress is cleaned up when character is deleted
   character_id UUID NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
-  
+
   -- Progress categorization (jobs, skills, trusts, mounts, etc.)
   category TEXT NOT NULL CHECK (length(category) >= 1),
-  
+
   -- Specific item within category (e.g., 'WAR', 'Sword Skill', 'Shantotto')
   item_name TEXT NOT NULL CHECK (length(item_name) >= 1),
-  
+
   -- Current progress value (level, completion status, etc.)
   progress_value INTEGER NOT NULL DEFAULT 0 CHECK (progress_value >= 0),
-  
+
   -- Optional maximum value for this type of progress
   max_value INTEGER CHECK (max_value IS NULL OR max_value > 0),
-  
+
   -- Flexible JSON metadata for category-specific data
-  -- Examples: 
+  -- Examples:
   --   Jobs: {"experience": 12500, "sub_job": "WAR"}
   --   Trusts: {"acquired_date": "2024-01-15", "source": "quest"}
   --   Skills: {"cap": 230, "food_bonus": 5}
   metadata JSONB DEFAULT '{}',
-  
+
   -- Audit field - when was this progress last updated
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  
+
   -- Ensure one progress entry per character per category per item
   -- This prevents duplicate entries like multiple "WAR" job entries for same character
   UNIQUE(character_id, category, item_name)
@@ -122,14 +122,14 @@ END;
 $$ language 'plpgsql';
 
 -- Apply the trigger to both tables
-CREATE TRIGGER update_characters_updated_at 
-  BEFORE UPDATE ON characters 
-  FOR EACH ROW 
+CREATE TRIGGER update_characters_updated_at
+  BEFORE UPDATE ON characters
+  FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_character_progress_updated_at 
-  BEFORE UPDATE ON character_progress 
-  FOR EACH ROW 
+CREATE TRIGGER update_character_progress_updated_at
+  BEFORE UPDATE ON character_progress
+  FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
@@ -168,8 +168,8 @@ CREATE POLICY "users_can_delete_own_characters" ON characters
 CREATE POLICY "users_can_view_progress_for_owned_and_public_characters" ON character_progress
   FOR SELECT USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_progress.character_id
       AND (characters.user_id = auth.uid() OR characters.is_public = true)
     )
   );
@@ -178,8 +178,8 @@ CREATE POLICY "users_can_view_progress_for_owned_and_public_characters" ON chara
 CREATE POLICY "users_can_insert_progress_for_own_characters" ON character_progress
   FOR INSERT WITH CHECK (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_progress.character_id
       AND characters.user_id = auth.uid()
     )
   );
@@ -188,8 +188,8 @@ CREATE POLICY "users_can_insert_progress_for_own_characters" ON character_progre
 CREATE POLICY "users_can_update_progress_for_own_characters" ON character_progress
   FOR UPDATE USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_progress.character_id
       AND characters.user_id = auth.uid()
     )
   );
@@ -198,8 +198,8 @@ CREATE POLICY "users_can_update_progress_for_own_characters" ON character_progre
 CREATE POLICY "users_can_delete_progress_for_own_characters" ON character_progress
   FOR DELETE USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_progress.character_id
       AND characters.user_id = auth.uid()
     )
   );
@@ -210,7 +210,7 @@ CREATE POLICY "users_can_delete_progress_for_own_characters" ON character_progre
 /*
 Key Database Concepts Demonstrated:
 
-1. **Foreign Key Relationships**: 
+1. **Foreign Key Relationships**:
    - auth.users -> characters (one-to-many)
    - characters -> character_progress (one-to-many)
 

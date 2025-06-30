@@ -61,7 +61,7 @@ git status --porcelain
 
 ### Zero Tolerance for Sampling
 
-❌ **PROHIBITED**: "Examined lines 220-260", "Checked representative sections", "Sampled JSX elements"  
+❌ **PROHIBITED**: "Examined lines 220-260", "Checked representative sections", "Sampled JSX elements"
 ✅ **REQUIRED**: "Examined entire file line-by-line", "Complete file scan", "Full file review"
 
 ### Manual First, Tools Second
@@ -91,16 +91,16 @@ git status --porcelain
 
 ### INVALID Assessment
 
-❌ Any applicable fragment lacks complete evidence log  
-❌ Tool results used without manual verification  
-❌ Claims made without specific line evidence  
+❌ Any applicable fragment lacks complete evidence log
+❌ Tool results used without manual verification
+❌ Claims made without specific line evidence
 ❌ Sampling used instead of complete examination
 
 ### VALID Assessment
 
-✅ All applicable fragments have complete evidence logs  
-✅ Manual verification performed before tool validation  
-✅ All claims supported by specific evidence  
+✅ All applicable fragments have complete evidence logs
+✅ Manual verification performed before tool validation
+✅ All claims supported by specific evidence
 ✅ Tool results reconciled with manual findings
 
 ## Color Coding

@@ -88,7 +88,7 @@ const {data: characters} = await supabase
 const {data, error} = await supabase
   .from('job_progress')
   .upsert({character_id, job_type, level}, {
-    onConflict: 'character_id,job_type' 
+    onConflict: 'character_id,job_type'
   });
 ```
 

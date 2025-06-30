@@ -11,7 +11,7 @@ globs:
 
 ### FFXI Character Portraits
 
-**Location**: `src/assets/portraits/` (128 manually sorted portraits)  
+**Location**: `src/assets/portraits/` (128 manually sorted portraits)
 **Protection Level**: CRITICAL - NEVER MODIFY WITHOUT EXPLICIT PERMISSION
 
 ## 🚨 AI Agent Instructions
@@ -50,7 +50,7 @@ globs:
 ### Protection Levels
 
 - **CRITICAL**: Never modify without explicit permission
-- **HIGH**: Require permission and backup before modification  
+- **HIGH**: Require permission and backup before modification
 - **MEDIUM**: Warn before modification, suggest backups
 
 ---

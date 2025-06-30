@@ -31,14 +31,7 @@ export type MainLayoutProps = {
  * - Optimized scrolling behavior and z-index management
  * - Accessibility support with proper ARIA attributes
  */
-export const MainLayout: React.FC<MainLayoutProps> = ({
-  children,
-  className,
-  footer,
-  header,
-  leftSidebar,
-  rightSidebar,
-}) => (
+export const MainLayout: React.FC = ({children, className, footer, header, leftSidebar, rightSidebar}) => (
   <div
     aria-label="Main application layout"
     className={cn(
@@ -63,13 +56,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     )}
 
     {/* Main Content and Sidebars Container */}
-    <div
-      className={cn(
-        'flex flex-1 flex-col overflow-hidden md:flex-row',
-        // Add top padding when header is present to account for fixed positioning
-        header && 'pt-16'
-      )}
-    >
+    <div className={cn('flex flex-1 flex-col overflow-hidden md:flex-row', header && 'pt-16')}>
       {/* Left Sidebar Area */}
       {leftSidebar && (
         <div className="z-40 w-full md:w-auto" data-testid="left-sidebar-area">

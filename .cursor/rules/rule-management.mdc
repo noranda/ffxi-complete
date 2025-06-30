@@ -8,10 +8,10 @@ globs:
 
 ## Golden Rules & Evidence
 
-- **All rule changes must be evidence-based:**  
+- **All rule changes must be evidence-based:**
   - Show need with examples, research, and rationale.
   - Test and document before publishing.
-- **Manual verification first:**  
+- **Manual verification first:**
   - Tools validate, not replace, manual checks.
   - Always document what was and wasn't checked.
 - **Never claim thoroughness or compliance** without showing your process and findings.
@@ -25,7 +25,7 @@ globs:
 ## Rule Creation & Updates
 
 - **Create/update for:** New patterns, repeated decisions, complex processes, knowledge gaps, or quality issues.
-- **Process:**  
+- **Process:**
   1. Place in correct folder, update lists, renumber as needed.
   2. Test in practice.
   3. Document rationale and evidence.
@@ -70,6 +70,6 @@ globs:
 
 ---
 
-**Summary:**  
+**Summary:**
 Keep rules modular, evidence-driven, and easy to maintain. Every change must be justified, tested, and
 clearly documented. Always show your work.

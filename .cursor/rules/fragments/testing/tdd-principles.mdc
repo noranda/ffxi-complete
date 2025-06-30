@@ -87,7 +87,7 @@ describe('JobTracker', () => {
   it('should call onJobSelect when job is clicked', () => {
     const mockOnJobSelect = vi.fn();
     render(<JobTracker jobs={['WAR']} onJobSelect={mockOnJobSelect} />);
-    
+
     fireEvent.click(screen.getByText('WAR'));
     expect(mockOnJobSelect).toHaveBeenCalledWith('WAR');
   });
@@ -115,11 +115,11 @@ const JobTracker = ({jobs, onJobSelect}: {
 describe('useJobProgress', () => {
   it('should update level when setLevel is called', () => {
     const {result} = renderHook(() => useJobProgress('WAR'));
-    
+
     act(() => {
       result.current.setLevel(75);
     });
-    
+
     expect(result.current.level).toBe(75);
   });
 });

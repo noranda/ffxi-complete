@@ -29,7 +29,7 @@ The following are **fully automated** by ESLint:
 ### Explicitly Disabled (Enforced by ESLint)
 
 - ❌ **No @param tags** - TypeScript provides parameter information
-- ❌ **No @returns tags** - TypeScript provides return type information  
+- ❌ **No @returns tags** - TypeScript provides return type information
 - ❌ **No @example tags** - Keep documentation lightweight
 - ❌ **No @arg/@argument/@throws/@yields tags** - Not needed in minimal approach
 - ❌ **No parameter descriptions** - Rely on TypeScript types and meaningful names
@@ -51,7 +51,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ ... }) => {
  * Validates user input and sanitizes special characters for database storage.
  */
 export const validateInput = (input: string): ValidationResult => {
-  // Implementation  
+  // Implementation
 };
 ```
 
@@ -78,13 +78,13 @@ export const validateInput = (input: string): ValidationResult => {
 const calculateShippingCost = (weight: number, distance: number) => {
   // Base rate calculation using industry standard zones
   const baseRate = weight * 0.5;
-  
+
   // Distance multiplier: >100 miles gets freight rates
   const distanceMultiplier = distance > 100 ? 1.8 : 1.2;
-  
+
   // Apply fuel surcharge (updated quarterly)
   const fuelSurcharge = baseRate * 0.15;
-  
+
   return (baseRate * distanceMultiplier) + fuelSurcharge;
 };
 ```
@@ -95,7 +95,7 @@ const calculateShippingCost = (weight: number, distance: number) => {
 const shouldShowAdvancedFeatures = (user: User) => {
   // Premium users or beta testers get advanced features
   // Beta program expires after 90 days of inactivity
-  return user.subscription === 'premium' || 
+  return user.subscription === 'premium' ||
          (user.betaTester && user.lastActivity > thirtyDaysAgo);
 };
 ```
@@ -116,7 +116,7 @@ const mergeUserPreferences = (current: Preferences, updates: Partial<Preferences
       customColors: updates.theme?.customColors || current.theme?.customColors,
     },
   };
-  
+
   return merged;
 };
 ```
@@ -170,7 +170,7 @@ const fetchUserData = useCallback(async () => {
 }, []);
 
 // ============================================================
-// Event Handlers  
+// Event Handlers
 // ============================================================
 const handleSubmit = useCallback(() => {
   // Implementation...
@@ -204,7 +204,7 @@ return (
 **Include important context:**
 
 - External API limitations
-- Browser compatibility requirements  
+- Browser compatibility requirements
 - Performance considerations
 - Security implications
 - Business rules and domain knowledge

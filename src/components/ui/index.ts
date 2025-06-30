@@ -12,3 +12,4 @@ export {Drawer, type DrawerTypes} from './drawer';
 export {DropdownMenu, type DropdownMenuTypes} from './dropdown-menu';
 export {Input, type InputProps} from './input';
 export {Tabs, type TabsTypes} from './tabs';
+export {Text, Typography, type TypographyProps} from './typography';

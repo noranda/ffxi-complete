@@ -11,9 +11,7 @@ import {render, screen} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
-import type {AuthContextType} from '@/contexts/AuthContext';
-
-import {AuthContext} from '@/contexts/AuthContext';
+import {AuthContext, type AuthContextType} from '@/contexts/AuthContext';
 
 import {ProtectedRoute} from '../';
 
@@ -28,37 +26,47 @@ vi.mock('react-router-dom', async () => {
 });
 
 // Mock auth context helper
-const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
+  getSessionInfo: vi.fn(),
   isAuthenticated: false,
   loading: false,
   refresh: vi.fn(),
+  refreshSession: vi.fn(),
   resetPassword: vi.fn(),
   signIn: vi.fn(),
   signInWithProvider: vi.fn(),
   signOut: vi.fn(),
   signUp: vi.fn(),
   updatePassword: vi.fn(),
+  updateProfile: vi.fn(),
   user: null,
+  validateSession: vi.fn(),
   ...overrides,
 });
 
-// Test wrapper component with router and auth context
-const TestWrapper: React.FC<{
-  authContext?: Partial<AuthContextType>;
+// Test wrapper component props type
+type TestWrapperProps = {
+  authContext?: Partial;
   children: React.ReactNode;
   initialEntries?: string[];
-}> = ({authContext = {}, children, initialEntries = ['/protected']}) => (
+};
+
+// Test wrapper component with router and auth context
+const TestWrapper: React.FC = ({authContext = {}, children, initialEntries = ['/protected']}) => (
   <MemoryRouter initialEntries={initialEntries}>
     <AuthContext.Provider value={createMockAuthContext(authContext)}>{children}</AuthContext.Provider>
   </MemoryRouter>
 );
 
+// Test child component props type
+type TestChildProps = {
+  testId?: string;
+};
+
 // Test child component for protected route testing
-const TestChild: React.FC<{testId?: string}> = ({testId = 'protected-content'}) => (
-  <div data-testid={testId}>Protected Content</div>
-);
+const TestChild: React.FC = ({testId = 'protected-content'}) => <div data-testid={testId}>Protected Content</div>;
 
 describe('ProtectedRoute', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -173,13 +181,7 @@ describe('ProtectedRoute', () => {
   describe('Error Handling', () => {
     it('should still render children when authenticated despite auth errors', () => {
       render(
-        <TestWrapper
-          authContext={{
-            error: 'Some auth error',
-            isAuthenticated: true,
-            loading: false,
-          }}
-        >
+        <TestWrapper authContext={{error: 'Some auth error', isAuthenticated: true, loading: false}}>
           <ProtectedRoute>
             <TestChild />
           </ProtectedRoute>
@@ -192,13 +194,7 @@ describe('ProtectedRoute', () => {
 
     it('should redirect when not authenticated even with auth errors', () => {
       render(
-        <TestWrapper
-          authContext={{
-            error: 'Authentication failed',
-            isAuthenticated: false,
-            loading: false,
-          }}
-        >
+        <TestWrapper authContext={{error: 'Authentication failed', isAuthenticated: false, loading: false}}>
           <ProtectedRoute>
             <TestChild />
           </ProtectedRoute>
@@ -277,14 +273,7 @@ describe('ProtectedRoute', () => {
       };
 
       render(
-        <TestWrapper
-          authContext={{
-            error: null,
-            isAuthenticated: true,
-            loading: false,
-            user,
-          }}
-        >
+        <TestWrapper authContext={{error: null, isAuthenticated: true, loading: false, user}}>
           <ProtectedRoute>
             <TestChild />
           </ProtectedRoute>

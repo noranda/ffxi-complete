@@ -6,15 +6,18 @@
  */
 
 import {RegisterForm} from '@/components/auth/RegisterForm';
+import {Typography} from '@/components/ui';
 
 /**
  * Demo page for the RegisterForm component
  */
-export const RegisterDemo: React.FC<unknown> = () => (
+export const RegisterDemo: React.FC = () => (
   <div className="bg-background flex min-h-screen items-center justify-center p-4">
     <div className="w-full max-w-md">
       <div className="mb-6 text-center">
-        <h1 className="text-foreground mb-2 text-2xl font-bold">RegisterForm Demo</h1>
+        <Typography className="text-foreground mb-2 text-2xl font-bold" variant="h1">
+          RegisterForm Demo
+        </Typography>
 
         <div className="text-muted-foreground text-sm">
           Testing the complete registration form with validation, error handling, and OAuth

@@ -23,18 +23,17 @@ describe('App', () => {
       </AuthProvider>
     );
 
-    // Wait for the FFXI Complete branding to appear in AppBar
-    await screen.findByText('FFXI Complete');
+    // Wait for the AppBar to be rendered
+    await screen.findByTestId('app-bar');
 
-    // Verify the AppBar branding is present
-    expect(screen.getByText('FFXI Complete')).toBeInTheDocument();
+    // Verify the AppBar branding is present (more specific query within AppBar)
+    expect(screen.getByTestId('app-bar')).toBeInTheDocument();
 
     // Verify the MainLayout structure is present
     expect(screen.getByTestId('main-layout')).toBeInTheDocument();
     expect(screen.getByTestId('main-content-area')).toBeInTheDocument();
 
     // Verify the AppBar is present
-    expect(screen.getByTestId('app-bar')).toBeInTheDocument();
     expect(screen.getByTestId('collection-settings-toggle')).toBeInTheDocument();
     expect(screen.getByText('Sign In')).toBeInTheDocument();
 

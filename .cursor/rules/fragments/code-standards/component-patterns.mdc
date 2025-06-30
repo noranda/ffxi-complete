@@ -231,16 +231,16 @@ src/components/auth/
 // ✅ Correct - Use standardized Button component
 import {Button} from '@/components/ui/button';
 
-<Button 
-  variant="link" 
-  size="sm" 
+<Button
+  variant="link"
+  size="sm"
   onClick={handleClick}
 >
   Click here
 </Button>
 
 // ❌ Incorrect - Raw HTML with manual styling
-<button 
+<button
   className="text-primary underline-offset-4 hover:underline text-sm"
   onClick={handleClick}
 >
@@ -270,7 +270,7 @@ import {Button} from '@/components/ui/button';
 **Input Elements:**
 
 ```typescript
-// Raw HTML → Input component  
+// Raw HTML → Input component
 <input type="text"> → <Input>
 <input type="email"> → <Input type="email">
 <input type="password"> → <Input type="password">

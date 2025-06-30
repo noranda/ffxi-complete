@@ -1,0 +1,102 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Task Completion Protocol
+
+Comprehensive protocol for completing development tasks after TDD cycle confirmation from Step 3.
+
+## When to Use This Step
+
+This step is executed ONLY after:
+
+1. TDD cycle (RED-GREEN-REFACTOR) has been completed in Step 3
+2. User has confirmed TDD work and approved proceeding to completion protocol
+3. All development work for the task is finished
+
+## MANDATORY Completion Protocol
+
+Execute ALL steps below in order:
+
+### 1. Run Status Checks
+
+Use the check-status workflow to verify code quality:
+
+```bash
+yarn lint                   # Check for ESLint errors
+yarn test --run             # Run all tests without watch mode
+yarn type-check             # TypeScript compiler check
+yarn prettier --check .     # Format verification
+```
+
+### 2. Code Guidelines Assessment
+
+**ONLY for files added or edited during this task:**
+
+1. **Identify changed files:** Use `git status --porcelain` to get list of modified files
+2. **MANDATORY: Check ALL 4 code-standards fragments against EVERY line in EVERY changed file:**
+   - `typescript-patterns.mdc`
+   - `component-patterns.mdc`
+   - `code-documentation.mdc`
+   - `code-quality.mdc`
+
+**Assessment Requirements:**
+
+- **NO SHORTCUTS ALLOWED**: Every rule in every fragment must be checked against every applicable line
+- **NO SAMPLING**: Must examine entire file content, not representative sections
+- **NO SKIPPING**: Cannot skip any rules or parts of rules - complete assessment required
+- **Document complete assessment** with specific line evidence for each fragment
+- **Fix ANY violations immediately** before proceeding
+
+### 3. TDD Verification
+
+Confirm RED-GREEN-REFACTOR cycle completion:
+
+- ✅ Tests written FIRST (RED phase documented)
+- ✅ Minimal implementation created (GREEN phase documented)
+- ✅ Code refactored while maintaining green tests (REFACTOR phase documented)
+
+### 4. Status Report
+
+Print comprehensive status showing:
+
+- **TDD cycle completion**: 🟢 RED-GREEN-REFACTOR documented / 🔴 TDD not followed
+- **Status checks results**: 🟢/🟠/🔴 for lint, tests, types, format
+- **Code guidelines assessment results** for changed files
+- **Confirmation** that everything is ready for task completion
+
+### 5. Mark Task Complete
+
+**ONLY after ALL above steps pass:**
+
+1. Mark task as completed by changing `[ ]` to `[x]` in task list
+2. **If all subtasks** underneath a parent task are now `[x]`, also mark the **parent task** as completed
+3. Update the "Relevant Files" section with any new or modified files
+
+### 6. Pause for Next Task
+
+**Pause and wait** for user's go-ahead before starting the next task.
+
+## Zero Tolerance Policy
+
+- **🔴 TDD violations:** MUST follow RED-GREEN-REFACTOR cycle for ALL development tasks - no exceptions
+- **🔴 Red status:** MUST fix immediately before proceeding to next step
+- **🟠 Orange status:** MUST fix unless explicitly documented as acceptable
+- **Code violations:** ANY non-adherence to ANY rule in ANY code-standards fragment must be fixed before task completion
+- **Complete coverage:** ALL 4 code-standards fragments must be assessed against ALL lines in ALL changed files
+- **No exceptions:** Cannot proceed to next task until ALL checks are green, TDD cycle complete, and ALL
+  guidelines verified with complete evidence
+
+## Critical Requirements
+
+**ABSOLUTE REQUIREMENTS for task completion:**
+
+1. **TDD COMPLIANCE:** Every development task must demonstrate RED-GREEN-REFACTOR cycle with documented evidence
+2. **CODE STANDARDS:** Every line in every changed file must be checked against every applicable rule in all 4
+   code-standards fragments
+3. **COMPLETE COVERAGE:** ALL 4 code-standards fragments MUST be checked against ALL lines in ALL changed files
+4. **EVIDENCE-BASED:** All assessments must include specific line numbers and evidence for EVERY fragment
+5. **SYSTEMATIC:** Use the fragment-by-fragment assessment template for ALL 4 code standards
+6. **EXHAUSTIVE DOCUMENTATION:** Must document findings for every fragment, even if compliant
+7. **NO COMPLETION:** No task can be marked complete without TDD cycle documentation AND complete verification of all fragments

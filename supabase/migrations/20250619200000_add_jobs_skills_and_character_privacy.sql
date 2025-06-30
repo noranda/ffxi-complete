@@ -7,7 +7,7 @@
 -- =============================================================================
 
 -- Add privacy and public sharing columns to characters table
-ALTER TABLE characters 
+ALTER TABLE characters
 ADD COLUMN is_public BOOLEAN DEFAULT false,
 ADD COLUMN public_url_slug VARCHAR(100) UNIQUE,
 ADD COLUMN privacy_updated_at TIMESTAMPTZ DEFAULT NOW();
@@ -100,8 +100,8 @@ ALTER TABLE character_skill_progress ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "users_own_job_progress" ON character_job_progress
   FOR ALL USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_job_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_job_progress.character_id
       AND characters.user_id = auth.uid()
     )
   );
@@ -109,8 +109,8 @@ CREATE POLICY "users_own_job_progress" ON character_job_progress
 CREATE POLICY "users_own_skill_progress" ON character_skill_progress
   FOR ALL USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_skill_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_skill_progress.character_id
       AND characters.user_id = auth.uid()
     )
   );
@@ -119,8 +119,8 @@ CREATE POLICY "users_own_skill_progress" ON character_skill_progress
 CREATE POLICY "public_job_progress_read" ON character_job_progress
   FOR SELECT USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_job_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_job_progress.character_id
       AND characters.is_public = true
     )
   );
@@ -128,8 +128,8 @@ CREATE POLICY "public_job_progress_read" ON character_job_progress
 CREATE POLICY "public_skill_progress_read" ON character_skill_progress
   FOR SELECT USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = character_skill_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = character_skill_progress.character_id
       AND characters.is_public = true
     )
   );
@@ -151,18 +151,18 @@ DECLARE
   result_character characters%ROWTYPE;
 BEGIN
   -- Update character privacy
-  UPDATE characters 
-  SET 
+  UPDATE characters
+  SET
     is_public = new_is_public,
     privacy_updated_at = NOW(),
-    public_url_slug = CASE 
-      WHEN new_is_public = true AND public_url_slug IS NULL 
+    public_url_slug = CASE
+      WHEN new_is_public = true AND public_url_slug IS NULL
       THEN LOWER(REGEXP_REPLACE(name || '-' || server, '[^a-zA-Z0-9]', '-', 'g'))
-      WHEN new_is_public = false 
+      WHEN new_is_public = false
       THEN NULL
       ELSE public_url_slug
     END
-  WHERE id = character_uuid 
+  WHERE id = character_uuid
     AND user_id = auth.uid()
   RETURNING * INTO result_character;
 
@@ -181,7 +181,7 @@ DECLARE
   result_character characters%ROWTYPE;
 BEGIN
   SELECT * INTO result_character
-  FROM characters 
+  FROM characters
   WHERE public_url_slug = slug AND is_public = true;
 
   IF NOT FOUND THEN
@@ -206,7 +206,7 @@ DECLARE
 BEGIN
   -- Verify character ownership
   IF NOT EXISTS (
-    SELECT 1 FROM characters 
+    SELECT 1 FROM characters
     WHERE id = character_uuid AND user_id = auth.uid()
   ) THEN
     RAISE EXCEPTION 'Character not found or access denied';
@@ -216,15 +216,15 @@ BEGIN
   INSERT INTO character_job_progress (
     character_id, job_id, main_level, sub_level, job_points, master_level, is_unlocked
   ) VALUES (
-    character_uuid, 
-    job_uuid, 
+    character_uuid,
+    job_uuid,
     COALESCE(new_main_level, 1),
     COALESCE(new_sub_level, 1),
     COALESCE(new_job_points, 0),
     COALESCE(new_master_level, 0),
     true
   )
-  ON CONFLICT (character_id, job_id) 
+  ON CONFLICT (character_id, job_id)
   DO UPDATE SET
     main_level = COALESCE(new_main_level, character_job_progress.main_level),
     sub_level = COALESCE(new_sub_level, character_job_progress.sub_level),
@@ -249,7 +249,7 @@ DECLARE
 BEGIN
   -- Verify character ownership
   IF NOT EXISTS (
-    SELECT 1 FROM characters 
+    SELECT 1 FROM characters
     WHERE id = character_uuid AND user_id = auth.uid()
   ) THEN
     RAISE EXCEPTION 'Character not found or access denied';
@@ -280,7 +280,7 @@ BEGIN
   -- Verify access (owner or public character)
   SELECT row_to_json(c.*) INTO character_data
   FROM characters c
-  WHERE c.id = character_uuid 
+  WHERE c.id = character_uuid
     AND (c.user_id = auth.uid() OR c.is_public = true);
 
   IF character_data IS NULL THEN
@@ -298,7 +298,7 @@ BEGIN
   JOIN jobs j ON j.id = cjp.job_id
   WHERE cjp.character_id = character_uuid;
 
-  -- Get skill progress  
+  -- Get skill progress
   SELECT json_agg(
     json_build_object(
       'skill', row_to_json(s.*),
@@ -356,4 +356,4 @@ COMMENT ON FUNCTION toggle_character_privacy IS 'Toggle character public/private
 COMMENT ON FUNCTION get_character_by_slug IS 'Get public character data by URL slug';
 COMMENT ON FUNCTION update_job_progress IS 'Update character job levels and progress';
 COMMENT ON FUNCTION update_skill_progress IS 'Update character skill levels';
-COMMENT ON FUNCTION get_character_progress_summary IS 'Get complete character progress data'; 
+COMMENT ON FUNCTION get_character_progress_summary IS 'Get complete character progress data';

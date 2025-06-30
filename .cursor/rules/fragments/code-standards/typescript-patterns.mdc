@@ -136,7 +136,7 @@ export type OAuthProvider = 'discord' | 'google';
 // ✅ Correct - Import and extend shared types
 import type {AuthCallbacks, BaseAuthFormProps, FormErrors} from './types';
 
-type LoginFormProps = BaseAuthFormProps & 
+type LoginFormProps = BaseAuthFormProps &
   Pick<AuthCallbacks, 'onSuccess' | 'onSwitchToRegister'>;
 
 const LoginForm: React.FC<LoginFormProps> = ({className, onSuccess}) => {
@@ -183,6 +183,37 @@ export type FormErrors = {
 };
 ```
 
+## Expression Patterns
+
+### Avoid Void Expressions
+
+**DO NOT use void expressions** - they add complexity without clear benefit:
+
+```typescript
+// ❌ Avoid - confusing void expressions
+const result = void doSideEffect();
+const value = condition ? void handleCase() : 'default';
+
+// ✅ Prefer - clear, explicit patterns
+doSideEffect();
+const value = condition ? (() => { handleCase(); return 'handled'; })() : 'default';
+
+// ✅ Even better - restructure logic
+if (condition) {
+  handleCase();
+  value = 'handled';
+} else {
+  value = 'default';
+}
+```
+
+**Why avoid void:**
+
+- Creates confusion about return values vs side effects
+- Makes code harder to read and debug
+- Often indicates unclear logic that should be restructured
+- Can mask TypeScript type errors
+
 ## Best Practices
 
 - **Use strict TypeScript configuration** - Enable all strict mode options
@@ -192,3 +223,4 @@ export type FormErrors = {
 - **Organize by category** (data, errors, callbacks, props, domain)
 - **Use composition** - Build complex types from simple ones
 - **Keep types focused** - One responsibility per type
+- **Avoid void expressions** - Use clear, explicit code patterns instead

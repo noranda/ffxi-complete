@@ -13,7 +13,7 @@ INSERT INTO jobs (name, short_name, job_type, required_expansion, is_advanced_jo
 ('Monk', 'MNK', 'combat', NULL, false, 2),
 ('Thief', 'THF', 'combat', NULL, false, 3),
 
--- Tank Jobs  
+-- Tank Jobs
 ('Paladin', 'PLD', 'combat', NULL, false, 4),
 
 -- Mage Jobs
@@ -163,28 +163,28 @@ DECLARE
 BEGIN
     SELECT COUNT(*) INTO job_count FROM jobs;
     SELECT COUNT(*) INTO skill_count FROM skills;
-    
+
     RAISE NOTICE 'Seeded % jobs and % skills', job_count, skill_count;
-    
+
     -- Log counts by category
     RAISE NOTICE 'Job breakdown:';
-    FOR rec IN 
-        SELECT job_type, COUNT(*) as count 
-        FROM jobs 
-        GROUP BY job_type 
+    FOR rec IN
+        SELECT job_type, COUNT(*) as count
+        FROM jobs
+        GROUP BY job_type
         ORDER BY job_type
     LOOP
         RAISE NOTICE '  %: %', rec.job_type, rec.count;
     END LOOP;
-    
+
     RAISE NOTICE 'Skill breakdown:';
-    FOR rec IN 
-        SELECT skill_type, COUNT(*) as count 
-        FROM skills 
-        GROUP BY skill_type 
+    FOR rec IN
+        SELECT skill_type, COUNT(*) as count
+        FROM skills
+        GROUP BY skill_type
         ORDER BY skill_type
     LOOP
         RAISE NOTICE '  %: %', rec.skill_type, rec.count;
     END LOOP;
 END
-$$; 
+$$;

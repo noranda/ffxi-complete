@@ -14,7 +14,7 @@ globs:
 The following are **fully automated** by ESLint and require no manual verification:
 
 - ✅ Error objects for throws and Promise rejections
-- ✅ Awaiting promises and proper async patterns  
+- ✅ Awaiting promises and proper async patterns
 - ✅ Promise misuse in conditionals
 - ✅ Testing file structure and naming conventions
 - ✅ Performance anti-patterns (unnecessary re-renders, memory leaks)

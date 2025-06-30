@@ -47,16 +47,16 @@ const componentVariants = tv({
   defaultVariants: { /* defaults */ }
 });
 
-type ComponentProps = React.ComponentProps<'element'> & 
+type ComponentProps = React.ComponentProps<'element'> &
   VariantProps<typeof componentVariants> & {
     asChild?: boolean; // if using Radix Slot
   };
 
 const Component: React.FC<ComponentProps> = ({className, variant, size, ...props}) => (
-  <element 
-    className={cn(componentVariants({variant, size, className}))} 
+  <element
+    className={cn(componentVariants({variant, size, className}))}
     data-slot="component-name"
-    {...props} 
+    {...props}
   />
 );
 
@@ -226,7 +226,7 @@ export {Button, type ButtonProps};
 export {Input, type InputProps};
 ```
 
-### Composable Components  
+### Composable Components
 
 ```typescript
 export {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
@@ -299,7 +299,7 @@ Every component should have clear JSDoc explaining its purpose and usage pattern
 This rule should be referenced whenever:
 
 - Adding new shadcn/ui components
-- Refactoring existing UI components  
+- Refactoring existing UI components
 - Creating custom components that could use shadcn alternatives
 - Reviewing component implementation patterns
 

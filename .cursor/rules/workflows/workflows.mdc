@@ -40,7 +40,7 @@ When a user says something like "run the [workflow-name] workflow":
 
 ```text
 User: "Run the feature-development workflow"
-AI: "I'll run the feature-development workflow. This will guide us through creating a PRD, generating tasks, and managing implementation. 
+AI: "I'll run the feature-development workflow. This will guide us through creating a PRD, generating tasks, and managing implementation.
 
 To start with step 1 (create-prd), I need to know:
 - What feature would you like to create a PRD for?

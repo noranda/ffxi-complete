@@ -11,7 +11,7 @@ globs:
 ## Branch Naming Conventions
 
 - `feat/feature-name` - New features
-- `fix/bug-description` - Bug fixes  
+- `fix/bug-description` - Bug fixes
 - `refactor/component-name` - Code refactoring
 - `docs/documentation-update` - Documentation changes
 - `test/test-description` - Test additions/updates
@@ -72,8 +72,8 @@ test(components): add Card component tests
 ```bash
 feat: implement character portrait picker
 
-Add component for selecting character portraits during character 
-creation. Supports filtering by race and gender with optimized 
+Add component for selecting character portraits during character
+creation. Supports filtering by race and gender with optimized
 image loading.
 
 Closes #123

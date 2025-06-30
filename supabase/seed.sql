@@ -51,10 +51,10 @@ CREATE TABLE IF NOT EXISTS character_portraits (
   file_path TEXT NOT NULL,
   source_url TEXT, -- Original Google Sheets URL for reference
   created_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Ensure unique combinations and validate race/gender constraints
   UNIQUE(race, gender, face, hair),
-  
+
   -- Constraint: Mithra is female only, Galka is male only
   CONSTRAINT valid_race_gender_combo CHECK (
     (race = 'mithra' AND gender = 'female') OR
@@ -87,31 +87,31 @@ INSERT INTO character_portraits (race, gender, face, hair, filename, file_path, 
   ('hume', 'male', 1, 'B', 'portrait-hume-male-face1-hairB.webp', '/portraits/hume/male/portrait-hume-male-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('hume', 'male', 2, 'A', 'portrait-hume-male-face2-hairA.webp', '/portraits/hume/male/portrait-hume-male-face2-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('hume', 'male', 2, 'B', 'portrait-hume-male-face2-hairB.webp', '/portraits/hume/male/portrait-hume-male-face2-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
-  
+
   -- Hume Female samples
   ('hume', 'female', 1, 'A', 'portrait-hume-female-face1-hairA.webp', '/portraits/hume/female/portrait-hume-female-face1-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('hume', 'female', 1, 'B', 'portrait-hume-female-face1-hairB.webp', '/portraits/hume/female/portrait-hume-female-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
-  
+
   -- Elvaan Male samples
   ('elvaan', 'male', 1, 'A', 'portrait-elvaan-male-face1-hairA.webp', '/portraits/elvaan/male/portrait-elvaan-male-face1-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('elvaan', 'male', 1, 'B', 'portrait-elvaan-male-face1-hairB.webp', '/portraits/elvaan/male/portrait-elvaan-male-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
-  
+
   -- Elvaan Female samples
   ('elvaan', 'female', 1, 'A', 'portrait-elvaan-female-face1-hairA.webp', '/portraits/elvaan/female/portrait-elvaan-female-face1-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('elvaan', 'female', 1, 'B', 'portrait-elvaan-female-face1-hairB.webp', '/portraits/elvaan/female/portrait-elvaan-female-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
-  
+
   -- Tarutaru Male samples
   ('tarutaru', 'male', 1, 'A', 'portrait-tarutaru-male-face1-hairA.webp', '/portraits/tarutaru/male/portrait-tarutaru-male-face1-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('tarutaru', 'male', 1, 'B', 'portrait-tarutaru-male-face1-hairB.webp', '/portraits/tarutaru/male/portrait-tarutaru-male-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
-  
+
   -- Tarutaru Female samples
   ('tarutaru', 'female', 1, 'A', 'portrait-tarutaru-female-face1-hairA.webp', '/portraits/tarutaru/female/portrait-tarutaru-female-face1-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('tarutaru', 'female', 1, 'B', 'portrait-tarutaru-female-face1-hairB.webp', '/portraits/tarutaru/female/portrait-tarutaru-female-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
-  
+
   -- Mithra (female only) samples
   ('mithra', 'female', 1, 'A', 'portrait-mithra-female-face1-hairA.webp', '/portraits/mithra/female/portrait-mithra-female-face1-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('mithra', 'female', 1, 'B', 'portrait-mithra-female-face1-hairB.webp', '/portraits/mithra/female/portrait-mithra-female-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
-  
+
   -- Galka (male only) samples
   ('galka', 'male', 1, 'A', 'portrait-galka-male-face1-hairA.webp', '/portraits/galka/male/portrait-galka-male-face1-hairA.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit'),
   ('galka', 'male', 1, 'B', 'portrait-galka-male-face1-hairB.webp', '/portraits/galka/male/portrait-galka-male-face1-hairB.webp', 'https://docs.google.com/spreadsheets/d/1hlddyUH37WG6s5vUZxkG9JqX_7D6HCzdnTT_pCYAQqE/edit')
@@ -153,4 +153,4 @@ Next Steps:
 - Run the portrait extraction script to populate actual image files
 - Extend character_portraits table with all face/hair combinations (currently has samples)
 - Add additional reference data as needed (jobs, skills, etc.)
-*/ 
+*/

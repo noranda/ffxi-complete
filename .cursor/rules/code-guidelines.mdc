@@ -30,7 +30,7 @@ Read fragments in order for complete guidelines:
 3. **@foundation/architecture-principles** - Core tech stack principles
 4. **@foundation/project-structure** - File organization, co-located testing
 
-### ⚙️ Code Standards & Practices  
+### ⚙️ Code Standards & Practices
 
 1. **@code-standards/typescript-patterns** - TypeScript config, type patterns, shared component types
 2. **@code-standards/component-patterns** - Export strategies, styling with tailwind-variants

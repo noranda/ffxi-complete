@@ -39,7 +39,7 @@ const DefaultLoadingComponent: React.FC = () => (
 /**
  * Protected Route component that guards authenticated areas and handles auth state transitions.
  */
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children, loadingComponent, redirectTo = '/login'}) => {
+export const ProtectedRoute: React.FC = ({children, loadingComponent, redirectTo = '/login'}) => {
   const {isAuthenticated, loading} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,7 +50,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children, loading
   useEffect(() => {
     // Only redirect when auth check is complete (not loading) and user is not authenticated
     if (!loading && !isAuthenticated) {
-      void navigate(redirectTo, {
+      navigate(redirectTo, {
         // Use replace to avoid creating back button loops
         replace: true,
         // Preserve original destination for post-login redirect
@@ -78,14 +78,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children, loading
 
   // Function-as-children pattern: inject auth state for components that need it
   if (typeof children === 'function') {
-    return (
-      <>
-        {(children as (authState: ProtectedRouteAuthState) => React.ReactNode)({
-          isAuthenticated,
-          loading,
-        })}
-      </>
-    );
+    return <>{(children as (authState: ProtectedRouteAuthState) => React.ReactNode)({isAuthenticated, loading})}</>;
   }
 
   // Standard children pattern: render components directly

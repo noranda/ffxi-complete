@@ -5,14 +5,13 @@ import pluginBetterTailwind from 'eslint-plugin-better-tailwindcss';
 import pluginImport from 'eslint-plugin-import';
 import pluginJsdoc from 'eslint-plugin-jsdoc';
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
+import pluginLocalRules from 'eslint-plugin-local-rules';
 import pluginPerfectionist from 'eslint-plugin-perfectionist';
 import pluginReact from 'eslint-plugin-react';
 import * as pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import tseslint, {configs as tseslintConfigs} from 'typescript-eslint';
-
-import {customRulesConfig} from './eslint-custom-rules.js';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -91,7 +90,7 @@ export default [
           allow: 'single-child',
         },
       ],
-      // Alphabetical prop sorting (disabled in favor of perfectionist/sort-jsx-props)
+      // Disabled in favor of perfectionist/sort-jsx-props which provides better sorting options
       'react/jsx-sort-props': 'off',
       // React import automation
       'react/no-deprecated': 'error', // Detect deprecated React methods
@@ -138,7 +137,11 @@ export default [
       // React import automation
       '@typescript-eslint/consistent-type-imports': [
         'error',
-        {fixStyle: 'inline-type-imports', prefer: 'type-imports'},
+        {
+          disallowTypeAnnotations: false,
+          fixStyle: 'inline-type-imports',
+          prefer: 'type-imports',
+        },
       ],
 
       '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
@@ -315,6 +318,7 @@ export default [
   {
     files: ['*.config.{js,ts,mjs}', 'vite.config.ts', 'vitest.config.ts', 'eslint-custom-rules.js'],
     rules: {
+      'import/no-internal-modules': 'off', // Allow internal imports in config files
       'import/no-unresolved': 'off',
       // Disable JSDoc rules for config files
       'jsdoc/check-param-names': 'off',
@@ -335,32 +339,125 @@ export default [
     languageOptions: {globals: globals.node},
   },
 
-  // Custom rules for project-specific formatting (reduced set)
+  // ESLint plugin bridge file - special configuration
   {
-    plugins: {
-      'ffxi-custom': {
-        rules: {
-          'jsx-expression-spacing': customRulesConfig.plugins['ffxi-custom'].rules['jsx-expression-spacing'],
-          'jsx-multiline-spacing': customRulesConfig.plugins['ffxi-custom'].rules['jsx-multiline-spacing'],
-          'no-duplicate-module-exports': customRulesConfig.plugins['ffxi-custom'].rules['no-duplicate-module-exports'],
-          'no-unnecessary-div-wrapper': customRulesConfig.plugins['ffxi-custom'].rules['no-unnecessary-div-wrapper'],
-          'prefer-cn-for-classname': customRulesConfig.plugins['ffxi-custom'].rules['prefer-cn-for-classname'],
-          'prefer-div-over-p': customRulesConfig.plugins['ffxi-custom'].rules['prefer-div-over-p'],
-          'prefer-single-line-arrow-functions':
-            customRulesConfig.plugins['ffxi-custom'].rules['prefer-single-line-arrow-functions'],
-          'react-fc-pattern': customRulesConfig.plugins['ffxi-custom'].rules['react-fc-pattern'],
-        },
-      },
+    files: ['eslint-local-rules.cjs'],
+    rules: {
+      // Allow CommonJS require() in bridge file
+      '@typescript-eslint/no-require-imports': 'off',
+      // Allow internal module imports - this file's purpose is to bridge to eslint-rules/
+      'import/no-internal-modules': 'off',
+    },
+  },
+
+  // ESLint rules development files - special configuration
+  {
+    files: ['eslint-rules/**/*.cjs'],
+    languageOptions: {
+      globals: globals.node,
     },
     rules: {
-      'ffxi-custom/jsx-expression-spacing': 'error',
-      'ffxi-custom/jsx-multiline-spacing': 'error',
-      'ffxi-custom/no-duplicate-module-exports': 'error',
-      'ffxi-custom/no-unnecessary-div-wrapper': 'error',
-      'ffxi-custom/prefer-cn-for-classname': 'error',
-      'ffxi-custom/prefer-div-over-p': 'error',
-      'ffxi-custom/prefer-single-line-arrow-functions': 'error',
-      'ffxi-custom/react-fc-pattern': 'error',
+      // Allow CommonJS patterns for ESLint rule development
+      '@typescript-eslint/no-require-imports': 'off',
+
+      // Allow unused parameters in rule development (context, options, etc.)
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          // Allow unused parameters in rule create functions
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+
+      // Enforce consistent spacing inside brackets and braces - NO SPACING
+      'array-bracket-spacing': ['error', 'never'],
+      'computed-property-spacing': ['error', 'never'],
+
+      // Allow internal module imports for rule utilities
+      'import/no-internal-modules': 'off',
+      // Allow 'Object' type in JSDoc for ESLint API compatibility
+      'jsdoc/check-types': 'off',
+      // Relax JSDoc requirements for rule development
+      'jsdoc/require-jsdoc': [
+        'error',
+        {
+          require: {
+            ArrowFunctionExpression: false,
+            ClassDeclaration: true,
+            ClassExpression: false,
+            FunctionDeclaration: true,
+            FunctionExpression: false,
+            MethodDefinition: false, // Don't require JSDoc for every method in rule development
+          },
+        },
+      ],
+      // Disable specific JSDoc requirements for utility functions
+      'jsdoc/require-param-description': 'off',
+      'jsdoc/require-param-type': 'off',
+      'jsdoc/require-returns': 'off',
+      // Apply our custom rules to ESLint rule development files
+      'local-rules/no-duplicate-imports': 'error',
+
+      'local-rules/no-duplicate-module-exports': 'error',
+
+      'local-rules/no-redundant-default-props': 'error',
+      'local-rules/prefer-cn-for-classname': 'error',
+      'local-rules/prefer-ui-components': 'error',
+      // Disable no-undef for test files that use describe/it
+      'no-undef': 'off',
+
+      'object-curly-spacing': ['error', 'never'],
+    },
+  },
+
+  // Local rules plugin definition (applies to all files)
+  {
+    plugins: {
+      'local-rules': pluginLocalRules,
+    },
+  },
+
+  // Custom rules for project-specific formatting (excludes ESLint rules directory)
+  {
+    ignores: ['eslint-rules/**/*.cjs', 'eslint-custom-rules.js'], // Exclude ESLint rules from global custom rules
+    rules: {
+      // Migrated TypeScript rules
+      'local-rules/no-duplicate-imports': 'error',
+      'local-rules/no-duplicate-module-exports': 'error',
+      'local-rules/no-redundant-default-props': 'error',
+      'local-rules/prefer-cn-for-classname': 'error',
+      'local-rules/prefer-type-imports': 'error',
+      'local-rules/prefer-ui-components': 'error',
+      // Configure perfectionist import sorting to group types together
+      'perfectionist/sort-imports': [
+        'error',
+        {
+          groups: [
+            'type',
+            ['builtin', 'external'],
+            'internal-type',
+            'internal',
+            ['parent-type', 'sibling-type', 'index-type'],
+            ['parent', 'sibling', 'index'],
+            'object',
+            'unknown',
+          ],
+          newlinesBetween: 'always',
+          type: 'natural',
+        },
+      ],
+      // Enable perfectionist named import sorting with type grouping
+      'perfectionist/sort-named-imports': [
+        'error',
+        {
+          groupKind: 'values-first',
+          order: 'asc',
+          type: 'natural',
+        },
+      ],
     },
   },
 
@@ -388,6 +485,19 @@ export default [
       '@stylistic/implicit-arrow-linebreak': ['error', 'beside'],
       // Condensed JSX expressions - use stylistic plugin instead of custom rule
       '@stylistic/jsx-curly-newline': ['error', {multiline: 'forbid', singleline: 'forbid'}],
+      '@stylistic/jsx-wrap-multilines': [
+        'error',
+        {
+          arrow: 'parens', // Enforce parentheses for arrow functions
+          assignment: 'parens', // Enforce parentheses for assignments
+          condition: 'parens', // Enforce parentheses for ternary conditions
+          declaration: 'parens', // Enforce parentheses for variable declarations
+          logical: 'parens', // Enforce parentheses for logical expressions
+          prop: 'ignore', // Don't enforce for props (less common)
+          propertyValue: 'ignore', // Don't enforce for object properties
+          return: 'parens', // Enforce parentheses for return statements
+        },
+      ],
       // Prefer concise conditional expressions
       '@stylistic/multiline-ternary': ['error', 'always-multiline'],
       // Enforce single-line statements to be beside their parent
@@ -400,9 +510,10 @@ export default [
           ObjectPattern: {consistent: true, minProperties: 4},
         },
       ],
-      // Disable TypeScript rules that conflict with condensed style
-      '@typescript-eslint/no-confusing-void-expression': 'off',
-      '@typescript-eslint/no-misused-promises': 'off',
+      // Disable TypeScript rules that conflict with condensed style preferences
+      // These rules would force verbose patterns that go against our condensed coding philosophy
+      '@typescript-eslint/no-confusing-void-expression': 'off', // Allows concise void expressions like void (setX(y), setZ(w))
+      '@typescript-eslint/no-misused-promises': 'off', // Allows promise patterns in condensed arrow functions
       // Enforce condensed arrow functions for expressions (return statements)
       'arrow-body-style': ['error', 'as-needed'],
       // Allow single-line if statements without braces for simple cases

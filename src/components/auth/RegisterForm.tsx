@@ -2,7 +2,7 @@
  * Registration form with email validation, password strength checking, and OAuth support
  */
 
-import {Field, type FieldProps, Form, Formik} from 'formik';
+import {Field, Form, Formik, type FieldProps} from 'formik';
 import {useState} from 'react';
 import * as Yup from 'yup';
 
@@ -20,7 +20,7 @@ import {SuccessMessage} from './SuccessMessage';
  * Registration form props
  * Extends shared auth component patterns for consistency
  */
-type RegisterFormProps = BaseAuthFormProps & Pick<AuthCallbacks, 'onSuccess' | 'onSwitchToLogin'>;
+type RegisterFormProps = BaseAuthFormProps & Pick;
 
 /**
  * Yup validation schema for registration form
@@ -51,7 +51,7 @@ const registrationSchema = Yup.object({
 /**
  * Registration form component with comprehensive validation and error handling
  */
-export const RegisterForm: React.FC<RegisterFormProps> = ({className, onSuccess, onSwitchToLogin}) => {
+export const RegisterForm: React.FC = ({className, onSuccess, onSwitchToLogin}) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Auth context
@@ -88,11 +88,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({className, onSuccess,
   /**
    * Switches to login form when user clicks sign in link
    */
-  const handleSwitchToLogin = () => {
-    if (onSwitchToLogin) {
-      onSwitchToLogin();
-    }
-  };
+  const handleSwitchToLogin = () => onSwitchToLogin?.();
 
   // Initial form values
   const initialValues: RegisterFormData = {

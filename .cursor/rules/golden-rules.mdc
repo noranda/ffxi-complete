@@ -23,10 +23,10 @@ These rules define the fundamental principles of honest, reliable, and effective
 ### Mandatory Evidence Requirements
 
 **For every assessment, provide:**
-□ **Exact quote** of requirement being checked  
-□ **Specific line numbers** examined in the code  
-□ **Specific evidence** found (or violations found)  
-□ **Tool command** run and result for validation  
+□ **Exact quote** of requirement being checked
+□ **Specific line numbers** examined in the code
+□ **Specific evidence** found (or violations found)
+□ **Tool command** run and result for validation
 □ **Reconciliation** of manual findings vs tool results
 
 ## 🔴 RULE #2: "MANUAL FIRST" - TOOLS ARE VALIDATION ONLY
@@ -51,7 +51,7 @@ These rules define the fundamental principles of honest, reliable, and effective
 ```text
 ### Fragment: [exact fragment name]
 **Requirement**: [exact quote from fragment]
-**Lines Examined**: [specific line numbers]  
+**Lines Examined**: [specific line numbers]
 **Manual Verification**: [what specifically you examined]
 **Findings**: [specific evidence or violations with examples]
 **Tool Validation**: [command run + result + explanation]
@@ -70,8 +70,8 @@ These rules define the fundamental principles of honest, reliable, and effective
 ### Required Coverage Documentation
 
 **Before starting assessment:**
-□ **List every file created** with line counts  
-□ **List every file modified** with change descriptions  
+□ **List every file created** with line counts
+□ **List every file modified** with change descriptions
 □ **Commit to assessing ALL files** using complete methodology
 
 ## 🔴 RULE #5: "ACCURACY OVER EFFICIENCY" - NO SHORTCUTS EVER
@@ -85,9 +85,9 @@ These rules define the fundamental principles of honest, reliable, and effective
 
 ### Prohibited Shortcuts
 
-❌ **"Visual inspection"** - Not specific enough  
-❌ **"Quick check"** - Implies shortcuts taken  
-❌ **"Obviously compliant"** - No evidence provided  
+❌ **"Visual inspection"** - Not specific enough
+❌ **"Quick check"** - Implies shortcuts taken
+❌ **"Obviously compliant"** - No evidence provided
 ❌ **"Tools validate"** - Tool-first approach
 
 ## 🔴 RULE #6: "DOCUMENT THE SYSTEM" - SYSTEMATIC MEANS DOCUMENTED

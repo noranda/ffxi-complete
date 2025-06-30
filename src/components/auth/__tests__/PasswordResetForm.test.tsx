@@ -6,35 +6,35 @@ import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it, vi} from 'vitest';
 
-import type {AuthContextType} from '@/contexts/AuthContext';
-import type {AuthResult} from '@/lib/auth';
-
-import {AuthContext} from '@/contexts/AuthContext';
+import {AuthContext, type AuthContextType} from '@/contexts/AuthContext';
 
 import {PasswordResetForm} from '../PasswordResetForm';
 
 // Mock auth context helper
-const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
+  getSessionInfo: vi.fn(),
   isAuthenticated: false,
   loading: false,
   refresh: vi.fn(),
+  refreshSession: vi.fn(),
   resetPassword: vi.fn(),
   signIn: vi.fn(),
   signInWithProvider: vi.fn(),
   signOut: vi.fn(),
   signUp: vi.fn(),
   updatePassword: vi.fn(),
+  updateProfile: vi.fn(),
   user: null,
+  validateSession: vi.fn(),
   ...overrides,
 });
 
 // Test wrapper component
-const TestWrapper: React.FC<{
-  authContext: AuthContextType;
-  children: React.ReactNode;
-}> = ({authContext, children}) => <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;
+const TestWrapper: React.FC = ({authContext, children}) => (
+  <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
+);
 
 describe('PasswordResetForm', () => {
   describe('Rendering', () => {
@@ -379,7 +379,7 @@ describe('PasswordResetForm', () => {
 
     it('should show loading text during form submission', async () => {
       const user = userEvent.setup();
-      const mockResetPassword = vi.fn(() => new Promise<Omit<AuthResult, 'data'>>(() => {})); // Never resolves
+      const mockResetPassword = vi.fn(() => new Promise<never>(() => {})); // Never resolves
       const mockAuthContext = createMockAuthContext({
         resetPassword: mockResetPassword,
       });

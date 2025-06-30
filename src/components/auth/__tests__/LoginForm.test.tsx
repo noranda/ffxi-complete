@@ -6,34 +6,35 @@ import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it, vi} from 'vitest';
 
-import type {AuthContextType} from '@/contexts/AuthContext';
-
-import {AuthContext} from '@/contexts/AuthContext';
+import {AuthContext, type AuthContextType} from '@/contexts/AuthContext';
 
 import {LoginForm} from '../LoginForm';
 
 // Mock auth context helper
-const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
+  getSessionInfo: vi.fn().mockResolvedValue({session: null}),
   isAuthenticated: false,
   loading: false,
   refresh: vi.fn(),
+  refreshSession: vi.fn().mockResolvedValue({session: null}),
   resetPassword: vi.fn(),
   signIn: vi.fn(),
   signInWithProvider: vi.fn(),
   signOut: vi.fn(),
   signUp: vi.fn(),
   updatePassword: vi.fn(),
+  updateProfile: vi.fn(),
   user: null,
+  validateSession: vi.fn().mockResolvedValue({valid: true}),
   ...overrides,
 });
 
 // Test wrapper component
-const TestWrapper: React.FC<{
-  authContext: AuthContextType;
-  children: React.ReactNode;
-}> = ({authContext, children}) => <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;
+const TestWrapper: React.FC = ({authContext, children}) => (
+  <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
+);
 describe('LoginForm', () => {
   describe('Rendering', () => {
     it('should render login form with all required fields', () => {

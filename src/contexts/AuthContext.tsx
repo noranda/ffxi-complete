@@ -6,11 +6,9 @@
  * in a single place to ensure consistency and prevent multiple auth listeners.
  */
 
-import type {Session, User} from '@supabase/supabase-js';
+import type {User} from '@supabase/supabase-js';
 
 import {createContext, useContext, useEffect, useState} from 'react';
-
-import type {AuthProvider as AuthProviderType, AuthResult} from '@/lib/auth';
 
 import {
   getCurrentUser,
@@ -24,6 +22,12 @@ import {
   updatePassword,
   updateProfile,
   validateSession,
+  type AuthProvider as AuthProviderType,
+  type AuthResult,
+  type AuthResultNoData,
+  type SessionInfoResult,
+  type SessionRefreshResult,
+  type SessionValidationResult,
 } from '@/lib/auth';
 import {supabase} from '@/lib/supabase';
 
@@ -36,27 +40,20 @@ import {supabase} from '@/lib/supabase';
 export type AuthContextType = {
   clearError: () => void;
   error: null | string;
-  getSessionInfo: () => Promise<{
-    error: null | string;
-    expiresAt: null | number;
-    expiresIn: null | number;
-    isExpired: boolean;
-    needsRefresh: boolean;
-    session: null | Session;
-  }>;
+  getSessionInfo: () => Promise;
   isAuthenticated: boolean;
   loading: boolean;
-  refresh: () => Promise<void>;
-  refreshSession: () => Promise<{error: null | string; session: null | Session; success: boolean}>;
-  resetPassword: (email: string) => Promise<Omit<AuthResult, 'data'>>;
-  signIn: (email: string, password: string) => Promise<AuthResult>;
-  signInWithProvider: (provider: AuthProviderType) => Promise<Omit<AuthResult, 'data'>>;
-  signOut: () => Promise<Omit<AuthResult, 'data'>>;
-  signUp: (email: string, password: string) => Promise<AuthResult>;
-  updatePassword: (newPassword: string) => Promise<Omit<AuthResult, 'data'>>;
-  updateProfile: (profileData: {display_name?: string; full_name?: string}) => Promise<Omit<AuthResult, 'data'>>;
+  refresh: () => Promise;
+  refreshSession: () => Promise;
+  resetPassword: (email: string) => Promise;
+  signIn: (email: string, password: string) => Promise;
+  signInWithProvider: (provider: AuthProviderType) => Promise;
+  signOut: () => Promise;
+  signUp: (email: string, password: string) => Promise;
+  updatePassword: (newPassword: string) => Promise;
+  updateProfile: (profileData: {display_name?: string; full_name?: string}) => Promise;
   user: null | User;
-  validateSession: () => Promise<{error: null | string; isValid: boolean; session: null | Session}>;
+  validateSession: () => Promise;
 };
 
 /**
@@ -88,7 +85,7 @@ type AuthProviderProps = {
  * - Single Supabase auth listener for the entire app
  * - Session persistence and refresh handling
  */
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+export const AuthProvider: React.FC = ({children}) => {
   // Core authentication state
   const [user, setUser] = useState<null | User>(null);
   const [loading, setLoading] = useState(true);
@@ -121,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     };
 
     // Start initialization
-    void initializeAuth();
+    initializeAuth();
 
     // Set up Supabase auth state listener
     const {
@@ -175,7 +172,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles user registration with email and password including loading and error state management
    */
-  const handleSignUp = async (email: string, password: string): Promise<AuthResult> => {
+  const handleSignUp = async (email: string, password: string): Promise => {
     setLoading(true);
     setError(null);
 
@@ -195,7 +192,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles user sign-in with email and password authentication including state management
    */
-  const handleSignIn = async (email: string, password: string): Promise<AuthResult> => {
+  const handleSignIn = async (email: string, password: string): Promise => {
     setLoading(true);
     setError(null);
 
@@ -215,7 +212,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles OAuth authentication with external providers including redirect handling
    */
-  const handleSignInWithProvider = async (provider: AuthProviderType): Promise<Omit<AuthResult, 'data'>> => {
+  const handleSignInWithProvider = async (provider: AuthProviderType): Promise => {
     setLoading(true);
     setError(null);
 
@@ -243,7 +240,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
    * - Resetting error and loading states
    * - Triggering auth state change listeners
    */
-  const handleSignOut = async (): Promise<Omit<AuthResult, 'data'>> => {
+  const handleSignOut = async (): Promise => {
     setLoading(true);
     setError(null);
 
@@ -263,7 +260,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles password reset request for user email addresses
    */
-  const handleResetPassword = async (email: string): Promise<Omit<AuthResult, 'data'>> => {
+  const handleResetPassword = async (email: string): Promise => {
     setError(null);
 
     const result = await resetPassword(email);
@@ -278,7 +275,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles password update for authenticated users
    */
-  const handleUpdatePassword = async (newPassword: string): Promise<Omit<AuthResult, 'data'>> => {
+  const handleUpdatePassword = async (newPassword: string): Promise => {
     setError(null);
 
     const result = await updatePassword(newPassword);
@@ -293,10 +290,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Handles profile metadata update for authenticated users
    */
-  const handleUpdateProfile = async (profileData: {
-    display_name?: string;
-    full_name?: string;
-  }): Promise<Omit<AuthResult, 'data'>> => {
+  const handleUpdateProfile = async (profileData: {display_name?: string; full_name?: string}): Promise => {
     setError(null);
 
     const result = await updateProfile(profileData);
@@ -313,20 +307,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Validates the current session
    */
-  const handleValidateSession = async (): Promise<{
-    error: null | string;
-    isValid: boolean;
-    session: null | Session;
-  }> => await validateSession();
+  const handleValidateSession = async (): Promise => await validateSession();
 
   /**
    * Manually refresh the current session
    */
-  const handleRefreshSession = async (): Promise<{
-    error: null | string;
-    session: null | Session;
-    success: boolean;
-  }> => {
+  const handleRefreshSession = async (): Promise => {
     setError(null);
 
     const result = await refreshSessionManually();
@@ -341,14 +327,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Get detailed session information
    */
-  const handleGetSessionInfo = async (): Promise<{
-    error: null | string;
-    expiresAt: null | number;
-    expiresIn: null | number;
-    isExpired: boolean;
-    needsRefresh: boolean;
-    session: null | Session;
-  }> => await getSessionInfo();
+  const handleGetSessionInfo = async (): Promise => await getSessionInfo();
 
   // Utility methods
 
@@ -360,7 +339,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   /**
    * Refreshes the current authentication state from Supabase
    */
-  const refresh = async (): Promise<void> => {
+  const refresh = async (): Promise => {
     setLoading(true);
     setError(null);
 

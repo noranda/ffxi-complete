@@ -2,7 +2,7 @@
  * Login form with email/password authentication and OAuth support
  */
 
-import {Field, type FieldProps, Form, Formik} from 'formik';
+import {Field, Form, Formik, type FieldProps} from 'formik';
 import {useState} from 'react';
 import * as Yup from 'yup';
 
@@ -10,7 +10,7 @@ import {Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input
 import {useAuth} from '@/contexts/AuthContext';
 import {isValidEmail} from '@/lib/auth';
 
-import type {AuthCallbacks, BaseAuthFormProps, LoginFormData} from './types';
+import type {BaseAuthFormProps, LoginFormData} from './types';
 
 import {OAuthButtons} from './OAuthButtons';
 
@@ -18,7 +18,11 @@ import {OAuthButtons} from './OAuthButtons';
  * Login form props
  * Extends shared auth component patterns for consistency
  */
-type LoginFormProps = BaseAuthFormProps & Pick<AuthCallbacks, 'onForgotPassword' | 'onSuccess' | 'onSwitchToRegister'>;
+export type LoginFormProps = BaseAuthFormProps & {
+  readonly onForgotPassword?: () => void;
+  readonly onSuccess?: () => void;
+  readonly onSwitchToRegister?: () => void;
+};
 
 /**
  * Yup validation schema for login form
@@ -34,7 +38,7 @@ const loginSchema = Yup.object({
 /**
  * Login form component with comprehensive error handling and OAuth support
  */
-export const LoginForm: React.FC<LoginFormProps> = ({className, onForgotPassword, onSuccess, onSwitchToRegister}) => {
+export const LoginForm: React.FC = ({className, onForgotPassword, onSuccess, onSwitchToRegister}) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Auth context
@@ -152,7 +156,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({className, onForgotPassword
                       aria-invalid={touched.email === true && errors.email !== undefined}
                       disabled={isSubmitting || authLoading}
                       id="email"
-                      onChange={event => {
+                      onChange={(event: React.ChangeEvent) => {
                         field.onChange(event);
                         if (authError !== null) {
                           clearError();

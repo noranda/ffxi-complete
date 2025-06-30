@@ -30,6 +30,23 @@ If any formatting issues are found:
 yarn prettier --write .
 ```
 
+#### 2.1. Check for Circular ESLint/Prettier Conflicts
+
+After running auto-fix, immediately check if ESLint has new errors:
+
+```bash
+yarn lint
+```
+
+**If ESLint errors appear after Prettier auto-fix**:
+
+- This indicates a circular conflict between Prettier and ESLint
+- **STOP and ask for user guidance** - do not attempt auto-resolution
+- Document which files and rules are conflicting
+- Wait for user direction on how to proceed
+
+**If ESLint passes**: Continue to validation check.
+
 ### 3. Validation Check
 
 Re-run formatting check to confirm fixes:
@@ -77,6 +94,7 @@ If ESLint errors appear after formatting:
 
 **Stop and ask for user guidance if**:
 
+- **Circular ESLint/Prettier conflicts detected** (ESLint errors appear immediately after Prettier auto-fix)
 - Formatting conflicts with ESLint rules cannot be auto-resolved
 - Files contain syntax errors that prevent Prettier parsing
 - Configuration conflicts between tools need resolution

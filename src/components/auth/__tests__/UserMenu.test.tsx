@@ -9,7 +9,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it, vi} from 'vitest';
 
-import {AuthContext} from '@/contexts/AuthContext';
+import {AuthContext, type AuthContextType} from '@/contexts/AuthContext';
 
 import {UserMenu} from '../UserMenu';
 
@@ -19,9 +19,16 @@ vi.mock('../UserProfile', () => ({
 }));
 
 // Helper function to render UserMenu with auth context
-const renderUserMenu = (authValue: any) =>
+type MockAuthContext = {
+  isAuthenticated: boolean;
+  loading: boolean;
+  signOut: ReturnType;
+  user: null | Record;
+};
+
+const renderUserMenu = (authValue: MockAuthContext) =>
   render(
-    <AuthContext.Provider value={authValue}>
+    <AuthContext.Provider value={authValue as unknown as AuthContextType}>
       <UserMenu />
     </AuthContext.Provider>
   );

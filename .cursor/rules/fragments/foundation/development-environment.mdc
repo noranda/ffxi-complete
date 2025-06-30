@@ -172,7 +172,7 @@ export const devLog = (message: string, data?: any) => {
 rm -rf node_modules/.cache
 yarn type-check
 
-# Build issues  
+# Build issues
 rm -rf node_modules yarn.lock
 yarn install
 
@@ -196,7 +196,7 @@ rm -rf node_modules/.vite
 
 ```bash
 yarn type-check  # TypeScript working
-yarn lint        # ESLint working  
+yarn lint        # ESLint working
 yarn test        # Testing working
 yarn build       # Build process working
 ```

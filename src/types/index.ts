@@ -16,7 +16,7 @@ export type {Database} from './database.types';
 // =============================================================================
 
 // Standard API response wrapper
-export type ApiResponse<T> = {
+export type ApiResponse<T = unknown> = {
   data: null | T;
   error: null | string;
   success: boolean;
@@ -86,12 +86,12 @@ export type CharacterSkillProgress = Database['public']['Tables']['character_ski
 /*
 Type Organization Best Practices:
 
-1. **Separation of Concerns**: 
+1. **Separation of Concerns**:
    - Generated types (database.types.ts) stay separate
    - Application types (index.ts) build on generated types
    - This allows regenerating database types without losing custom types
 
-2. **Type Aliases**: 
+2. **Type Aliases**:
    - Create meaningful names (Character vs Database['public']['Tables']['characters']['Row'])
    - Group related types together
    - Document the purpose of each type
@@ -209,7 +209,7 @@ export type LoadingState<T> = {
  * Paginated response structure
  * Used for lists that need pagination
  */
-export type PaginatedResponse<T> = ApiResponse<T[]> & {
+export type PaginatedResponse<T> = ApiResponse & {
   pagination?: {
     hasMore: boolean;
     page: number;

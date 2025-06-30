@@ -1,8 +1,6 @@
 import {act, fireEvent, render, renderHook, screen, waitFor} from '@testing-library/react';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
-import type {AuthResult} from '@/lib/auth';
-
 import {
   getCurrentUser,
   getSessionInfo,
@@ -14,6 +12,8 @@ import {
   signUp,
   updatePassword,
   validateSession,
+  type AuthResult,
+  type AuthResultNoData,
 } from '@/lib/auth';
 import {supabase} from '@/lib/supabase';
 
@@ -61,7 +61,7 @@ const mockUser = {
 } as const;
 
 // Test wrapper component
-const TestWrapper: React.FC<{children: React.ReactNode}> = ({children}) => <AuthProvider>{children}</AuthProvider>;
+const TestWrapper: React.FC = ({children}) => <AuthProvider>{children}</AuthProvider>;
 
 // Test component for session persistence tests
 const TestComponent: React.FC = () => {
@@ -75,7 +75,7 @@ const TestComponent: React.FC = () => {
 
       {error && <div>Error: {error}</div>}
 
-      <button onClick={() => void refresh()}>Refresh</button>
+      <button onClick={refresh}>Refresh</button>
     </div>
   );
 };
@@ -250,7 +250,7 @@ describe('AuthContext', () => {
       });
 
       it('should handle OAuth sign in', async () => {
-        const mockResult: Omit<AuthResult, 'data'> = {
+        const mockResult: AuthResultNoData = {
           error: null,
           success: true,
         };
@@ -260,7 +260,7 @@ describe('AuthContext', () => {
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 
-        let oauthResult: Omit<AuthResult, 'data'>;
+        let oauthResult: AuthResultNoData;
         await act(async () => (oauthResult = await result.current.signInWithProvider('google')));
 
         expect(signInWithOAuth).toHaveBeenCalledWith('google');
@@ -268,7 +268,7 @@ describe('AuthContext', () => {
       });
 
       it('should handle sign out', async () => {
-        const mockResult: Omit<AuthResult, 'data'> = {
+        const mockResult: AuthResultNoData = {
           error: null,
           success: true,
         };
@@ -278,7 +278,7 @@ describe('AuthContext', () => {
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 
-        let signOutResult: Omit<AuthResult, 'data'>;
+        let signOutResult: AuthResultNoData;
         await act(async () => (signOutResult = await result.current.signOut()));
 
         expect(signOut).toHaveBeenCalled();
@@ -286,7 +286,7 @@ describe('AuthContext', () => {
       });
 
       it('should handle sign out errors', async () => {
-        const mockResult: Omit<AuthResult, 'data'> = {
+        const mockResult: AuthResultNoData = {
           error: 'Sign out failed',
           success: false,
         };
@@ -302,7 +302,7 @@ describe('AuthContext', () => {
       });
 
       it('should clear error state before sign out', async () => {
-        const mockResult: Omit<AuthResult, 'data'> = {
+        const mockResult: AuthResultNoData = {
           error: null,
           success: true,
         };
@@ -331,7 +331,7 @@ describe('AuthContext', () => {
       });
 
       it('should handle password reset', async () => {
-        const mockResult: Omit<AuthResult, 'data'> = {
+        const mockResult: AuthResultNoData = {
           error: null,
           success: true,
         };
@@ -341,7 +341,7 @@ describe('AuthContext', () => {
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 
-        let resetResult: Omit<AuthResult, 'data'>;
+        let resetResult: AuthResultNoData;
         await act(async () => (resetResult = await result.current.resetPassword('test@example.com')));
 
         expect(resetPassword).toHaveBeenCalledWith('test@example.com');
@@ -349,7 +349,7 @@ describe('AuthContext', () => {
       });
 
       it('should handle password update', async () => {
-        const mockResult: Omit<AuthResult, 'data'> = {
+        const mockResult: AuthResultNoData = {
           error: null,
           success: true,
         };
@@ -359,7 +359,7 @@ describe('AuthContext', () => {
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 
-        let updateResult: Omit<AuthResult, 'data'>;
+        let updateResult: AuthResultNoData;
         await act(async () => (updateResult = await result.current.updatePassword('newpassword')));
 
         expect(updatePassword).toHaveBeenCalledWith('newpassword');
@@ -457,8 +457,15 @@ describe('AuthContext', () => {
 });
 
 describe('AuthContext - Session Persistence and Token Refresh', () => {
-  let mockSupabase: any;
-  let mockAuthStateChangeCallback: any;
+  let mockSupabase: {
+    auth: {
+      getSession: ReturnType;
+      getUser: ReturnType;
+      onAuthStateChange: ReturnType;
+      refreshSession: ReturnType;
+    };
+  };
+  let mockAuthStateChangeCallback: ((event: string, session: unknown) => void) | null;
 
   beforeEach(() => {
     mockAuthStateChangeCallback = null;
@@ -475,7 +482,7 @@ describe('AuthContext - Session Persistence and Token Refresh', () => {
         refreshSession: vi.fn(),
       },
     };
-    vi.mocked(supabase).auth = mockSupabase.auth;
+    Object.assign(vi.mocked(supabase).auth, mockSupabase.auth);
     vi.mocked(getCurrentUser).mockClear();
     vi.mocked(validateSession).mockResolvedValue({
       error: null,
@@ -589,7 +596,7 @@ describe('AuthContext - Session Persistence and Token Refresh', () => {
         user: mockUser,
       };
 
-      act(() => mockAuthStateChangeCallback('TOKEN_REFRESHED', refreshedSession));
+      act(() => mockAuthStateChangeCallback!('TOKEN_REFRESHED', refreshedSession));
 
       await waitFor(() => {
         expect(screen.getByText('User: test@example.com')).toBeInTheDocument();
@@ -615,9 +622,9 @@ describe('AuthContext - Session Persistence and Token Refresh', () => {
       const refreshedSession3 = {access_token: 'token-3', user: mockUser};
 
       act(() => {
-        mockAuthStateChangeCallback('TOKEN_REFRESHED', refreshedSession1);
-        mockAuthStateChangeCallback('TOKEN_REFRESHED', refreshedSession2);
-        mockAuthStateChangeCallback('TOKEN_REFRESHED', refreshedSession3);
+        mockAuthStateChangeCallback!('TOKEN_REFRESHED', refreshedSession1);
+        mockAuthStateChangeCallback!('TOKEN_REFRESHED', refreshedSession2);
+        mockAuthStateChangeCallback!('TOKEN_REFRESHED', refreshedSession3);
       });
 
       await waitFor(() => {
@@ -639,7 +646,7 @@ describe('AuthContext - Session Persistence and Token Refresh', () => {
       await waitFor(() => expect(screen.getByText('User: test@example.com')).toBeInTheDocument());
 
       // Simulate token refresh failure (session becomes null)
-      act(() => mockAuthStateChangeCallback('TOKEN_REFRESHED', null));
+      act(() => mockAuthStateChangeCallback!('TOKEN_REFRESHED', null));
 
       await waitFor(() => {
         expect(screen.getByText('User: null')).toBeInTheDocument();
@@ -797,7 +804,7 @@ describe('AuthContext - Session Persistence and Token Refresh', () => {
       // Simulate sign-in from another tab
       const newSession = {access_token: 'new-token', user: testUser};
 
-      act(() => mockAuthStateChangeCallback('SIGNED_IN', newSession));
+      act(() => mockAuthStateChangeCallback!('SIGNED_IN', newSession));
 
       await waitFor(() => {
         expect(screen.getByText('User: test@example.com')).toBeInTheDocument();
@@ -818,7 +825,7 @@ describe('AuthContext - Session Persistence and Token Refresh', () => {
       await waitFor(() => expect(screen.getByText('User: test@example.com')).toBeInTheDocument());
 
       // Simulate sign-out from another tab
-      act(() => mockAuthStateChangeCallback('SIGNED_OUT', null));
+      act(() => mockAuthStateChangeCallback!('SIGNED_OUT', null));
 
       await waitFor(() => {
         expect(screen.getByText('User: null')).toBeInTheDocument();

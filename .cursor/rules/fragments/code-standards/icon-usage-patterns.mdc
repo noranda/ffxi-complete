@@ -216,18 +216,18 @@ size="2x"             // 2x size
 
 ```typescript
 // ✅ Correct - Using design system colors
-<FontAwesomeIcon 
-  className="text-green-600" 
-  icon={faCheck} 
+<FontAwesomeIcon
+  className="text-green-600"
+  icon={faCheck}
 />
 
-<FontAwesomeIcon 
-  className="text-destructive" 
-  icon={faTimes} 
+<FontAwesomeIcon
+  className="text-destructive"
+  icon={faTimes}
 />
 
-<FontAwesomeIcon 
-  className="text-muted-foreground" 
+<FontAwesomeIcon
+  className="text-muted-foreground"
   icon={faUser}
 />
 ```

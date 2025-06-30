@@ -49,10 +49,10 @@ type AuthContextType = {
 // ProtectedRoute.tsx - Route guards for authenticated users
 const ProtectedRoute = ({children}: {children: React.ReactNode}) => {
   const {user, loading} = useAuth();
-  
+
   if (loading) return <LoadingSpinner />;
   if (!user) return <Navigate to="/login" replace />;
-  
+
   return <>{children}</>;
 };
 ```
@@ -104,8 +104,8 @@ CREATE POLICY "users_own_characters" ON characters
 CREATE POLICY "users_own_progress" ON job_progress
   FOR ALL USING (
     EXISTS (
-      SELECT 1 FROM characters 
-      WHERE characters.id = job_progress.character_id 
+      SELECT 1 FROM characters
+      WHERE characters.id = job_progress.character_id
       AND characters.user_id = auth.uid()
     )
   );
@@ -124,7 +124,7 @@ export const characterService = {
       .insert(character)
       .select()
       .single();
-    
+
     if (error) throw new Error(`Failed to create character: ${error.message}`);
     return data;
   },
@@ -135,7 +135,7 @@ export const characterService = {
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
-    
+
     if (error) throw new Error(`Failed to fetch characters: ${error.message}`);
     return data;
   }
@@ -160,7 +160,7 @@ export const progressService = {
       })
       .select()
       .single();
-    
+
     if (error) throw new Error(`Failed to update job progress: ${error.message}`);
     return data;
   }
@@ -181,11 +181,11 @@ export const useRealtimeSubscription = <T>(
   useEffect(() => {
     const subscription = supabase
       .channel(`${table}_changes`)
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
         table,
-        filter 
+        filter
       }, callback)
       .subscribe();
 
@@ -241,7 +241,7 @@ export const useCharacters = () => {
 
 export const useUpdateCharacter = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, updates }: { id: string; updates: Partial<Character> }) =>
       characterService.update(id, updates),

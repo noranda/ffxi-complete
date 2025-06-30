@@ -1,9 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
-import type {AuthContextType} from '@/contexts/AuthContext';
-
-import {AuthContext} from '@/contexts/AuthContext';
+import {AuthContext, type AuthContextType} from '@/contexts/AuthContext';
 
 import {Register} from '../Register';
 
@@ -23,27 +21,28 @@ vi.mock('@/components/auth/RegisterForm', () => ({
 }));
 
 // Mock auth context for testing
-const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
+  getSessionInfo: vi.fn(),
   isAuthenticated: false,
   loading: false,
   refresh: vi.fn(),
+  refreshSession: vi.fn(),
   resetPassword: vi.fn(),
   signIn: vi.fn(),
   signInWithProvider: vi.fn(),
   signOut: vi.fn(),
   signUp: vi.fn(),
   updatePassword: vi.fn(),
+  updateProfile: vi.fn(),
   user: null,
+  validateSession: vi.fn(),
   ...overrides,
 });
 
 // Test wrapper component
-const TestWrapper: React.FC<{
-  authContext?: Partial<AuthContextType>;
-  children: React.ReactNode;
-}> = ({authContext = {}, children}) => (
+const TestWrapper: React.FC = ({authContext = {}, children}) => (
   <AuthContext.Provider value={createMockAuthContext(authContext)}>{children}</AuthContext.Provider>
 );
 describe('Register', () => {
