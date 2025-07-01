@@ -25,7 +25,7 @@ module.exports = {
       const imports = sourceCode.ast.body.filter(node => node.type === 'ImportDeclaration');
       const lastImport = imports[imports.length - 1];
 
-      const cnImport = "import { cn } from '@/lib/utils';";
+      const cnImport = "import {cn} from '@/lib/utils';";
 
       if (lastImport) {
         return fixer.insertTextAfter(lastImport, `\n${cnImport}`);

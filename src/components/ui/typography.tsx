@@ -31,7 +31,7 @@ const typographyVariants = tv({
 /**
  * Typography component props
  */
-type TypographyProps = React.HTMLAttributes & {
+type TypographyProps = React.HTMLAttributes<HTMLElement> & {
   as?: 'blockquote' | 'code' | 'h1' | 'h2' | 'h3' | 'h4' | 'p';
   children?: React.ReactNode;
   className?: string;
@@ -39,25 +39,28 @@ type TypographyProps = React.HTMLAttributes & {
 };
 
 /**
+ * Mapping of typography variants to their corresponding HTML elements
+ */
+const variantElementMap = {
+  blockquote: 'blockquote',
+  code: 'code',
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  large: 'p',
+  lead: 'p',
+  muted: 'p',
+  p: 'p',
+  small: 'p',
+} as const;
+
+/**
  * Typography component with semantic HTML elements and consistent styling.
  * Provides a flexible foundation for text content with multiple variants.
  */
-const Typography = ({as, className, variant = 'p', ...props}: TypographyProps) => {
-  const Component =
-    as ||
-    (variant === 'h1'
-      ? 'h1'
-      : variant === 'h2'
-        ? 'h2'
-        : variant === 'h3'
-          ? 'h3'
-          : variant === 'h4'
-            ? 'h4'
-            : variant === 'blockquote'
-              ? 'blockquote'
-              : variant === 'code'
-                ? 'code'
-                : 'p');
+const Typography: React.FC<TypographyProps> = ({as, className, variant = 'p', ...props}) => {
+  const Component = as || variantElementMap[variant] || 'p';
 
   return <Component className={cn(typographyVariants({variant}), className)} {...props} />;
 };
@@ -65,7 +68,9 @@ const Typography = ({as, className, variant = 'p', ...props}: TypographyProps) =
 /**
  * Text component for simple paragraph text
  */
-const Text = ({className, ...props}: Omit) => <Typography className={className} variant="p" {...props} />;
+const Text: React.FC<TypographyProps> = ({className, ...props}) => (
+  <Typography className={className} variant="p" {...props} />
+);
 
 export {Text, Typography};
 export type {TypographyProps};

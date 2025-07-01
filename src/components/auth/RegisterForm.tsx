@@ -2,7 +2,7 @@
  * Registration form with email validation, password strength checking, and OAuth support
  */
 
-import {Field, Form, Formik, type FieldProps} from 'formik';
+import {Field, type FieldProps, Form, Formik} from 'formik';
 import {useState} from 'react';
 import * as Yup from 'yup';
 
@@ -10,7 +10,7 @@ import {Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input
 import {useAuth} from '@/contexts/AuthContext';
 import {isValidEmail, validatePassword} from '@/lib/auth';
 
-import type {AuthCallbacks, BaseAuthFormProps, RegisterFormData} from './types';
+import type {BaseAuthFormProps, RegisterFormData} from './types';
 
 import {OAuthButtons} from './OAuthButtons';
 import {PasswordFieldWithStrength} from './PasswordFieldWithStrength';
@@ -20,7 +20,12 @@ import {SuccessMessage} from './SuccessMessage';
  * Registration form props
  * Extends shared auth component patterns for consistency
  */
-type RegisterFormProps = BaseAuthFormProps & Pick;
+type RegisterFormProps = BaseAuthFormProps & {
+  /** Callback when authentication is successful */
+  onSuccess?: () => void;
+  /** Callback when user wants to switch to login */
+  onSwitchToLogin?: () => void;
+};
 
 /**
  * Yup validation schema for registration form
@@ -51,7 +56,7 @@ const registrationSchema = Yup.object({
 /**
  * Registration form component with comprehensive validation and error handling
  */
-export const RegisterForm: React.FC = ({className, onSuccess, onSwitchToLogin}) => {
+export const RegisterForm: React.FC<RegisterFormProps> = ({className, onSuccess, onSwitchToLogin}) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Auth context
@@ -88,7 +93,11 @@ export const RegisterForm: React.FC = ({className, onSuccess, onSwitchToLogin}) 
   /**
    * Switches to login form when user clicks sign in link
    */
-  const handleSwitchToLogin = () => onSwitchToLogin?.();
+  const handleSwitchToLogin = () => {
+    if (onSwitchToLogin) {
+      onSwitchToLogin();
+    }
+  };
 
   // Initial form values
   const initialValues: RegisterFormData = {

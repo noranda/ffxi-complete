@@ -77,7 +77,7 @@ describe('Card Components', () => {
       render(<CardTitle data-testid="title">Card Title</CardTitle>);
       const title = screen.getByTestId('title');
       expect(title).toBeInTheDocument();
-      expect(title).toHaveClass('font-semibold', 'text-lg');
+      expect(title).toHaveClass('leading-none', 'font-semibold');
     });
 
     it('applies custom className', () => {

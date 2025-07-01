@@ -36,7 +36,8 @@ module.exports = {
                 ? specifier.imported.name
                 : `${specifier.imported.name} as ${specifier.local.name}`;
 
-            if (importNode.importKind === 'type') {
+            // Check both the import statement and individual specifier for type modifier
+            if (importNode.importKind === 'type' || specifier.importKind === 'type') {
               typeImports.push(`type ${importText}`);
             } else {
               namedImports.push(importText);

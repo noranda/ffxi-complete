@@ -16,7 +16,7 @@ export type {Database} from './database.types';
 // =============================================================================
 
 // Standard API response wrapper
-export type ApiResponse<T = unknown> = {
+export type ApiResponse<T> = {
   data: null | T;
   error: null | string;
   success: boolean;
@@ -209,7 +209,8 @@ export type LoadingState<T> = {
  * Paginated response structure
  * Used for lists that need pagination
  */
-export type PaginatedResponse<T> = ApiResponse & {
+export type PaginatedResponse<T> = Omit<ApiResponse<T[]>, 'data'> & {
+  data: T[];
   pagination?: {
     hasMore: boolean;
     page: number;

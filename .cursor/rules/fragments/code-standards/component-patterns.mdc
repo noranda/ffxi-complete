@@ -223,29 +223,41 @@ src/components/auth/
 
 ## UI Component Usage
 
-### Prefer Internal Components Over Raw HTML
+### Element Selection Hierarchy
 
-**Always use our standardized UI components instead of raw HTML elements:**
+**Follow this priority order when choosing elements:**
+
+1. **Semantic HTML first** - Use semantic elements when they provide meaning
+2. **Check for UI component** - If semantic element exists, use our UI component version
+3. **Use `<div>` for structure** - When no semantic meaning is needed
+4. **Typography for semantic text** - Only when text needs semantic meaning (headings, body text)
 
 ```typescript
-// ✅ Correct - Use standardized Button component
-import {Button} from '@/components/ui/button';
+// ✅ Correct hierarchy examples
 
-<Button
-  variant="link"
-  size="sm"
-  onClick={handleClick}
->
-  Click here
-</Button>
+// 1. Interactive element → Semantic HTML → UI Component
+<Button onClick={handleClick}>Click here</Button>
 
-// ❌ Incorrect - Raw HTML with manual styling
-<button
-  className="text-primary underline-offset-4 hover:underline text-sm"
-  onClick={handleClick}
->
-  Click here
-</button>
+// 2. Text input → Semantic HTML → UI Component
+<Input type="email" />
+
+// 3. Layout/structural text → div (no semantic meaning needed)
+<div className="text-sm text-muted-foreground">Status: Online</div>
+
+// 4. Semantic text content → Typography
+<Typography variant="h2">Page Title</Typography>
+<Typography variant="p">This is body text with semantic meaning.</Typography>
+
+// ❌ Incorrect examples
+
+// Don't use raw HTML when UI component exists
+<button onClick={handleClick}>Click here</button>
+
+// Don't use Typography for layout text
+<Typography variant="p" className="text-xs">Status: Online</Typography>
+
+// Don't use span for block-level layout text
+<span className="text-sm">Character name</span>
 ```
 
 **Benefits of using internal components:**
@@ -256,49 +268,88 @@ import {Button} from '@/components/ui/button';
 - **Type Safety**: Full TypeScript support with proper prop validation
 - **Design System**: Automatically follows design tokens and variants
 
-### Common HTML to Component Mappings
+### Element Selection Decision Tree
 
-**Button Elements:**
+**Use this decision process:**
 
 ```typescript
-// Raw HTML → Button component
+// Decision Tree for Element Selection:
+
+// 1. Does this need semantic meaning? (button, input, nav, main, etc.)
+//    YES → Go to step 2
+//    NO → Use <div> for structure
+
+// 2. Do we have a UI component for this semantic element?
+//    YES → Use UI component (Button, Input, Card, etc.)
+//    NO → Use semantic HTML directly
+
+// 3. Is this text content with semantic meaning? (headings, body text, etc.)
+//    YES → Use Typography with appropriate variant
+//    NO → Use <div> for layout text
+
+// Examples:
+<Button>           // Interactive → Semantic → UI Component
+<Input />          // Form field → Semantic → UI Component
+<nav>              // Navigation → Semantic → No UI component → Raw HTML
+<div>Status</div>  // Layout text → No semantic meaning → div
+<Typography variant="h1">Title</Typography>  // Semantic text → Typography
+```
+
+**Common Element Mappings:**
+
+```typescript
+// Interactive Elements → UI Components
 <button> → <Button>
-<button type="submit"> → <Button type="submit">
-<button className="link-style"> → <Button variant="link">
+<input> → <Input>
+<textarea> → <Textarea>
+<select> → <Select>
+
+// Layout/Container Elements → Raw HTML or UI Components
+<div> → <div> (for basic layout)
+<div className="card-style"> → <Card> (when we have component)
+<nav> → <nav> (semantic HTML)
+<main> → <main> (semantic HTML)
+
+// Text Content → Context-dependent
+"Status: Online" → <div> (layout text)
+"Page Title" → <Typography variant="h1"> (semantic text)
+"Body content" → <Typography variant="p"> (semantic text)
 ```
 
-**Input Elements:**
+### When Each Approach is Correct
 
-```typescript
-// Raw HTML → Input component
-<input type="text"> → <Input>
-<input type="email"> → <Input type="email">
-<input type="password"> → <Input type="password">
-```
+**Use `<div>` for:**
 
-**Card/Container Elements:**
+- Layout structure without semantic meaning
+- Text content that's purely presentational (labels, status, names)
+- Container elements that group other elements
+- Block-level content that doesn't need semantics
 
-```typescript
-// Raw HTML → Card components
-<div className="card-container"> → <Card>
-<div className="card-header"> → <CardHeader>
-<div className="card-content"> → <CardContent>
-```
+**Use UI Components for:**
 
-### When Raw HTML is Acceptable
+- Interactive elements (Button, Input, Select)
+- Design system components (Card, Alert, Badge)
+- Complex reusable patterns with styling variants
 
-**Only use raw HTML elements when:**
+**Use Raw Semantic HTML for:**
 
-- No corresponding UI component exists
-- Semantic HTML is required (e.g., `<main>`, `<nav>`, `<section>`)
-- Component would add unnecessary complexity
-- Building the UI component itself
+- Semantic structure (`<nav>`, `<main>`, `<section>`, `<article>`)
+- When semantic element exists but we don't have a UI component
+- Building the UI components themselves
 
-**Always consider creating a UI component if:**
+**Use Typography for:**
 
-- Element appears multiple times across the codebase
-- Element has complex styling or interactive states
-- Element needs consistent behavior across usage
+- Headings (`<h1>`, `<h2>`, etc.) with semantic meaning
+- Body text content that forms readable content
+- Text that needs consistent typographic styling across the app
+- Content that should follow semantic heading hierarchy
+
+**Assessment Questions:**
+
+- "Is this interactive?" → UI Component if available
+- "Does this have semantic meaning?" → Semantic HTML → UI Component if available
+- "Is this layout/structural text?" → `<div>`
+- "Is this content text with hierarchy?" → Typography
 
 ## Best Practices
 
@@ -310,4 +361,4 @@ import {Button} from '@/components/ui/button';
 - **Choose export patterns** based on component relationships
 - **Create index files** for clean imports
 - **Keep styling consistent** across component families
-- **Prefer internal UI components** over raw HTML elements
+- **Follow element selection hierarchy** (semantic → UI component → div → typography)

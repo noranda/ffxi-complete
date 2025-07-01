@@ -57,7 +57,7 @@ describe('Button', () => {
   });
 
   it('applies default size styles', () => {
-    render(<Button>Default Size</Button>);
+    render(<Button size="default">Default Size</Button>);
     const button = screen.getByRole('button');
     expect(button).toHaveClass('h-9', 'px-4');
   });

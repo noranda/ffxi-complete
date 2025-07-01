@@ -17,7 +17,7 @@ import {faCog} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import {UserMenu} from '@/components/auth/UserMenu';
-import {Button} from '@/components/ui';
+import {Button} from '@/components/ui/button';
 import {cn} from '@/lib/utils';
 
 /**
@@ -45,7 +45,7 @@ export type User = {
  * Implements a modern glass morphism design with turquoise theming,
  * responsive layout, and comprehensive accessibility support.
  */
-export const AppBar: React.FC = ({
+export const AppBar: React.FC<AppBarProps> = ({
   className,
   isCollectionSettingsOpen = false,
   onCollectionSettingsToggle,
@@ -68,7 +68,9 @@ export const AppBar: React.FC = ({
     <div className="flex items-center justify-between px-4 py-3 md:px-6">
       {/* Branding */}
       <div className="flex items-center space-x-3">
-        <div className="hidden font-bold sm:block">FFXI Complete</div>
+        <h1 className="text-lg font-bold text-teal-100">
+          <span className="hidden sm:block">FFXI Complete</span>
+        </h1>
       </div>
 
       {/* Controls */}

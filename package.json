@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "lint:md": "markdownlint-cli2 '*.md' '.cursor/**/*.mdc' --config .markdownlint.json",
     "lint:md:fix": "markdownlint-cli2 '*.md' '.cursor/**/*.mdc' --config .markdownlint.json --fix",
-    "type-check": "tsc --noEmit --project ./tsconfig.app.json",
+    "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
     "test:watch": "vitest --watch",
@@ -27,6 +27,7 @@
     "ci": "yarn install --frozen-lockfile && yarn quality-check",
     "test:rules": "cd eslint-rules/tests && for test in *.test.cjs; do echo \"Testing $test...\" && node \"$test\" || exit 1; done && echo \"All rule tests passed!\"",
     "validate:rules": "eslint eslint-rules/**/*.cjs --max-warnings=0",
+    "validate:rules:structure": "yarn validate:rules",
     "maintain:rules": "yarn test:rules && yarn validate:rules"
   },
   "dependencies": {
@@ -76,7 +77,6 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsdoc": "^51.1.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-local-rules": "^3.0.2",
     "eslint-plugin-perfectionist": "^4.15.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",

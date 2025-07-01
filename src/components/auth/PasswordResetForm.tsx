@@ -2,7 +2,7 @@
  * Password reset form with email validation and success states
  */
 
-import {Field, Form, Formik, type FieldProps} from 'formik';
+import {Field, type FieldProps, Form, Formik} from 'formik';
 import {useState} from 'react';
 import * as Yup from 'yup';
 
@@ -19,8 +19,10 @@ import {SuccessMessage} from './SuccessMessage';
  * Extends shared auth component patterns for consistency
  */
 type PasswordResetFormProps = BaseAuthFormProps & {
-  readonly onCancel?: () => void;
-  readonly onSwitchToLogin?: () => void;
+  /** Callback when user cancels the current action */
+  onCancel?: () => void;
+  /** Callback when user wants to switch to login */
+  onSwitchToLogin?: () => void;
 };
 
 /**
@@ -37,7 +39,7 @@ const passwordResetSchema = Yup.object({
  * Password reset form component with comprehensive error handling
  * Allows users to request a password reset email for their account
  */
-export const PasswordResetForm: React.FC = ({className, onCancel, onSwitchToLogin}) => {
+export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({className, onCancel, onSwitchToLogin}) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
 

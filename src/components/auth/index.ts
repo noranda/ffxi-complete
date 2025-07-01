@@ -29,7 +29,6 @@ export {SuccessMessage} from './SuccessMessage';
 export type * from './types';
 // Export shared types for use by other components
 export type {
-  AuthCallbacks,
   AuthFormState,
   BaseAuthFormProps,
   FormErrors,

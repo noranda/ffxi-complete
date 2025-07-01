@@ -5,9 +5,11 @@ import {validatePassword} from '@/lib/auth';
 import {cn} from '@/lib/utils';
 
 /**
- * Props for the PasswordFieldWithStrength component
+ * Password input field with real-time strength validation and visual feedback.
+ * Features real-time password strength validation, visual strength indicator with color coding,
+ * accessibility support with proper ARIA labels, and requirements display for incomplete passwords.
  */
-type PasswordFieldWithStrengthProps = {
+export const PasswordFieldWithStrength: React.FC<{
   /** Whether the field is disabled */
   disabled?: boolean;
   /** Error message if validation failed */
@@ -24,14 +26,7 @@ type PasswordFieldWithStrengthProps = {
   touched?: boolean;
   /** Current password value */
   value: string;
-};
-
-/**
- * Password input field with real-time strength validation and visual feedback.
- * Features real-time password strength validation, visual strength indicator with color coding,
- * accessibility support with proper ARIA labels, and requirements display for incomplete passwords.
- */
-export const PasswordFieldWithStrength: React.FC<PasswordFieldWithStrengthProps> = ({
+}> = ({
   disabled = false,
   error,
   id,

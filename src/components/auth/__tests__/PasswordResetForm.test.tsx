@@ -6,12 +6,15 @@ import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it, vi} from 'vitest';
 
-import {AuthContext, type AuthContextType} from '@/contexts/AuthContext';
+import type {AuthContextType} from '@/contexts/AuthContext';
+import type {AuthResult} from '@/lib/auth';
+
+import {AuthContext} from '@/contexts/AuthContext';
 
 import {PasswordResetForm} from '../PasswordResetForm';
 
 // Mock auth context helper
-const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
   getSessionInfo: vi.fn(),
@@ -32,7 +35,12 @@ const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
 });
 
 // Test wrapper component
-const TestWrapper: React.FC = ({authContext, children}) => (
+type TestWrapperProps = {
+  authContext: AuthContextType;
+  children: React.ReactNode;
+};
+
+const TestWrapper: React.FC<TestWrapperProps> = ({authContext, children}) => (
   <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
 );
 
@@ -379,7 +387,7 @@ describe('PasswordResetForm', () => {
 
     it('should show loading text during form submission', async () => {
       const user = userEvent.setup();
-      const mockResetPassword = vi.fn(() => new Promise<never>(() => {})); // Never resolves
+      const mockResetPassword = vi.fn(() => new Promise<AuthResult<null>>(() => {})); // Never resolves
       const mockAuthContext = createMockAuthContext({
         resetPassword: mockResetPassword,
       });

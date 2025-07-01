@@ -1,4 +1,4 @@
-import type {AuthError, Session, User} from '@supabase/supabase-js';
+import type {AuthError, User} from '@supabase/supabase-js';
 
 import {supabase} from './supabase';
 
@@ -15,7 +15,7 @@ import {supabase} from './supabase';
  * result objects for easy consumption in React components.
  */
 
-export type AuthProvider = 'discord' | 'google';
+export type AuthProvider = 'apple' | 'discord' | 'google';
 
 // Authentication result types for consistent error handling
 export type AuthResult<T = User> = {
@@ -24,36 +24,34 @@ export type AuthResult<T = User> = {
   success: boolean;
 };
 
-export type AuthResultNoData = {
-  error: null | string;
-  success: boolean;
-};
-
+// Session info result type
 export type SessionInfoResult = {
   error: null | string;
   expiresAt: null | number;
   expiresIn: null | number;
   isExpired: boolean;
   needsRefresh: boolean;
-  session: null | Session;
+  session: unknown;
 };
 
+// Session refresh result type
 export type SessionRefreshResult = {
   error: null | string;
-  session: null | Session;
+  session: unknown;
   success: boolean;
 };
 
+// Session validation result type
 export type SessionValidationResult = {
   error: null | string;
   isValid: boolean;
-  session: null | Session;
+  session: unknown;
 };
 
 /**
  * Sign up a new user with email and password
  */
-export const signUp = async (email: string, password: string): Promise => {
+export const signUp = async (email: string, password: string): Promise<AuthResult<User>> => {
   try {
     const {data, error} = await supabase.auth.signUp({
       email,
@@ -86,7 +84,7 @@ export const signUp = async (email: string, password: string): Promise => {
 /**
  * Sign in an existing user with email and password
  */
-export const signIn = async (email: string, password: string): Promise => {
+export const signIn = async (email: string, password: string): Promise<AuthResult<User>> => {
   try {
     const {data, error} = await supabase.auth.signInWithPassword({
       email,
@@ -119,7 +117,7 @@ export const signIn = async (email: string, password: string): Promise => {
 /**
  * Sign in with OAuth provider (Discord, Google, Apple)
  */
-export const signInWithOAuth = async (provider: AuthProvider): Promise => {
+export const signInWithOAuth = async (provider: AuthProvider): Promise<AuthResult<User>> => {
   try {
     const {error} = await supabase.auth.signInWithOAuth({
       options: {
@@ -130,18 +128,21 @@ export const signInWithOAuth = async (provider: AuthProvider): Promise => {
 
     if (error) {
       return {
+        data: null,
         error: getAuthErrorMessage(error),
         success: false,
       };
     }
 
     return {
+      data: null,
       error: null,
       success: true,
     };
   } catch (err) {
     console.error('Unexpected OAuth error:', err);
     return {
+      data: null,
       error: 'An unexpected error occurred during OAuth login',
       success: false,
     };
@@ -151,7 +152,7 @@ export const signInWithOAuth = async (provider: AuthProvider): Promise => {
 /**
  * Send password reset email to user
  */
-export const resetPassword = async (email: string): Promise => {
+export const resetPassword = async (email: string): Promise<AuthResult<null>> => {
   try {
     const {error} = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/reset-password`,
@@ -159,18 +160,21 @@ export const resetPassword = async (email: string): Promise => {
 
     if (error) {
       return {
+        data: null,
         error: getAuthErrorMessage(error),
         success: false,
       };
     }
 
     return {
+      data: null,
       error: null,
       success: true,
     };
   } catch (err) {
     console.error('Unexpected password reset error:', err);
     return {
+      data: null,
       error: 'An unexpected error occurred while sending reset email',
       success: false,
     };
@@ -180,7 +184,7 @@ export const resetPassword = async (email: string): Promise => {
 /**
  * Update user password (requires current session)
  */
-export const updatePassword = async (newPassword: string): Promise => {
+export const updatePassword = async (newPassword: string): Promise<AuthResult<null>> => {
   try {
     const {error} = await supabase.auth.updateUser({
       password: newPassword,
@@ -188,18 +192,21 @@ export const updatePassword = async (newPassword: string): Promise => {
 
     if (error) {
       return {
+        data: null,
         error: getAuthErrorMessage(error),
         success: false,
       };
     }
 
     return {
+      data: null,
       error: null,
       success: true,
     };
   } catch (err) {
     console.error('Unexpected password update error:', err);
     return {
+      data: null,
       error: 'An unexpected error occurred while updating password',
       success: false,
     };
@@ -209,26 +216,32 @@ export const updatePassword = async (newPassword: string): Promise => {
 /**
  * Update user profile metadata (requires current session)
  */
-export const updateProfile = async (profileData: {display_name?: string; full_name?: string}): Promise => {
+export const updateProfile = async (profileData: {
+  display_name?: string;
+  full_name?: string;
+}): Promise<AuthResult<User>> => {
   try {
-    const {error} = await supabase.auth.updateUser({
+    const {data, error} = await supabase.auth.updateUser({
       data: profileData,
     });
 
     if (error) {
       return {
+        data: null,
         error: getAuthErrorMessage(error),
         success: false,
       };
     }
 
     return {
+      data: data.user,
       error: null,
       success: true,
     };
   } catch (err) {
     console.error('Unexpected profile update error:', err);
     return {
+      data: null,
       error: 'An unexpected error occurred while updating profile',
       success: false,
     };
@@ -238,24 +251,27 @@ export const updateProfile = async (profileData: {display_name?: string; full_na
 /**
  * Sign out the current user
  */
-export const signOut = async (): Promise => {
+export const signOut = async (): Promise<AuthResult<null>> => {
   try {
     const {error} = await supabase.auth.signOut();
 
     if (error) {
       return {
+        data: null,
         error: getAuthErrorMessage(error),
         success: false,
       };
     }
 
     return {
+      data: null,
       error: null,
       success: true,
     };
   } catch (err) {
     console.error('Unexpected signout error:', err);
     return {
+      data: null,
       error: 'An unexpected error occurred during signout',
       success: false,
     };
@@ -265,7 +281,7 @@ export const signOut = async (): Promise => {
 /**
  * Get the current user session
  */
-export const getCurrentUser = async (): Promise => {
+export const getCurrentUser = async (): Promise<null | User> => {
   try {
     const {
       data: {user},
@@ -368,7 +384,7 @@ const getPasswordStrength = (password: string): number => {
  * This function checks if the current session exists and is not expired.
  * It can be used to validate sessions before making authenticated requests.
  */
-export const validateSession = async (): Promise => {
+export const validateSession = async (): Promise<SessionValidationResult> => {
   try {
     const {
       data: {session},
@@ -423,7 +439,7 @@ export const validateSession = async (): Promise => {
  * This function attempts to refresh the current session using the refresh token.
  * It's useful for proactive session refresh or recovering from expired sessions.
  */
-export const refreshSession = async (): Promise => {
+export const refreshSession = async (): Promise<SessionRefreshResult> => {
   try {
     const {data, error} = await supabase.auth.refreshSession();
 
@@ -455,7 +471,7 @@ export const refreshSession = async (): Promise => {
  * This function provides detailed session information including
  * time until expiry and whether the session needs refresh.
  */
-export const getSessionInfo = async (): Promise => {
+export const getSessionInfo = async (): Promise<SessionInfoResult> => {
   try {
     const {
       data: {session},

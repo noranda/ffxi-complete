@@ -2,7 +2,7 @@
  * Login form with email/password authentication and OAuth support
  */
 
-import {Field, Form, Formik, type FieldProps} from 'formik';
+import {Field, type FieldProps, Form, Formik} from 'formik';
 import {useState} from 'react';
 import * as Yup from 'yup';
 
@@ -18,10 +18,13 @@ import {OAuthButtons} from './OAuthButtons';
  * Login form props
  * Extends shared auth component patterns for consistency
  */
-export type LoginFormProps = BaseAuthFormProps & {
-  readonly onForgotPassword?: () => void;
-  readonly onSuccess?: () => void;
-  readonly onSwitchToRegister?: () => void;
+type LoginFormProps = BaseAuthFormProps & {
+  /** Callback when user forgot their password */
+  onForgotPassword?: () => void;
+  /** Callback when authentication is successful */
+  onSuccess?: () => void;
+  /** Callback when user wants to switch to register */
+  onSwitchToRegister?: () => void;
 };
 
 /**
@@ -38,7 +41,7 @@ const loginSchema = Yup.object({
 /**
  * Login form component with comprehensive error handling and OAuth support
  */
-export const LoginForm: React.FC = ({className, onForgotPassword, onSuccess, onSwitchToRegister}) => {
+export const LoginForm: React.FC<LoginFormProps> = ({className, onForgotPassword, onSuccess, onSwitchToRegister}) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Auth context
@@ -156,7 +159,7 @@ export const LoginForm: React.FC = ({className, onForgotPassword, onSuccess, onS
                       aria-invalid={touched.email === true && errors.email !== undefined}
                       disabled={isSubmitting || authLoading}
                       id="email"
-                      onChange={(event: React.ChangeEvent) => {
+                      onChange={event => {
                         field.onChange(event);
                         if (authError !== null) {
                           clearError();

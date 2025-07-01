@@ -131,7 +131,7 @@ describe('LeftSidebar', () => {
     });
   });
 
-  describe('integration', () => {
+  describe('integration', () =>
     it('should work within MainLayout', () => {
       // This test ensures the component integrates properly with the layout system
       render(<LeftSidebar character={mockCharacter} />);
@@ -139,6 +139,5 @@ describe('LeftSidebar', () => {
       const sidebar = screen.getByTestId('left-sidebar');
       // Should have proper positioning classes for layout integration
       expect(sidebar).toHaveClass('flex-col');
-    });
-  });
+    }));
 });

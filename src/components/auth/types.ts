@@ -6,25 +6,6 @@
  */
 
 /**
- * Authentication callback function types
- * Standardized callbacks for auth component interactions
- */
-export type AuthCallbacks = {
-  /** Callback when user cancels the current action */
-  onCancel?: () => void;
-  /** Callback when user forgot their password */
-  onForgotPassword?: () => void;
-  /** Callback when authentication is successful */
-  onSuccess?: () => void;
-  /** Callback when user wants to switch to login */
-  onSwitchToLogin?: () => void;
-  /** Callback when user wants to reset password */
-  onSwitchToPasswordReset?: () => void;
-  /** Callback when user wants to switch to register */
-  onSwitchToRegister?: () => void;
-};
-
-/**
  * Auth form validation state
  */
 export type AuthFormState = {

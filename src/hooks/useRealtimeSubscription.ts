@@ -3,20 +3,19 @@
  * Provides automatic subscription management with cleanup
  */
 
-import type {RealtimeChannel} from '@supabase/supabase-js';
-
+import {type RealtimeChannel} from '@supabase/supabase-js';
 import {useEffect, useRef} from 'react';
 
 import {supabase} from '@/lib/supabase';
 
-type RealtimePayload<T = Record> = {
+type RealtimePayload<T = Record<string, unknown>> = {
   errors: Error[] | null;
   eventType: SubscriptionEvent;
   new: null | T;
   old: null | T;
 };
 
-type SubscriptionCallback<T = Record> = (payload: RealtimePayload) => void;
+type SubscriptionCallback<T = Record<string, unknown>> = (payload: RealtimePayload<T>) => void;
 
 type SubscriptionEvent = '*' | 'DELETE' | 'INSERT' | 'UPDATE';
 
@@ -35,15 +34,16 @@ type UseRealtimeSubscriptionOptions = {
  * Hook for managing real-time subscriptions to Supabase tables
  * Automatically handles subscription lifecycle and cleanup
  */
-export const useRealtimeSubscription = (options: UseRealtimeSubscriptionOptions, callback: SubscriptionCallback) => {
+export const useRealtimeSubscription = <_T = Record<string, unknown>>(
+  options: UseRealtimeSubscriptionOptions,
+  callback: SubscriptionCallback<_T>
+) => {
   const {enabled = true, event = '*', filter, table} = options;
   const channelRef = useRef<null | RealtimeChannel>(null);
   const callbackRef = useRef(callback);
 
   // Keep callback reference current
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
+  useEffect(() => void (callbackRef.current = callback), [callback]);
 
   useEffect(() => {
     if (!enabled) {
@@ -60,7 +60,11 @@ export const useRealtimeSubscription = (options: UseRealtimeSubscriptionOptions,
     // Using type assertion to bypass TypeScript overload issues
     (
       channel as RealtimeChannel & {
-        on: (event: string, config: Record, callback: (payload: RealtimePayload) => void) => RealtimeChannel;
+        on: (
+          event: string,
+          config: Record<string, unknown>,
+          callback: (payload: RealtimePayload) => void
+        ) => RealtimeChannel;
       }
     ).on(
       'postgres_changes',
@@ -70,7 +74,7 @@ export const useRealtimeSubscription = (options: UseRealtimeSubscriptionOptions,
         schema: 'public',
         table,
       },
-      (payload: RealtimePayload) => callbackRef.current(payload)
+      (payload: unknown) => callbackRef.current(payload as RealtimePayload<_T>)
     );
 
     // Subscribe to the channel
@@ -88,7 +92,7 @@ export const useRealtimeSubscription = (options: UseRealtimeSubscriptionOptions,
     return () => {
       if (channelRef.current) {
         console.log(`🔄 Unsubscribing from ${table} changes`);
-        supabase.removeChannel(channelRef.current);
+        void supabase.removeChannel(channelRef.current);
         channelRef.current = null;
       }
     };
@@ -98,7 +102,7 @@ export const useRealtimeSubscription = (options: UseRealtimeSubscriptionOptions,
   useEffect(
     () => () => {
       if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
+        void supabase.removeChannel(channelRef.current);
       }
     },
     []

@@ -7,15 +7,15 @@
 
 import {
   FACE_OPTIONS,
+  type FaceOption,
   FFXI_GENDERS,
   FFXI_RACES,
-  HAIR_STYLES,
-  PORTRAIT_CONFIG,
-  RACE_GENDER_COMBINATIONS,
-  type FaceOption,
   type FFXIGender,
   type FFXIRace,
+  HAIR_STYLES,
   type HairStyle,
+  PORTRAIT_CONFIG,
+  RACE_GENDER_COMBINATIONS,
 } from './constants';
 
 // =============================================================================

@@ -25,6 +25,11 @@ import {createUser} from '@/lib/user';
 // Regular import for type-only usage
 import {ComponentProps} from 'react';
 type ButtonProps = ComponentProps;
+
+// Multiple separate type imports
+import type {Props} from '@/types';
+import type {Config} from '@/types';
+import {utils} from '@/types';
 ```
 
 ### ✅ Good

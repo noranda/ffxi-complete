@@ -52,7 +52,11 @@ const formatServerInfo = (character: Character): string => character.server || '
  * Character Display Component
  * Renders character information including portrait, name, and server
  */
-const CharacterDisplay: React.FC = ({character}) => (
+type CharacterDisplayProps = {
+  character: Character;
+};
+
+const CharacterDisplay: React.FC<CharacterDisplayProps> = ({character}) => (
   <div className="space-y-3" data-testid="character-display">
     {/* Character Portrait */}
     <div className="flex justify-center">
@@ -91,14 +95,7 @@ const CharacterDisplay: React.FC = ({character}) => (
 const CharacterPlaceholder: React.FC = () => (
   <div className="space-y-3 text-center" data-testid="character-placeholder">
     <div className="flex justify-center">
-      <div
-        className={cn(
-          CHARACTER_PLACEHOLDER.SIZE_CLASSES,
-          'border-muted-foreground/50 bg-muted flex items-center justify-center rounded-full border-2 border-dashed'
-        )}
-      >
-        <span className="text-muted-foreground text-xs">{CHARACTER_PLACEHOLDER.ICON_TEXT}</span>
-      </div>
+      <span className="text-muted-foreground text-xs">{CHARACTER_PLACEHOLDER.ICON_TEXT}</span>
     </div>
 
     <Typography className="text-muted-foreground text-sm" variant="p">
@@ -117,7 +114,7 @@ const CharacterPlaceholder: React.FC = () => (
  * - Proper accessibility attributes
  * - Integration with MainLayout system
  */
-export const LeftSidebar: React.FC = ({character, className}) => (
+export const LeftSidebar: React.FC<LeftSidebarProps> = ({character, className}) => (
   <aside
     aria-label="Character navigation"
     className={cn(

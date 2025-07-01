@@ -6,7 +6,9 @@ import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
-import {AuthContext, type AuthContextType} from '@/contexts/AuthContext';
+import type {AuthContextType} from '@/contexts/AuthContext';
+
+import {AuthContext} from '@/contexts/AuthContext';
 
 import {Login} from '../Login';
 
@@ -17,7 +19,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 // Mock auth context helper
-const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
+const createMockAuthContext = (overrides: Partial<AuthContextType> = {}): AuthContextType => ({
   clearError: vi.fn(),
   error: null,
   getSessionInfo: vi.fn(),
@@ -38,10 +40,14 @@ const createMockAuthContext = (overrides: Partial = {}): AuthContextType => ({
 });
 
 // Test wrapper component
-const TestWrapper: React.FC = ({authContext, children}) => (
+type TestWrapperProps = {
+  authContext: AuthContextType;
+  children: React.ReactNode;
+};
+
+const TestWrapper: React.FC<TestWrapperProps> = ({authContext, children}) => (
   <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
 );
-
 describe('Login Page', () => {
   beforeEach(() => vi.clearAllMocks());
 

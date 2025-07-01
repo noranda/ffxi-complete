@@ -609,7 +609,89 @@ const preferSingleLineArrowFunctions = {
 /** @type {import('eslint').Rule.RuleModule} */
 const noDuplicateModuleImports = {
   create(context) {
-    const importsByModule = new Map();
+    let importsByModule = new Map();
+
+    /**
+     * Combines import specifiers from multiple import statements, removing duplicates
+     * @param {Array<import('eslint').Rule.Node>} imports - Array of import declaration nodes
+     * @param {string} moduleName - The module name being imported from
+     * @returns {{combinedImport: string, fixes: Array}} Combined import statement and fix array
+     */
+    function combineImportSpecifiers(imports, moduleName) {
+      const specifierSet = new Set(); // For deduplication
+      let hasDefaultImport = false;
+      let defaultImportName = '';
+
+      // Collect all specifiers from all import statements for this module
+      imports.forEach(importNode =>
+        importNode.specifiers.forEach(spec => {
+          if (spec.type === 'ImportDefaultSpecifier') {
+            hasDefaultImport = true;
+            defaultImportName = spec.local.name;
+          } else if (spec.type === 'ImportSpecifier') {
+            // Check if this is a type import
+            const isTypeImport = importNode.importKind === 'type' || spec.importKind === 'type';
+
+            let specifierText;
+            if (isTypeImport) {
+              // Handle type imports
+              if (spec.imported.name !== spec.local.name) {
+                specifierText = `type ${spec.imported.name} as ${spec.local.name}`;
+              } else {
+                specifierText = `type ${spec.imported.name}`;
+              }
+            } else {
+              // Handle regular imports
+              if (spec.imported.name !== spec.local.name) {
+                specifierText = `${spec.imported.name} as ${spec.local.name}`;
+              } else {
+                specifierText = spec.imported.name;
+              }
+            }
+
+            // Add to set for deduplication
+            specifierSet.add(specifierText);
+          }
+        })
+      );
+
+      // Convert set to array to maintain deduplication
+      const allSpecifiers = Array.from(specifierSet);
+
+      // Create the combined import statement
+      let combinedImport;
+      if (hasDefaultImport && allSpecifiers.length > 0) {
+        combinedImport = `import ${defaultImportName}, {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+      } else if (hasDefaultImport) {
+        combinedImport = `import ${defaultImportName} from '${moduleName}';`;
+      } else {
+        combinedImport = `import {${allSpecifiers.join(', ')}} from '${moduleName}';`;
+      }
+
+      return {allSpecifiers, combinedImport};
+    }
+
+    /**
+     * Creates fix array for combining imports
+     * @param {import('eslint').Linter.RuleFixer} fixer - ESLint fixer
+     * @param {Array<import('eslint').Rule.Node>} imports - Array of import declarations
+     * @param {string} combinedImport - The combined import statement
+     * @returns {Array} Array of fixes
+     */
+    function createCombinedImportFixes(fixer, imports, combinedImport) {
+      const fixes = [];
+      const firstImport = imports[0];
+
+      // Replace the first import with the combined import
+      fixes.push(fixer.replaceText(firstImport, combinedImport));
+
+      // Remove all other imports from the same module
+      for (let i = 1; i < imports.length; i++) {
+        fixes.push(fixer.remove(imports[i]));
+      }
+
+      return fixes;
+    }
 
     /**
      * Checks if an import declaration can be combined with existing imports
@@ -633,66 +715,10 @@ const noDuplicateModuleImports = {
 
       // If we have multiple imports from the same module, report an error
       if (existingImports.length > 1) {
-        const firstImport = existingImports[0];
-
         context.report({
           fix(fixer) {
-            // Combine all imports from the same module into a single import statement
-            const allSpecifiers = [];
-            let hasDefaultImport = false;
-            let defaultImportName = '';
-
-            // Collect all specifiers from all import statements for this module
-            existingImports.forEach(importNode =>
-              importNode.specifiers.forEach(spec => {
-                if (spec.type === 'ImportDefaultSpecifier') {
-                  hasDefaultImport = true;
-                  defaultImportName = spec.local.name;
-                } else if (spec.type === 'ImportSpecifier') {
-                  // Check if this is a type import
-                  const isTypeImport = importNode.importKind === 'type' || spec.importKind === 'type';
-
-                  if (isTypeImport) {
-                    // Handle type imports
-                    if (spec.imported.name !== spec.local.name) {
-                      allSpecifiers.push(`type ${spec.imported.name} as ${spec.local.name}`);
-                    } else {
-                      allSpecifiers.push(`type ${spec.imported.name}`);
-                    }
-                  } else {
-                    // Handle regular imports
-                    if (spec.imported.name !== spec.local.name) {
-                      allSpecifiers.push(`${spec.imported.name} as ${spec.local.name}`);
-                    } else {
-                      allSpecifiers.push(spec.imported.name);
-                    }
-                  }
-                }
-              })
-            );
-
-            // Create the combined import statement
-            let combinedImport;
-            if (hasDefaultImport && allSpecifiers.length > 0) {
-              combinedImport = `import ${defaultImportName}, {${allSpecifiers.join(', ')}} from '${moduleName}';`;
-            } else if (hasDefaultImport) {
-              combinedImport = `import ${defaultImportName} from '${moduleName}';`;
-            } else {
-              combinedImport = `import {${allSpecifiers.join(', ')}} from '${moduleName}';`;
-            }
-
-            // Remove all existing imports and replace the first one with the combined import
-            const fixes = [];
-
-            // Replace the first import with the combined import
-            fixes.push(fixer.replaceText(firstImport, combinedImport));
-
-            // Remove all other imports from the same module
-            for (let i = 1; i < existingImports.length; i++) {
-              fixes.push(fixer.remove(existingImports[i]));
-            }
-
-            return fixes;
+            const {combinedImport} = combineImportSpecifiers(existingImports, moduleName);
+            return createCombinedImportFixes(fixer, existingImports, combinedImport);
           },
           message: `Multiple import statements from '${moduleName}' should be combined into a single import declaration`,
           node,
@@ -700,53 +726,8 @@ const noDuplicateModuleImports = {
             {
               desc: `Combine imports from '${moduleName}' into a single statement`,
               fix(fixer) {
-                // Same fix logic as above but as a suggestion
-                const allSpecifiers = [];
-                let hasDefaultImport = false;
-                let defaultImportName = '';
-
-                existingImports.forEach(importNode =>
-                  importNode.specifiers.forEach(spec => {
-                    if (spec.type === 'ImportDefaultSpecifier') {
-                      hasDefaultImport = true;
-                      defaultImportName = spec.local.name;
-                    } else if (spec.type === 'ImportSpecifier') {
-                      const isTypeImport = importNode.importKind === 'type' || spec.importKind === 'type';
-
-                      if (isTypeImport) {
-                        if (spec.imported.name !== spec.local.name) {
-                          allSpecifiers.push(`type ${spec.imported.name} as ${spec.local.name}`);
-                        } else {
-                          allSpecifiers.push(`type ${spec.imported.name}`);
-                        }
-                      } else {
-                        if (spec.imported.name !== spec.local.name) {
-                          allSpecifiers.push(`${spec.imported.name} as ${spec.local.name}`);
-                        } else {
-                          allSpecifiers.push(spec.imported.name);
-                        }
-                      }
-                    }
-                  })
-                );
-
-                let combinedImport;
-                if (hasDefaultImport && allSpecifiers.length > 0) {
-                  combinedImport = `import ${defaultImportName}, {${allSpecifiers.join(', ')}} from '${moduleName}';`;
-                } else if (hasDefaultImport) {
-                  combinedImport = `import ${defaultImportName} from '${moduleName}';`;
-                } else {
-                  combinedImport = `import {${allSpecifiers.join(', ')}} from '${moduleName}';`;
-                }
-
-                const fixes = [];
-                fixes.push(fixer.replaceText(firstImport, combinedImport));
-
-                for (let i = 1; i < existingImports.length; i++) {
-                  fixes.push(fixer.remove(existingImports[i]));
-                }
-
-                return fixes;
+                const {combinedImport} = combineImportSpecifiers(existingImports, moduleName);
+                return createCombinedImportFixes(fixer, existingImports, combinedImport);
               },
             },
           ],
@@ -756,6 +737,10 @@ const noDuplicateModuleImports = {
 
     return {
       ImportDeclaration: checkImportDeclaration,
+      // Reset the map at the start of each file to prevent cross-file interference
+      Program() {
+        importsByModule = new Map();
+      },
     };
   },
   meta: {

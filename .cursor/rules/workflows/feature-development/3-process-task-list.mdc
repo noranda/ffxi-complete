@@ -40,34 +40,72 @@ Guidelines for managing task lists in markdown files to track progress on comple
      - Analyze requirements and write comprehensive test cases
      - Ensure tests fail for the right reasons (feature not implemented)
      - Cover happy path, error cases, edge cases, and boundary conditions
-     - **Document what you're testing and why** - Provide clear rationale for test cases
   2. **GREEN Phase:** Write minimal implementation to make tests pass
      - Implement only what's needed to make tests pass
      - Avoid over-engineering or adding extra features
      - Focus on making tests pass, not perfect code
-     - **Document implementation decisions** - Explain approach taken to satisfy tests
   3. **REFACTOR Phase:** Clean up code while maintaining green tests
      - Improve code structure, readability, and maintainability
      - Extract functions, remove duplication, improve naming
      - Ensure all tests remain green throughout refactoring
-     - **Document improvements made** - Explain what was refactored and why
   4. **🎯 TDD COMPLETION CHECKPOINT** 🎯
      - **STOP HERE** and present TDD cycle completion to user
      - **USER CONFIRMATION REQUIRED** before proceeding to completion protocol
      - Show summary: ✅ RED → ✅ GREEN → ✅ REFACTOR phases completed
-     - **Provide evidence** of each phase with specific examples of tests, implementation, and refactoring
-     - **COLORFUL REMINDER**: 🚨 **IMPORTANT** 🚨 Once user confirms TDD work, proceed to Step 4 (Completion Protocol)
-     - **DO NOT SKIP**: The completion protocol in Step 4 is MANDATORY after TDD confirmation
+     - **COLORFUL REMINDER**: 🚨 **IMPORTANT** 🚨 Once user confirms TDD work, AI must continue with remaining
+       completion protocol items (Status Checks, Code Guidelines Assessment, etc.)
+     - **DO NOT SKIP**: The completion protocol items are MANDATORY after TDD confirmation
+- **MANDATORY Completion Protocol for ANY Task:**
+  1. **Complete the TDD cycle (RED-GREEN-REFACTOR) for implementation work**
+  2. **Run Status Checks** (using check-status workflow):
+     - `yarn lint` - Check for ESLint errors
+     - `yarn test --run` - Run all tests without watch mode
+     - `yarn type-check` - TypeScript compiler check
+     - `yarn prettier --check .` - Format verification
+  3. **Code Guidelines Assessment** (following code-guidelines-assessment.mdc methodology):
+     - **ONLY for files added or edited during this task**
+     - Use `git status --porcelain` to identify changed files
+     - **MANDATORY: Check ALL 4 code-standards fragments against EVERY line in EVERY changed file:**
+       - typescript-patterns.mdc
+       - component-patterns.mdc
+       - code-documentation.mdc
+       - code-quality.mdc
+     - **NO SHORTCUTS ALLOWED**: Every rule in every fragment must be checked against every applicable line
+     - **NO SAMPLING**: Must examine entire file content, not representative sections
+     - **NO SKIPPING**: Cannot skip any rules or parts of rules - complete assessment required
+     - Document complete assessment with specific line evidence for each fragment
+     - Fix ANY violations immediately before proceeding
+  4. **TDD Verification** - Confirm RED-GREEN-REFACTOR cycle completion:
+     - ✅ Tests written FIRST (RED phase documented)
+     - ✅ Minimal implementation created (GREEN phase documented)
+     - ✅ Code refactored while maintaining green tests (REFACTOR phase documented)
+  5. **Status Report** - Print comprehensive status showing:
+     - TDD cycle completion (🟢 RED-GREEN-REFACTOR documented/🔴 TDD not followed)
+     - Status checks results (🟢/🟠/🔴 for lint, tests, types, format)
+     - Code guidelines assessment results for changed files
+     - Confirmation that everything is ready for task completion
+  6. **ONLY THEN** mark task as completed by changing `[ ]` to `[x]`
+  7. **If all subtasks** underneath a parent task are now `[x]`, also mark the **parent task** as completed
+  8. **Pause and wait** for user's go-ahead before starting next task
+
+- **Zero Tolerance Policy:**
+  - **🔴 TDD violations:** MUST follow RED-GREEN-REFACTOR cycle for ALL development tasks - no exceptions
+  - **🔴 Red status:** MUST fix immediately before proceeding to next step
+  - **🟠 Orange status:** MUST fix unless explicitly documented as acceptable sub-task
+  - **Code violations:** ANY non-adherence to ANY rule in ANY code-standards fragment must be fixed before task completion
+  - **Complete coverage:** ALL 4 code-standards fragments must be assessed against ALL lines in ALL changed files
+  - **No exceptions:** Cannot proceed to next task until ALL checks are green, TDD cycle complete, and ALL
+  guidelines verified with complete evidence
 
 ## Task List Maintenance
 
 1. **Update the task list as you work:**
-   - Mark tasks and subtasks as completed per Step 4 (Completion Protocol)
-   - Add new tasks as they emerge
+   - Mark tasks and subtasks as completed (`[x]`) per the protocol above.
+   - Add new tasks as they emerge.
 
 2. **Maintain the "Relevant Files" section:**
-   - List every file created or modified
-   - Give each file a one-line description of its purpose
+   - List every file created or modified.
+   - Give each file a one-line description of its purpose.
 
 ## AI Instructions
 
@@ -79,55 +117,44 @@ When working with task lists, the AI must:
    - **GREEN:** Write minimal code to make tests pass, document implementation decisions
    - **REFACTOR:** Clean up code while maintaining green tests, document improvements made
 3. **During work:** Regularly update the task list file after finishing any significant work
-4. **After TDD completion:** Present TDD cycle completion to user and wait for confirmation
-5. **Upon user approval:** Proceed to Step 4 (Completion Protocol) for final task completion
+4. **After implementation:** Follow the MANDATORY Completion Protocol:
+   - Run all status checks (`yarn lint`, `yarn test --run`, `yarn type-check`, `yarn prettier --check .`)
+   - Identify changed files using `git status --porcelain`
+   - **EXHAUSTIVE Code Guidelines Assessment:** Check ALL 4 code-standards fragments against EVERY line in
+     EVERY changed file:
+     - typescript-patterns.mdc: Every type definition, shared component types, utility types
+     - component-patterns.mdc: Every export pattern, styling with tailwind-variants
+     - code-documentation.mdc: Every exported item JSDoc, inline commenting
+     - code-quality.mdc: Every error pattern, testing considerations, performance guidelines
+   - **COMPLETE EVIDENCE REQUIRED:** Document specific line numbers and findings for each fragment
+   - Fix ANY violations immediately before proceeding
+     - Verify and document TDD cycle completion (RED-GREEN-REFACTOR)
+     - Print comprehensive status report with complete evidence for all 4 fragments
+     - ONLY mark task as completed (`[x]`) after ALL checks pass, TDD cycle complete, and ALL 4 fragments
+       verified with complete evidence
+5. **Task completion:** Mark parent task `[x]` once ALL subtasks are `[x]`
 6. **File maintenance:** Keep "Relevant Files" section accurate and up to date
 7. **New tasks:** Add newly discovered tasks as they emerge
-
-**Mandatory TDD Execution:**
-
-- **Never write implementation before tests** - Tests must be written first and must fail
-- **Document each phase thoroughly** - Explain what you're testing, why, and what you implemented
-- **Always complete refactor phase** - Clean up code while ensuring tests remain green
-- **Stop at TDD checkpoint** - Present completion summary and wait for user confirmation
-- **No shortcuts allowed** - Every development task must follow complete RED-GREEN-REFACTOR cycle
-
-**Pause and Confirmation Requirements:**
-
-- **Mandatory pause after TDD** - Cannot proceed to Step 4 without stopping first
-- **Present clear summary** - Show ✅ RED → ✅ GREEN → ✅ REFACTOR phases completed
-- **Wait for explicit approval** - User must confirm before proceeding to completion protocol
-- **Reference Step 4** - Direct user to completion protocol when ready
+8. **User approval:** Pause after each task completion and wait for user's go-ahead
 
 ## Critical Requirements
 
 - **MANDATORY TDD:** Every development task MUST follow RED-GREEN-REFACTOR cycle - no exceptions
 - **TDD DOCUMENTATION:** Must document each phase of TDD cycle with evidence of tests-first approach
 - **NO TDD SHORTCUTS:** Cannot write implementation before tests, cannot skip refactor phase
-- **USER CONFIRMATION:** Must pause after TDD completion and wait for user approval before proceeding to Step 4
-- **STEP 4 MANDATORY:** Completion protocol in Step 4 is required after TDD confirmation
+- **NO SHORTCUTS:** Every task completion MUST follow the full protocol with ALL 4 fragments
+- **NO SAMPLING:** Code guidelines assessment must examine EVERY line in EVERY file, not representative sections
+- **NO SKIPPING:** Cannot skip ANY rules or ANY parts of rules in ANY fragment
+- **NO ASSUMPTIONS:** Manual verification required before tool validation for EVERY fragment
+- **NO EXCEPTIONS:** Zero tolerance for red or orange status without explicit documentation
+- **COMPLETE COVERAGE:** ALL 4 code-standards fragments MUST be checked against ALL lines in ALL changed files
+- **EVIDENCE-BASED:** All assessments must include specific line numbers and evidence for EVERY fragment
+- **SYSTEMATIC:** Use the fragment-by-fragment assessment template for ALL 4 code standards
+- **EXHAUSTIVE DOCUMENTATION:** Must document findings for every fragment, even if compliant
 
-## Zero Tolerance Policy for TDD
+**ABSOLUTE REQUIREMENTS:**
 
-- **🔴 TDD violations:** MUST follow RED-GREEN-REFACTOR cycle for ALL development tasks - no exceptions
-- **🔴 Implementation before tests:** Cannot write any implementation code before tests are written and failing
-- **🔴 Skipping refactor:** Cannot skip the refactor phase - code must be cleaned up while maintaining green tests
-- **🔴 Missing documentation:** Each TDD phase must be documented with evidence of proper approach
-- **🔴 No user confirmation:** Cannot proceed to Step 4 without explicit user approval after TDD completion
-
-## Absolute Requirements for Step 3
-
-**TDD COMPLIANCE Requirements:**
-
-1. **RED Phase Evidence Required:** Must demonstrate tests were written FIRST and fail for correct reasons
-2. **GREEN Phase Evidence Required:** Must show minimal implementation that makes tests pass
-3. **REFACTOR Phase Evidence Required:** Must document code improvements while maintaining green tests
-4. **User Pause Mandatory:** MUST stop after TDD completion and wait for user confirmation
-5. **No Step 4 Without Approval:** Cannot proceed to completion protocol without user go-ahead
-
-**Documentation Standards:**
-
-- Document what you're testing and why in RED phase
-- Document implementation decisions in GREEN phase
-- Document improvements made in REFACTOR phase
-- Present clear summary of ✅ RED → ✅ GREEN → ✅ REFACTOR completion
+1. **TDD COMPLIANCE:** Every development task must demonstrate RED-GREEN-REFACTOR cycle with documented evidence
+2. **CODE STANDARDS:** Every line in every changed file must be checked against every applicable rule in all 4
+   code-standards fragments
+3. **NO COMPLETION:** No task can be marked complete without TDD cycle documentation AND complete verification of all fragments
