@@ -2,11 +2,53 @@ import '@testing-library/jest-dom/vitest';
 import {cleanup} from '@testing-library/react';
 import {afterEach, beforeAll, vi} from 'vitest';
 
+// Mock Supabase environment variables for testing
+vi.mock('../lib/supabase', () => {
+  const mockSupabase = {
+    auth: {
+      getSession: vi.fn().mockResolvedValue({data: {session: null}, error: null}),
+      getUser: vi.fn().mockResolvedValue({data: {user: null}, error: null}),
+      onAuthStateChange: vi.fn().mockReturnValue({data: {subscription: {unsubscribe: vi.fn()}}}),
+      refreshSession: vi.fn().mockResolvedValue({data: {}, error: null}),
+      resetPasswordForEmail: vi.fn().mockResolvedValue({data: {}, error: null}),
+      signInWithOAuth: vi.fn().mockResolvedValue({data: {}, error: null}),
+      signInWithPassword: vi.fn().mockResolvedValue({data: {}, error: null}),
+      signOut: vi.fn().mockResolvedValue({error: null}),
+      signUp: vi.fn().mockResolvedValue({data: {}, error: null}),
+      updateUser: vi.fn().mockResolvedValue({data: {}, error: null}),
+    },
+    delete: vi.fn().mockResolvedValue({data: null, error: null}),
+    eq: vi.fn().mockReturnThis(),
+    from: vi.fn().mockReturnThis(),
+    insert: vi.fn().mockResolvedValue({
+      data: null,
+      error: {message: 'new row violates row-level security policy'},
+    }),
+    limit: vi.fn().mockResolvedValue({data: [], error: null}),
+    select: vi.fn().mockReturnThis(),
+    single: vi.fn().mockResolvedValue({data: null, error: null}),
+    storage: {
+      download: vi.fn().mockResolvedValue({data: null, error: null}),
+      from: vi.fn().mockReturnThis(),
+      upload: vi.fn().mockResolvedValue({data: {}, error: null}),
+    },
+    update: vi.fn().mockReturnThis(),
+  };
+
+  return {
+    supabase: mockSupabase,
+  };
+});
+
 // Cleanup after each test case (e.g. clearing jsdom)
 afterEach(() => cleanup());
 
 // Mock browser APIs that are not available in jsdom
 beforeAll(() => {
+  // Mock environment variables for tests
+  vi.stubEnv('VITE_SUPABASE_URL', 'https://test.supabase.co');
+  vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'test-anon-key');
+
   // Mock window.matchMedia for Drawer component (vaul library)
   Object.defineProperty(window, 'matchMedia', {
     value: vi.fn().mockImplementation(
