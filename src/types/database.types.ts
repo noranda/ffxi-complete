@@ -252,6 +252,42 @@ export type Database = {
           user_id?: string;
         };
       };
+      dev_icon_tags: {
+        Insert: {
+          created_at?: string;
+          icon_category: string;
+          icon_id: number;
+          id?: string;
+          metadata?: Json;
+          original_tags?: string[];
+          tags: string[];
+          updated_at?: string;
+          user_id: string;
+        };
+        Relationships: [];
+        Row: {
+          created_at: string;
+          icon_category: string;
+          icon_id: number;
+          id: string;
+          metadata: Json;
+          original_tags: string[];
+          tags: string[];
+          updated_at: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          icon_category?: string;
+          icon_id?: number;
+          id?: string;
+          metadata?: Json;
+          original_tags?: string[];
+          tags?: string[];
+          updated_at?: string;
+          user_id?: string;
+        };
+      };
       jobs: {
         Insert: {
           created_at?: string;

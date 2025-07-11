@@ -68,7 +68,7 @@ describe('LeftSidebar', () => {
 
       const sidebar = screen.getByTestId('left-sidebar');
       // Should have fixed width on desktop
-      expect(sidebar).toHaveClass('md:w-64');
+      expect(sidebar).toHaveClass('md:w-48');
     });
   });
 
@@ -126,8 +126,8 @@ describe('LeftSidebar', () => {
     it('should have proper heading structure', () => {
       render(<LeftSidebar character={mockCharacter} />);
 
-      const heading = screen.getByRole('heading', {level: 2});
-      expect(heading).toHaveTextContent('Character');
+      const heading = screen.getByRole('heading', {level: 3});
+      expect(heading).toHaveTextContent('TestChar');
     });
   });
 

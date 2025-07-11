@@ -131,18 +131,13 @@ describe('MainLayout', () => {
 
     it('should support sidebar areas', () => {
       render(
-        <MainLayout
-          leftSidebar={<div data-testid="left-sidebar">Left</div>}
-          rightSidebar={<div data-testid="right-sidebar">Right</div>}
-        >
+        <MainLayout leftSidebar={<div data-testid="left-sidebar">Left</div>}>
           <div>Content</div>
         </MainLayout>
       );
 
       expect(screen.getByTestId('left-sidebar-area')).toBeInTheDocument();
-      expect(screen.getByTestId('right-sidebar-area')).toBeInTheDocument();
       expect(screen.getByTestId('left-sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('right-sidebar')).toBeInTheDocument();
     });
 
     it('should support footer area', () => {
@@ -164,7 +159,6 @@ describe('MainLayout', () => {
           footer={<div data-testid="footer">Footer</div>}
           header={<div data-testid="header">Header</div>}
           leftSidebar={<div data-testid="left">Left</div>}
-          rightSidebar={<div data-testid="right">Right</div>}
         >
           <div data-testid="main">Main Content</div>
         </MainLayout>
@@ -172,7 +166,6 @@ describe('MainLayout', () => {
 
       expect(screen.getByTestId('header')).toBeInTheDocument();
       expect(screen.getByTestId('left')).toBeInTheDocument();
-      expect(screen.getByTestId('right')).toBeInTheDocument();
       expect(screen.getByTestId('footer')).toBeInTheDocument();
       expect(screen.getByTestId('main')).toBeInTheDocument();
     });
@@ -223,7 +216,11 @@ describe('MainLayout', () => {
       );
 
       const contentArea = screen.getByTestId('main-content-area');
-      expect(contentArea).toHaveClass('overflow-auto');
+      expect(contentArea).toHaveClass('overflow-hidden');
+
+      // The actual scrolling element is the inner content container
+      const contentContainer = contentArea.querySelector('.flex-1.overflow-auto');
+      expect(contentContainer).toBeInTheDocument();
     });
 
     it('should prevent body scroll when needed', () => {

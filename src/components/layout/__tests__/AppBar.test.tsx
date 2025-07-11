@@ -26,20 +26,20 @@ describe('AppBar', () => {
       expect(screen.getByText('FFXI Complete')).toBeInTheDocument();
     });
 
-    it('should apply fixed positioning for full-width coverage', () => {
+    it('should apply flex layout for content organization', () => {
       render(<AppBar />);
 
       const appBar = screen.getByTestId('app-bar');
-      expect(appBar).toHaveClass('fixed', 'top-0', 'left-0', 'right-0');
+      expect(appBar).toHaveClass('flex', 'h-full', 'items-center', 'justify-between');
     });
   });
 
   describe('Turquoise Theme Integration', () => {
-    it('should apply turquoise-based color scheme', () => {
+    it('should apply dark color scheme', () => {
       render(<AppBar />);
 
       const appBar = screen.getByTestId('app-bar');
-      expect(appBar).toHaveClass('bg-teal-900/80');
+      expect(appBar).toHaveClass('bg-[#21252a]');
     });
 
     it('should use backdrop blur for glass effect', () => {
@@ -99,7 +99,7 @@ describe('AppBar', () => {
       render(<AppBar isCollectionSettingsOpen />);
 
       const toggle = screen.getByTestId('collection-settings-toggle');
-      expect(toggle).toHaveClass('bg-teal-700');
+      expect(toggle).toHaveClass('bg-cyan-700');
     });
   });
 
@@ -108,9 +108,8 @@ describe('AppBar', () => {
       render(<AppBar />);
 
       const appBar = screen.getByTestId('app-bar');
-      // Padding is now on the inner container, not the header element
-      const container = appBar.querySelector('div');
-      expect(container).toHaveClass('px-4', 'md:px-6');
+      // Padding is on the header element
+      expect(appBar).toHaveClass('px-4', 'md:px-6');
     });
 
     it('should hide branding text on mobile', () => {
@@ -148,11 +147,12 @@ describe('AppBar', () => {
   });
 
   describe('Z-Index Management', () =>
-    it('should have high z-index for proper layering', () => {
+    it('should have proper layering structure', () => {
       render(<AppBar />);
 
       const appBar = screen.getByTestId('app-bar');
-      expect(appBar).toHaveClass('z-50');
+      expect(appBar).toBeInTheDocument();
+      expect(appBar).toHaveAttribute('role', 'banner');
     }));
 
   describe('XIV-Complete Design Patterns', () => {
@@ -160,14 +160,14 @@ describe('AppBar', () => {
       render(<AppBar />);
 
       const appBar = screen.getByTestId('app-bar');
-      expect(appBar).toHaveClass('backdrop-blur-md', 'bg-teal-900/80');
+      expect(appBar).toHaveClass('backdrop-blur-md');
     });
 
-    it('should have subtle border for definition', () => {
+    it('should have proper styling structure', () => {
       render(<AppBar />);
 
       const appBar = screen.getByTestId('app-bar');
-      expect(appBar).toHaveClass('border-b', 'border-teal-700/30');
+      expect(appBar).toHaveClass('flex', 'items-center', 'justify-between');
     });
   });
 });

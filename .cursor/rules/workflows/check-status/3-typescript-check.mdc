@@ -7,7 +7,12 @@ globs:
 
 ## Goal
 
-Ensure TypeScript compilation passes with 0 errors and 0 warnings and proper type safety.
+Ensure ALL TypeScript errors and warnings are resolved - both compilation errors AND type mismatches that
+developers see in their IDE.
+
+**Critical Note**: `tsc --noEmit` only catches compilation-blocking errors. IDE diagnostics catch ALL TypeScript
+errors including type mismatches, incorrect prop types, and other issues that don't prevent compilation but are
+still type errors that developers see and need to fix.
 
 ## Required Context/Inputs
 
@@ -18,13 +23,26 @@ Ensure TypeScript compilation passes with 0 errors and 0 warnings and proper typ
 
 ### 1. Initial TypeScript Check
 
+**Primary Check - IDE Diagnostics (catches ALL type errors):**
+
+```bash
+# Use IDE diagnostics to get comprehensive type checking results
+# This catches all TypeScript errors that developers see in their IDE
+```
+
+**Secondary Check - Compilation Verification:**
+
 ```bash
 yarn type-check
 ```
 
+**Important**: The IDE diagnostics check is the primary validation method as it shows ALL TypeScript errors
+including type mismatches, incorrect prop types, and other issues that might not prevent compilation but are
+still type errors.
+
 ### 2. Analyze TypeScript Errors
 
-If any compilation errors are found:
+If any TypeScript errors are found (from IDE diagnostics or compilation):
 
 1. **Read error messages carefully**:
    - Note file paths and line numbers
@@ -33,12 +51,14 @@ If any compilation errors are found:
 
 2. **Categorize error types**:
    - Missing type annotations
-   - Type mismatches in assignments
+   - Type mismatches in assignments (e.g., incorrect prop types)
    - Incorrect function signatures
    - Missing properties on objects
    - Import/export type issues
    - Generic type problems
    - Null/undefined safety issues
+   - React prop type mismatches (common with SVG/DOM elements)
+   - Event handler type issues
 
 ### 3. Manual Fix Process
 
@@ -74,6 +94,8 @@ If any compilation errors are found:
    - Fix component prop type definitions
    - Update event handler types
    - Resolve ref and state type issues
+   - Fix SVG/DOM element prop mismatches (e.g., use `<title>` element instead of `title` prop)
+   - Correct HTML attribute vs React prop differences
 
 ### 4. Incremental Fixing
 
@@ -91,11 +113,23 @@ For each TypeScript error:
 
 ### 5. Validation Check
 
-After all fixes, run full type check:
+After all fixes, run comprehensive validation:
+
+**Primary Validation - IDE Diagnostics:**
+
+```bash
+# Check IDE diagnostics to ensure ALL TypeScript errors are resolved
+# This is the definitive check - must show 0 errors across all files
+```
+
+**Secondary Validation - Compilation Check:**
 
 ```bash
 yarn type-check
 ```
+
+**Critical**: Both checks must pass. IDE diagnostics catching errors while compilation passes indicates the
+workflow missed type issues that developers would see.
 
 ### 6. Cross-Validation with ESLint
 
@@ -119,6 +153,7 @@ yarn lint
 
 ## Expected Output
 
+- **IDE diagnostics show 0 TypeScript errors across all files** (primary requirement)
 - TypeScript compilation succeeds with 0 errors and 0 warnings
 - All type annotations are correct and consistent
 - Code maintains type safety
@@ -126,10 +161,19 @@ yarn lint
 
 ## Success Criteria
 
+**Primary Success Criteria:**
+
+- IDE diagnostics must show 0 TypeScript errors across all files
+- This is the definitive measure of TypeScript correctness
+
+**Secondary Success Criteria:**
+
 ```bash
 yarn type-check
 # Should output: ✨ Done (no compilation errors)
 ```
+
+**Note**: If compilation passes but IDE shows errors, the TypeScript check has FAILED and issues must be resolved.
 
 ## Next Step
 

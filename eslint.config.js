@@ -171,6 +171,7 @@ export default [
             '@testing-library/**',
             // Allow specific patterns that don't use index files
             '**/contexts/**', // Context files often imported directly
+            '**/sprites/**', // Allow direct sprite asset imports
           ],
         },
       ],

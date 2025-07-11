@@ -24,8 +24,7 @@ export type LeftSidebarProps = {
  */
 const CHARACTER_PORTRAIT = {
   ALT_TEXT: (name: string) => `${name} portrait`,
-  PLACEHOLDER_URL: '/src/assets/portraits/elvaan/female/portrait-elvaan-female-face1-hairA.jpg',
-  SIZE_CLASSES: 'h-16 w-16',
+  PLACEHOLDER_URL: '/src/assets/portraits/hume/female/portrait-hume-female-face1-hairB.jpg',
 } as const;
 
 /**
@@ -34,7 +33,6 @@ const CHARACTER_PORTRAIT = {
 const CHARACTER_PLACEHOLDER = {
   ICON_TEXT: 'No',
   MESSAGE: 'No character selected',
-  SIZE_CLASSES: 'h-16 w-16',
 } as const;
 
 /**
@@ -59,14 +57,13 @@ type CharacterDisplayProps = {
 const CharacterDisplay: React.FC<CharacterDisplayProps> = ({character}) => (
   <div className="space-y-3" data-testid="character-display">
     {/* Character Portrait */}
-    <div className="flex justify-center">
-      <img
-        alt={CHARACTER_PORTRAIT.ALT_TEXT(character.name)}
-        className={cn(CHARACTER_PORTRAIT.SIZE_CLASSES, 'border-border bg-muted rounded-full border-2 object-cover')}
-        data-testid="character-portrait"
-        src={getCharacterPortraitUrl(character)}
-      />
-    </div>
+
+    <img
+      alt={CHARACTER_PORTRAIT.ALT_TEXT(character.name)}
+      className="h-36"
+      data-testid="character-portrait"
+      src={getCharacterPortraitUrl(character)}
+    />
 
     {/* Character Name */}
     <div className="text-center">
@@ -123,26 +120,18 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({character, className}) 
       // Layout structure
       'flex-col',
       // Dimensions
-      'h-full md:w-64',
+      'h-full md:w-48',
       // Scrolling behavior
       'overflow-auto',
       // Styling
-      'bg-card border-border border-r',
-      // Padding
-      'p-4',
+      'border-r bg-[#282c33]',
       className
     )}
     data-testid="left-sidebar"
     role="complementary"
   >
     {/* Character Section */}
-    <div className="space-y-4">
-      <Typography className="text-card-foreground text-lg font-semibold" variant="h2">
-        Character
-      </Typography>
-
-      {character ? <CharacterDisplay character={character} /> : <CharacterPlaceholder />}
-    </div>
+    {character ? <CharacterDisplay character={character} /> : <CharacterPlaceholder />}
 
     {/* Future: Navigation items will go here */}
     {/* Future: Character switching controls will go here */}

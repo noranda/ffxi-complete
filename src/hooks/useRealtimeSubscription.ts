@@ -79,9 +79,7 @@ export const useRealtimeSubscription = <_T = Record<string, unknown>>(
 
     // Subscribe to the channel
     channel.subscribe(status => {
-      if (status === 'SUBSCRIBED') {
-        console.log(`🔄 Subscribed to ${table} changes`);
-      } else if (status === 'CHANNEL_ERROR') {
+      if (status === 'CHANNEL_ERROR') {
         console.error(`❌ Subscription error for ${table}:`, status);
       }
     });
@@ -91,7 +89,6 @@ export const useRealtimeSubscription = <_T = Record<string, unknown>>(
     // Cleanup subscription on unmount or dependency change
     return () => {
       if (channelRef.current) {
-        console.log(`🔄 Unsubscribing from ${table} changes`);
         void supabase.removeChannel(channelRef.current);
         channelRef.current = null;
       }

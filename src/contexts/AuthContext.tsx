@@ -125,10 +125,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     // Set up Supabase auth state listener
     const {
       data: {subscription},
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((_, session) => {
       if (!isMounted) return;
-
-      console.log('🔐 Auth state changed:', event, session?.user?.email);
 
       // Update user state based on session
       setUser(session?.user ?? null);
@@ -137,28 +135,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       // Clear errors on successful authentication
       if (session?.user) {
         setError(null);
-      }
-
-      // Handle specific auth events for logging and potential side effects
-      switch (event) {
-        case 'PASSWORD_RECOVERY':
-          console.log('🔑 Password recovery initiated');
-          break;
-        case 'SIGNED_IN':
-          console.log('✅ User signed in successfully');
-          break;
-        case 'SIGNED_OUT':
-          console.log('👋 User signed out');
-          // Note: User state is automatically cleared above via setUser(session?.user ?? null)
-          // This ensures complete session cleanup on logout
-          break;
-        case 'TOKEN_REFRESHED':
-          console.log('🔄 Session token refreshed');
-          // Session is automatically updated above, no additional action needed
-          break;
-        case 'USER_UPDATED':
-          console.log('👤 User profile updated');
-          break;
       }
     });
 

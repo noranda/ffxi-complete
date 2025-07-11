@@ -17,7 +17,7 @@ export type MainLayoutProps = {
   footer?: React.ReactNode;
   header?: React.ReactNode;
   leftSidebar?: React.ReactNode;
-  rightSidebar?: React.ReactNode;
+  tabNavigation?: React.ReactNode;
 };
 
 /**
@@ -37,7 +37,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   footer,
   header,
   leftSidebar,
-  rightSidebar,
+  tabNavigation,
 }) => (
   <div
     aria-label="Main application layout"
@@ -57,7 +57,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   >
     {/* Header Area */}
     {header && (
-      <div className="z-50 w-full" data-testid="header-area">
+      <div className="fixed top-0 z-50 h-16 w-full" data-testid="header-area">
         {header}
       </div>
     )}
@@ -77,17 +77,18 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
         </div>
       )}
 
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-auto" data-testid="main-content-area">
-        {children}
-      </div>
+      {/* Main Content Area with TabNavigation */}
+      <div className="flex flex-1 flex-col overflow-hidden" data-testid="main-content-area">
+        {/* Tab Navigation Area - positioned above main content */}
+        {tabNavigation && (
+          <div className="z-40 w-full" data-testid="tab-navigation-area">
+            {tabNavigation}
+          </div>
+        )}
 
-      {/* Right Sidebar Area */}
-      {rightSidebar && (
-        <div className="z-40 w-full md:w-auto" data-testid="right-sidebar-area">
-          {rightSidebar}
-        </div>
-      )}
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto">{children}</div>
+      </div>
     </div>
 
     {/* Footer Area */}

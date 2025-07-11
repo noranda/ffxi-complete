@@ -7,14 +7,22 @@ import {defineConfig} from 'vite';
 export default defineConfig({
   // Build configuration for better development experience
   build: {
-    // Reduce chunk size warnings threshold
-    chunkSizeWarningLimit: 1000,
+    // Reduce chunk size warnings threshold to 500KB
+    chunkSizeWarningLimit: 500,
     rollupOptions: {
       output: {
-        // Better chunk splitting for development
-        manualChunks: {
-          ui: ['@radix-ui/react-slot', '@radix-ui/react-tabs', '@radix-ui/react-dialog'],
-          vendor: ['react', 'react-dom'],
+        // Better chunk splitting to keep files under 500KB
+        manualChunks: id => {
+          // UI components
+          if (id.includes('@radix-ui')) return 'ui';
+          if (id.includes('react') || id.includes('react-dom')) return 'vendor';
+
+          // Split large sprites by size
+          if (id.includes('sprites/magic.svg')) return 'magic-1';
+          if (id.includes('sprites/status.svg')) return 'status-1';
+
+          // Default chunking
+          return undefined;
         },
       },
     },
